@@ -4,6 +4,7 @@ string_to_append = "BM"
 index_count = 0
 big_ol_list = []
 list_depth = 0
+html_file_list = []
 
 def write_html_file(html_list):
     with open("New_Html.html", mode='a') as y:
@@ -15,6 +16,8 @@ def set_html_list():
     with open("Python.html") as f:
         for line in f:
             the_file.append(line)
+
+    html_file_list = the_file
 
 def generate_contents(contents_li_items):
     contents = []
@@ -77,16 +80,8 @@ def add_dot(the_list):
 
     return(dot_list)
 
-
-#content_li_list.append(generate_dropdown_ul('BM2', 'Lists', ['dogs', 'cats']))
-#full_list = ['Some Item', ['category_name: d1', 'item', 'item', 'item', ['category_name: d2', 'item', 'item']]]
-#print(generate_id_list(full_list))
-test_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
-#deeper_breakdown(test_list)
-print(add_dot(test_list))
-print(big_ol_list)
-
-
-
-#add_html(generate_contents(full_list))
-#write_html_file(html_list)
+#full_content_list = ['Some Item', ['category_name: d1', 'item', 'item', 'item', ['category_name: d2', 'item', 'item']]]
+#test_id__gen_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
+#print(add_dot(test_id_gen_list))
+set_html_list()
+print(html_file_list)
