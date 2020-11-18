@@ -1,5 +1,10 @@
 html_list = []
 content_li_list = []
+string_to_append = "BM"
+index_count = 0
+big_ol_list = []
+list_depth = 0
+
 def write_html_file(html_list):
     with open("New_Html.html", mode='a') as y:
         for line in html_list:
@@ -54,21 +59,34 @@ def generate_dropdown_ul(id, content, items):
     dropdown_ul.append('</ul>')
     return dropdown_ul
 
-def generate_link(content):
-    return content
+def add_dot(the_list):
+    global list_depth
+    global index_count
+    global string_to_append
+    dot_list = []
+    local_index = 0
+    for item in the_list:
+        local_index += 1
+        if isinstance(item, list):
+            index_count = local_index
+            string_to_append = string_to_append + "." + str(index_count)
+            dot_list.append(add_dot(item))
+            string_to_append = string_to_append[0:-2]
+        else:
+            dot_list.append(string_to_append + "." + item)
 
-def generate_id_list(content_list):
-    id_list = []
-    item_count = 1
-    for item in content_list:
-        id_list.append(str(item_count))
-        item_count += 1
+    return(dot_list)
 
-    return id_list
 
 #content_li_list.append(generate_dropdown_ul('BM2', 'Lists', ['dogs', 'cats']))
-full_list = ['Some Item', ['categor_name', 'item', 'item', 'item', ['another', 'please']]]
-print(generate_id_list(full_list))
+#full_list = ['Some Item', ['category_name: d1', 'item', 'item', 'item', ['category_name: d2', 'item', 'item']]]
+#print(generate_id_list(full_list))
+test_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
+#deeper_breakdown(test_list)
+print(add_dot(test_list))
+print(big_ol_list)
+
+
 
 #add_html(generate_contents(full_list))
 #write_html_file(html_list)
