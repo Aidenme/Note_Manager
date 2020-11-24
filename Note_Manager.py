@@ -11,6 +11,7 @@ class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
         self.html_file = self.set_html_file(self.html_filename)
+        self.contents = self.get_contents(self.html_file)
 
     def set_html_file(self, html_filename):
         the_file = []
@@ -20,29 +21,29 @@ class HTMLFile:
                 the_file.append(line.rstrip())
         return the_file
 
-    def print_html_file(html_list):
+    def print_html_file(self, html_list):
         for item in html_list:
             print(item)
+
+    def get_contents(self, html_list):
+        html_contents = []
+        content_start_string = '<ul class="contents">'
+        content_end_string = '</ul><!--End contents-->'
+        start_index = None
+        end_index = None
+        for index, item in enumerate(html_list):
+            if content_start_string in item:
+                start_index = index + 1
+            if content_end_string in item:
+                end_index = index - 1
+                break
+        html_contents = html_list[start_index:(end_index + 1)]
+        return html_contents
 
 def write_html_file(html_list):
     with open("New_Html.html", mode='a') as y:
         for line in html_list:
             y.write(line + '\n')
-
-def get_contents(html_list):
-    html_contents = []
-    content_start_string = '<ul class="contents">'
-    content_end_string = '</ul><!--End contents-->'
-    start_index = None
-    end_index = None
-    for index, item in enumerate(html_list):
-        if content_start_string in item:
-            start_index = index + 1
-        if content_end_string in item:
-            end_index = index - 1
-            break
-    html_contents = html_list[start_index:(end_index + 1)]
-    return html_contents
 
 def convert_sudo_to_html(sudo_list):
     html_list = []
@@ -88,7 +89,7 @@ def convert_contents_to_sudo(html_list):
     return sudo_list
 
 html_file = HTMLFile("Python2.html")
-contents = get_contents(html_file.html_file)
+contents = html_file.contents)
 contents_sudo = convert_contents_to_sudo(contents)
 html_contents = convert_sudo_to_html(contents_sudo)
 write_html_file(html_contents)
