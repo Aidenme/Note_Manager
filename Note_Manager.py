@@ -1,3 +1,5 @@
+import re
+
 html_file_list = []
 sudo_list = []
 
@@ -19,7 +21,7 @@ def print_html_file_list(html_list):
     for item in html_list:
         print(item)
 
-def get_contents_from_html(html_list):
+def get_list_from_html_contents(html_list):
     html_contents = []
     content_start_string = '<ul class="contents">'
     content_end_string = '</ul><!--End contents-->'
@@ -27,9 +29,9 @@ def get_contents_from_html(html_list):
     end_index = None
     for index, item in enumerate(html_list):
         if content_start_string in item:
-            start_index = index
+            start_index = index + 1
         if content_end_string in item:
-            end_index = index
+            end_index = index - 1
             break
     html_contents = html_list[start_index:(end_index + 1)]
     return html_contents
@@ -55,18 +57,36 @@ def convert_sudo_to_html(sudo_list):
 
 def convert_html_to_sudo(html_list):
     sudo_list = []
+    id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
+    content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
     for line in html_list:
-        type = None
-        id = None
-        content = None
+        try:
+            id = re.findall(id_regex_pattern, line)[0]
+        except:
+            id = 'No id'
+        try:
+            content = re.findall(content_regex_pattern, line)[0]
+        except:
+            content = 'No content'
+        type = 'link_line'
         trimmed_line = line.strip()
         if 'class="subcontents"' in trimmed_line:
             type = 'dropdown_ul'
-            sudo_list.append(['dropdown_ul', ])
+        sudo_list.append([type, id, content])
+    return sudo_list
+
+def test_regex():
+    line = '<li><a href="#BM.11.22.4">Variable assignment</a></li>"'
+    search_this = line
+    #search_pattern = 'href="#BM(?:[.][1-9]*)*"'
+    search_pattern = '>([ a-zA-Z1-9.]*)</a>'
+    #id = 'BM' + ''.join(re.findall(search_pattern, search_this))
+    print(re.findall(search_pattern, search_this))
 
 set_html_list()
-print_html_file_list(get_contents_from_html(html_file_list))
-convert_html_to_sudo(html_file_list)
+#print_html_file_list(get_list_from_html_contents(html_file_list))
+
+#test_regex()
 
 sudo_list = [
 ['link_line', 'BM.1', 'Variable assignment'],
@@ -75,5 +95,6 @@ sudo_list = [
 ['end_dropdown_ul']
 ]
 
+print_html_file_list(convert_html_to_sudo(get_list_from_html_contents(html_file_list)))
 #print_html_file_list(convert_sudo_to_html(sudo_list))
 #write_html_file(convert_sudo_to_html(sudo_list))
