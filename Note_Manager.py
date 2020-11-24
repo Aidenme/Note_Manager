@@ -1,27 +1,35 @@
 import re
 
-html_file_list = []
-sudo_list = []
+sudo_list = [
+['link_line', 'BM.1', 'Variable assignment'],
+['dropdown_ul', 'BM.2', 'Numbers'],
+['link_line', 'BM.2.1', 'Number Data Types'],
+['end_dropdown_ul']
+]
+
+class HTMLFile:
+    def __init__(self, html_filename):
+        self.html_filename = html_filename
+        self.html_file = self.set_html_file(self.html_filename)
+
+    def set_html_file(self, html_filename):
+        the_file = []
+        global html_file
+        with open(html_filename) as f:
+            for line in f:
+                the_file.append(line.rstrip())
+        return the_file
+
+    def print_html_file(html_list):
+        for item in html_list:
+            print(item)
 
 def write_html_file(html_list):
     with open("New_Html.html", mode='a') as y:
         for line in html_list:
             y.write(line + '\n')
 
-def set_html_list():
-    the_file = []
-    global html_file_list
-    with open("Python2.html") as f:
-        for line in f:
-            the_file.append(line.rstrip())
-
-    html_file_list = the_file
-
-def print_html_file_list(html_list):
-    for item in html_list:
-        print(item)
-
-def get_list_from_html_contents(html_list):
+def get_contents(html_list):
     html_contents = []
     content_start_string = '<ul class="contents">'
     content_end_string = '</ul><!--End contents-->'
@@ -35,9 +43,6 @@ def get_list_from_html_contents(html_list):
             break
     html_contents = html_list[start_index:(end_index + 1)]
     return html_contents
-
-def get_contents_from_contents(html_list):
-    pass
 
 def convert_sudo_to_html(sudo_list):
     html_list = []
@@ -55,7 +60,7 @@ def convert_sudo_to_html(sudo_list):
     html_list.append('</ul><!--End contents-->')
     return html_list
 
-def convert_html_to_sudo(html_list):
+def convert_contents_to_sudo(html_list):
     sudo_list = []
     id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
     content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
@@ -72,29 +77,18 @@ def convert_html_to_sudo(html_list):
         trimmed_line = line.strip()
         if 'class="subcontents"' in trimmed_line:
             type = 'dropdown_ul'
-        sudo_list.append([type, id, content])
+        if '</ul></li>' in trimmed_line:
+            type = 'end_dropdown_ul'
+
+        if content == 'No content':
+            sudo_list.append([type])
+        else:
+            sudo_list.append([type, id, content])
+
     return sudo_list
 
-def test_regex():
-    line = '<li><a href="#BM.11.22.4">Variable assignment</a></li>"'
-    search_this = line
-    #search_pattern = 'href="#BM(?:[.][1-9]*)*"'
-    search_pattern = '>([ a-zA-Z1-9.]*)</a>'
-    #id = 'BM' + ''.join(re.findall(search_pattern, search_this))
-    print(re.findall(search_pattern, search_this))
-
-set_html_list()
-#print_html_file_list(get_list_from_html_contents(html_file_list))
-
-#test_regex()
-
-sudo_list = [
-['link_line', 'BM.1', 'Variable assignment'],
-['dropdown_ul', 'BM.2', 'Numbers'],
-['link_line', 'BM.2.1', 'Number Data Types'],
-['end_dropdown_ul']
-]
-
-print_html_file_list(convert_html_to_sudo(get_list_from_html_contents(html_file_list)))
-#print_html_file_list(convert_sudo_to_html(sudo_list))
-#write_html_file(convert_sudo_to_html(sudo_list))
+html_file = HTMLFile("Python2.html")
+contents = get_contents(html_file.html_file)
+contents_sudo = convert_contents_to_sudo(contents)
+html_contents = convert_sudo_to_html(contents_sudo)
+write_html_file(html_contents)
