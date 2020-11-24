@@ -1,10 +1,5 @@
-html_list = []
-content_li_list = []
-string_to_append = "BM"
-index_count = 0
-big_ol_list = []
-list_depth = 0
 html_file_list = []
+sudo_list = []
 
 def write_html_file(html_list):
     with open("New_Html.html", mode='a') as y:
@@ -13,75 +8,56 @@ def write_html_file(html_list):
 
 def set_html_list():
     the_file = []
-    with open("Python.html") as f:
+    global html_file_list
+    with open("Python2.html") as f:
         for line in f:
-            the_file.append(line)
+            the_file.append(line.rstrip())
 
     html_file_list = the_file
 
-def generate_contents(contents_li_items):
-    contents = []
-    contents.append('<ul class="contents">')
-    for item in contents_li_items:
-        contents.append('<li>')
-        if isinstance(item, list):
-            for list_item in temp_gen_dropdown(item):
-                contents.append(list_item)
-        else:
-            contents.append(item)
-        contents.append('</li>')
-    contents.append('</ul>')
-    print(contents)
-    return contents
+def print_html_file_list(html_list):
+    for item in html_list:
+        print(item)
 
-def add_html(sub_html_list):
-    for line in sub_html_list:
-        html_list.append(line)
+def convert_sudo_to_html(sudo_list):
+    html_list = []
+    html_list.append('<ul class="contents">')
+    for item in sudo_list:
+        if item[0] == 'link_line':
+            line = '<li><a href="#' + item[1] + '">' + item[2] + '</a></li>'
+            html_list.append(line)
+        elif item[0] == 'dropdown_ul':
+            line = '<li><a href="#' + item[1] + '">' + item[2] + '</a><div id="'+ item[1] + 'but" class="twirl_button" onclick="reveal(\'' + item[1] + 'sub\', \'' + item[1] + 'but\')">&#8658;</div><ul id="' + item[1] + 'sub" class="subcontents" style="display:none;">'
+            html_list.append(line)
+        elif item[0] == 'end_dropdown_ul':
+            line = '</ul></li>'
+            html_list.append(line)
+    html_list.append('</ul><!--End contents-->')
+    return html_list
 
-def temp_gen_dropdown(content_list):
-    dropdown_ul = []
-    dropdown_ul.append('<a>' + content_list[0] + '</a>')
-    dropdown_ul.append('<ul>')
-    for item in content_list[1:]:
-        dropdown_ul.append('<li>')
-        if isinstance(item, list):
-            for list_item in temp_gen_dropdown(item):
-                dropdown_ul.append(list_item)
-        else:
-            dropdown_ul.append(item)
-        dropdown_ul.append('</li>')
-    dropdown_ul.append('</ul>')
-    return dropdown_ul
-
-def generate_dropdown_ul(id, content, items):
-    dropdown_ul = []
-    dropdown_ul.append('<a href="#' + id + '" id="' + id + 'Link">' + content + '</a><div id="' + id + 'but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div>')
-    dropdown_ul.append('<ul id="' + id + 'sub" class="subcontents" style="display:none;">')
-    for item in items:
-        dropdown_ul.append('<li>' + item + '</li>')
-    dropdown_ul.append('</ul>')
-    return dropdown_ul
-
-def add_dot(the_list):
-    global list_depth
-    global index_count
-    global string_to_append
-    dot_list = []
-    local_index = 0
-    for item in the_list:
-        local_index += 1
-        if isinstance(item, list):
-            index_count = local_index
-            string_to_append = string_to_append + "." + str(index_count)
-            dot_list.append(add_dot(item))
-            string_to_append = string_to_append[0:-2]
-        else:
-            dot_list.append(string_to_append + "." + item)
-
-    return(dot_list)
-
+def convert_html_to_sudo(html_list):
+    sudo_list = []
+    for line in html_list:
+        type = None
+        id = None
+        content = None
+        trimmed_line = line.strip()
+        if 'class="subcontents"' in trimmed_line:
+            type = 'dropdown_ul'
+            sudo_list.append(['dropdown_ul', ])
 #full_content_list = ['Some Item', ['category_name: d1', 'item', 'item', 'item', ['category_name: d2', 'item', 'item']]]
-#test_id__gen_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
+#test_id_gen_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
 #print(add_dot(test_id_gen_list))
 set_html_list()
-print(html_file_list)
+print_html_file_list(get_contents_from_html(html_file_list))
+convert_html_to_sudo(html_file_list)
+
+sudo_list = [
+['link_line', 'BM.1', 'Variable assignment'],
+['dropdown_ul', 'BM.2', 'Numbers'],
+['link_line', 'BM.2.1', 'Number Data Types'],
+['end_dropdown_ul']
+]
+
+#print_html_file_list(convert_sudo_to_html(sudo_list))
+#write_html_file(convert_sudo_to_html(sudo_list))
