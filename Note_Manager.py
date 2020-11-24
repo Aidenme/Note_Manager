@@ -19,6 +19,24 @@ def print_html_file_list(html_list):
     for item in html_list:
         print(item)
 
+def get_contents_from_html(html_list):
+    html_contents = []
+    content_start_string = '<ul class="contents">'
+    content_end_string = '</ul><!--End contents-->'
+    start_index = None
+    end_index = None
+    for index, item in enumerate(html_list):
+        if content_start_string in item:
+            start_index = index
+        if content_end_string in item:
+            end_index = index
+            break
+    html_contents = html_list[start_index:(end_index + 1)]
+    return html_contents
+
+def get_contents_from_contents(html_list):
+    pass
+
 def convert_sudo_to_html(sudo_list):
     html_list = []
     html_list.append('<ul class="contents">')
@@ -45,9 +63,7 @@ def convert_html_to_sudo(html_list):
         if 'class="subcontents"' in trimmed_line:
             type = 'dropdown_ul'
             sudo_list.append(['dropdown_ul', ])
-#full_content_list = ['Some Item', ['category_name: d1', 'item', 'item', 'item', ['category_name: d2', 'item', 'item']]]
-#test_id_gen_list = ['1',['1', '2', ['1', '2', '3', '4'], '4', '5'], '3', '4', ['1', '2', '3', ['1', '2', '3'], '5'], '5', '6']
-#print(add_dot(test_id_gen_list))
+
 set_html_list()
 print_html_file_list(get_contents_from_html(html_file_list))
 convert_html_to_sudo(html_file_list)
