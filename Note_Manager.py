@@ -7,6 +7,16 @@ sudo_list = [
 ['end_dropdown_ul']
 ]
 
+class HTMLWriter:
+    def __init__(self, filename):
+        self.file_to_write = None
+        self.filename = filename
+
+    def write_html_file(self, html_file):
+        with open(self.filename, mode='a') as y:
+            for line in html_file:
+                y.write(line + '\n')
+
 class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
@@ -40,11 +50,6 @@ class HTMLFile:
         html_contents = html_list[start_index:(end_index + 1)]
         return html_contents
 
-def write_html_file(html_list):
-    with open("New_Html.html", mode='a') as y:
-        for line in html_list:
-            y.write(line + '\n')
-
 def convert_sudo_to_html(sudo_list):
     html_list = []
     html_list.append('<ul class="contents">')
@@ -61,7 +66,7 @@ def convert_sudo_to_html(sudo_list):
     html_list.append('</ul><!--End contents-->')
     return html_list
 
-def convert_contents_to_sudo(html_list):
+def convert_html_to_sudo(html_list):
     sudo_list = []
     id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
     content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
@@ -89,7 +94,8 @@ def convert_contents_to_sudo(html_list):
     return sudo_list
 
 html_file = HTMLFile("Python2.html")
-contents = html_file.contents)
-contents_sudo = convert_contents_to_sudo(contents)
+writer = HTMLWriter("New_Html.html")
+contents = html_file.contents
+contents_sudo = convert_html_to_sudo(contents)
 html_contents = convert_sudo_to_html(contents_sudo)
-write_html_file(html_contents)
+writer.write_html_file(html_contents)
