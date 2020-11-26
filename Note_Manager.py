@@ -138,7 +138,7 @@ class Contents:
                 content = re.findall(content_regex_pattern, line)[0]
             except:
                 content = 'No content'
-            sudo_list.append([id, content])
+            sudo_list.append({'id' : id, 'content' : content})
         self.deep_list = sudo_list
 
     def set_full_list(self):
@@ -164,7 +164,7 @@ class Contents:
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
-contents.print_contents_list()
+contents.print_deep_list()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
 #writer.write_html_file(html_file)
