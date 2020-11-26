@@ -118,11 +118,7 @@ class Contents:
                 type = 'dropdown_ul'
             if '</ul></li>' in trimmed_line:
                 type = 'end_dropdown_ul'
-
-            if content == 'No content':
-                sudo_list.append([type])
-            else:
-                sudo_list.append([type, id, content])
+            sudo_list.append({'type' : type , 'id' : id, 'content' : content })
         self.contents_list = sudo_list
 
     def set_contents_from_clist(self, contents_list):
@@ -145,6 +141,9 @@ class Contents:
             sudo_list.append([id, content])
         self.deep_list = sudo_list
 
+    def set_full_list(self):
+        full_list_temp = []
+
     def print_contents_list(self):
         if self.contents_list is not None:
             for line in self.contents_list:
@@ -165,7 +164,7 @@ class Contents:
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
-contents.print_deep_list()
+contents.print_contents_list()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
 #writer.write_html_file(html_file)
