@@ -14,25 +14,32 @@ class HTMLWriter:
 
     def write_html_file(self, html_file):
         with open(self.filename, mode='a') as y:
-            for line in html_file:
+            for line in html_file.html_file:
                 y.write(line + '\n')
 
 class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
-        self.html_file = self.set_html_file(self.html_filename)
-        self.contents = self.get_contents(self.html_file)
+        self.html_file = None
+        self.contents = None
+        self.contents_start_index = None
+        self.contents_end_index = None
+        self.html_deep_list = None
+        self.set_html_file(self.html_filename)
+        self.get_contents(self.html_file)
+        self.get_html_deep_list(self.html_file)
 
     def set_html_file(self, html_filename):
+        print("set_html_file ran")
         the_file = []
         global html_file
         with open(html_filename) as f:
             for line in f:
                 the_file.append(line.rstrip())
-        return the_file
+        self.html_file = the_file
 
-    def print_html_file(self, html_list):
-        for item in html_list:
+    def print_html_file(self):
+        for item in self.html_file:
             print(item)
 
     def get_contents(self, html_list):
@@ -43,59 +50,108 @@ class HTMLFile:
         end_index = None
         for index, item in enumerate(html_list):
             if content_start_string in item:
+                print("if statement ran")
+                self.contents_start_index = index
                 start_index = index + 1
             if content_end_string in item:
+                self.contents_end_index = index
                 end_index = index - 1
                 break
         html_contents = html_list[start_index:(end_index + 1)]
-        return html_contents
+        self.contents = html_contents
 
-def convert_sudo_to_html(sudo_list):
-    html_list = []
-    html_list.append('<ul class="contents">')
-    for item in sudo_list:
-        if item[0] == 'link_line':
-            line = '<li><a href="#' + item[1] + '">' + item[2] + '</a></li>'
-            html_list.append(line)
-        elif item[0] == 'dropdown_ul':
-            line = '<li><a href="#' + item[1] + '">' + item[2] + '</a><div id="'+ item[1] + 'but" class="twirl_button" onclick="reveal(\'' + item[1] + 'sub\', \'' + item[1] + 'but\')">&#8658;</div><ul id="' + item[1] + 'sub" class="subcontents" style="display:none;">'
-            html_list.append(line)
-        elif item[0] == 'end_dropdown_ul':
-            line = '</ul></li>'
-            html_list.append(line)
-    html_list.append('</ul><!--End contents-->')
-    return html_list
+    def insert_contents(self, contents):
+        self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
 
-def convert_html_to_sudo(html_list):
-    sudo_list = []
-    id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
-    content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
-    for line in html_list:
-        try:
+    def get_html_deep_list(self, html_file):
+        deep_list = []
+        section_classes = ['class="linked_sub"', 'class="linked_sec"']
+        for line in html_file:
+            if any(x in line for x in section_classes):
+                deep_list.append(line.strip())
+        self.html_deep_list = deep_list
+
+class Contents:
+    def __init__(self, contents):
+        self.html_contents = contents.contents
+        self.contents_list = None
+        self.html_deep_list = contents.html_deep_list
+        self.deep_list = None
+
+        self.convert_html_to_contents_list()
+        self.set_deep_list()
+
+    def convert_contents_list_to_html(self):
+        html_list = []
+        html_list.append('<ul class="contents">')
+        for item in self.contents_list:
+            if item[0] == 'link_line':
+                line = '<li><a href="#' + item[1] + '">' + item[2] + '</a></li>'
+                html_list.append(line)
+            elif item[0] == 'dropdown_ul':
+                line = '<li><a href="#' + item[1] + '">' + item[2] + '</a><div id="'+ item[1] + 'but" class="twirl_button" onclick="reveal(\'' + item[1] + 'sub\', \'' + item[1] + 'but\')">&#8658;</div><ul id="' + item[1] + 'sub" class="subcontents" style="display:none;">'
+                html_list.append(line)
+            elif item[0] == 'end_dropdown_ul':
+                line = '</ul></li>'
+                html_list.append(line)
+        html_list.append('</ul><!--End contents-->')
+        self.html_contents = html_list
+
+    def convert_html_to_contents_list(self):
+        sudo_list = []
+        id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
+        content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
+        for line in self.html_contents:
+            try:
+                id = re.findall(id_regex_pattern, line)[0]
+            except:
+                id = 'No id'
+            try:
+                content = re.findall(content_regex_pattern, line)[0]
+            except:
+                content = 'No content'
+            type = 'link_line'
+            trimmed_line = line.strip()
+            if 'class="subcontents"' in trimmed_line:
+                type = 'dropdown_ul'
+            if '</ul></li>' in trimmed_line:
+                type = 'end_dropdown_ul'
+
+            if content == 'No content':
+                sudo_list.append([type])
+            else:
+                sudo_list.append([type, id, content])
+        self.contents_list = sudo_list
+
+    def set_contents_from_clist(self, contents_list):
+        self.contents_list = contents_list
+        self.convert_contents_list_to_html()
+
+    def set_deep_list(self):
+        sudo_list = []
+        id_regex_pattern = ''
+        content_regex_pattern = ''
+        for line in self.html_deep_list:
             id = re.findall(id_regex_pattern, line)[0]
-        except:
-            id = 'No id'
-        try:
-            content = re.findall(content_regex_pattern, line)[0]
-        except:
-            content = 'No content'
-        type = 'link_line'
-        trimmed_line = line.strip()
-        if 'class="subcontents"' in trimmed_line:
-            type = 'dropdown_ul'
-        if '</ul></li>' in trimmed_line:
-            type = 'end_dropdown_ul'
+            contents = re.findall(content_regex_pattern)[0]
 
-        if content == 'No content':
-            sudo_list.append([type])
-        else:
-            sudo_list.append([type, id, content])
+    def print_contents_list(self):
+        if self.contents_list is not None:
+            for line in self.contents_list:
+                print(line)
 
-    return sudo_list
+    def print_html_contents(self):
+        for line in self.html_contents:
+            print(line)
+
+    def print_html_deep_list(self):
+        for line in self.html_deep_list:
+            print(line)
 
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
-contents = html_file.contents
-contents_sudo = convert_html_to_sudo(contents)
-html_contents = convert_sudo_to_html(contents_sudo)
-writer.write_html_file(html_contents)
+contents = Contents(html_file)
+contents.print_html_deep_list()
+#contents.set_contents_from_clist(sudo_list)
+#html_file.insert_contents(contents.html_contents)
+#writer.write_html_file(html_file)
