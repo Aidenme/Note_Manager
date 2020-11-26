@@ -77,9 +77,11 @@ class Contents:
         self.contents_list = None
         self.html_deep_list = contents.html_deep_list
         self.deep_list = None
+        self.full_list = None
 
         self.convert_html_to_contents_list()
         self.set_deep_list()
+        self.set_full_list()
 
     def convert_contents_list_to_html(self):
         html_list = []
@@ -129,11 +131,19 @@ class Contents:
 
     def set_deep_list(self):
         sudo_list = []
-        id_regex_pattern = ''
-        content_regex_pattern = ''
+        id_regex_pattern = 'id="BM(?:[.][1-9]*)*"'
+        content_regex_pattern = '>([ a-zA-Z1-9.]*)</h'
         for line in self.html_deep_list:
-            id = re.findall(id_regex_pattern, line)[0]
-            contents = re.findall(content_regex_pattern)[0]
+            try:
+                id = re.findall(id_regex_pattern, line)[0]
+            except:
+                id = 'No id'
+            try:
+                content = re.findall(content_regex_pattern, line)[0]
+            except:
+                content = 'No content'
+            sudo_list.append([id, content])
+        self.deep_list = sudo_list
 
     def print_contents_list(self):
         if self.contents_list is not None:
@@ -148,10 +158,14 @@ class Contents:
         for line in self.html_deep_list:
             print(line)
 
+    def print_deep_list(self):
+        for line in self.deep_list:
+            print(line)
+
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
-contents.print_html_deep_list()
+contents.print_deep_list()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
 #writer.write_html_file(html_file)
