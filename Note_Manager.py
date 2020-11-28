@@ -71,6 +71,31 @@ class HTMLFile:
                 deep_list.append(line.strip())
         self.html_deep_list = deep_list
 
+    def change_line(self, index, line_string):
+        self.html_file[index] = line_string
+
+    def change_line_id(self, index, new_id):
+        line_to_change = self.html_file[index]
+        #I've been treating id and href as the same thing, but different patterns need to be used to search for each of them:
+        href_search_pattern = 'href="#BM(?:[.][1-9]*)*"'
+        id_search_pattern = 'id="BM(?:[.][1-9]*)*"'
+        #These are added to whatever results are returned from the regex to get the index of where the id, starting with BM actually starts.
+        href_index_mod = 7
+        id_index_mod = 4
+        search_result = re.search(href_search_pattern, line_to_change)
+        if search_result == None:
+            search_result = re.search(id_search_pattern, line_to_change)
+            span_indexes = search_result.span()
+            search_indexes = [span_indexes[0] + id_index_mod, span_indexes[1] - 1]
+        else:
+            span_indexes = search_result.span()
+            search_indexes = [span_indexes[0] + href_index_mod, span_indexes[1] - 1]
+        left_string = line_to_change[:search_indexes[0]]
+        right_string = line_to_change[search_indexes[1]:]
+        modded_line = ''.join([left_string, new_id, right_string])
+        self.html_file[index] = modded_line
+
+
 class Contents:
     def __init__(self, contents):
         self.html_contents = contents.contents
@@ -142,7 +167,14 @@ class Contents:
         self.deep_list = sudo_list
 
     def set_full_list(self):
-        full_list_temp = []
+        full_list = []
+        for line in self.contents_list:
+            if line['content'] != 'No content':
+                ccontent = line['content']
+                cid = line['id']
+                ctype = line['type']
+                #Turning an href in the contents_list ('id': 'href="#BM.3.4"') into an id in the deep_list ('id': 'id="BM.3.4"')
+                id_to_search = 'id="' + line['id'][7:]
 
     def print_contents_list(self):
         if self.contents_list is not None:
@@ -161,10 +193,21 @@ class Contents:
         for line in self.deep_list:
             print(line)
 
+class Display:
+    def __init__(self):
+        pass
+
+    def display_the_lists(self, list_1, list_2):
+        i = 0
+        while i <= len(list_1):
+            print(str(list_1[i]) + str(list_2[i]))
+            i += 1
+
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
-contents.print_deep_list()
+display = Display()
+display.display_the_lists(contents.deep_list, contents.contents_list)
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
-#writer.write_html_file(html_file)
+writer.write_html_file(html_file)
