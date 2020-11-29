@@ -1,12 +1,5 @@
 import re
 
-sudo_list = [
-['link_line', 'BM.1', 'Variable assignment'],
-['dropdown_ul', 'BM.2', 'Numbers'],
-['link_line', 'BM.2.1', 'Number Data Types'],
-['end_dropdown_ul']
-]
-
 class HTMLWriter:
     def __init__(self, filename):
         self.file_to_write = None
@@ -26,7 +19,7 @@ class HTMLFile:
         self.contents_end_index = None
         self.html_deep_list = None
         self.set_html_file(self.html_filename)
-        self.get_contents(self.html_file)
+        self.get_html_contents(self.html_file)
         self.get_html_deep_list(self.html_file)
 
     def set_html_file(self, html_filename):
@@ -42,7 +35,7 @@ class HTMLFile:
         for item in self.html_file:
             print(item)
 
-    def get_contents(self, html_list):
+    def get_html_contents(self, html_list):
         html_contents = []
         content_start_string = '<ul class="contents">'
         content_end_string = '</ul><!--End contents-->'
@@ -97,17 +90,16 @@ class HTMLFile:
 
 
 class Contents:
-    def __init__(self, contents):
-        self.html_contents = contents.contents
+    def __init__(self, html):
+        self.html_contents = html.contents
         self.contents_list = None
-        self.html_deep_list = contents.html_deep_list
+        self.html_deep_list = html.html_deep_list
         self.deep_list = None
         self.full_list = None
         self.clean_contents_list = []
 
         self.convert_html_to_contents_list()
         self.set_deep_list()
-        self.set_full_list()
         self.set_clean_contents_list()
 
     def convert_contents_list_to_html(self):
@@ -167,16 +159,6 @@ class Contents:
                 content = 'No content'
             sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link'})
         self.deep_list = sudo_list
-
-    def set_full_list(self):
-        full_list = []
-        for line in self.contents_list:
-            if line['content'] != 'No content':
-                ccontent = line['content']
-                cid = line['id']
-                ctype = line['type']
-                #Turning an href in the contents_list ('id': 'href="#BM.3.4"') into an id in the deep_list ('id': 'id="BM.3.4"')
-                id_to_search = 'id="' + line['id'][7:]
 
     def set_clean_contents_list(self):
         for line in self.contents_list:
@@ -240,9 +222,9 @@ class Display:
 
     def clean_content_dict(self, content_dict):
         if content_dict['type'] == 'sec_link':
-            return content_dict['id'][4:-1] + "-" + content_dict['content']
+            return content_dict['id'][4:-1] + " - " + content_dict['content']
         elif content_dict['type'] == 'link_line' or 'dropdown_ul':
-            return content_dict['id'][7:-1] + "-" + content_dict['content']
+            return content_dict['id'][7:-1] + " - " + content_dict['content']
         else:
             return "Wrong type for clean_content_dict()"
 
