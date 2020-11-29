@@ -103,10 +103,12 @@ class Contents:
         self.html_deep_list = contents.html_deep_list
         self.deep_list = None
         self.full_list = None
+        self.clean_contents_list = []
 
         self.convert_html_to_contents_list()
         self.set_deep_list()
         self.set_full_list()
+        self.set_clean_contents_list()
 
     def convert_contents_list_to_html(self):
         html_list = []
@@ -163,7 +165,7 @@ class Contents:
                 content = re.findall(content_regex_pattern, line)[0]
             except:
                 content = 'No content'
-            sudo_list.append({'id' : id, 'content' : content})
+            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link'})
         self.deep_list = sudo_list
 
     def set_full_list(self):
@@ -176,9 +178,14 @@ class Contents:
                 #Turning an href in the contents_list ('id': 'href="#BM.3.4"') into an id in the deep_list ('id': 'id="BM.3.4"')
                 id_to_search = 'id="' + line['id'][7:]
 
+    def set_clean_contents_list(self):
+        for line in self.contents_list:
+            if line['type'] == 'dropdown_ul' or line['type'] == 'link_line':
+                self.clean_contents_list.append(line)
+
     def print_contents_list(self):
-        if self.contents_list is not None:
-            for line in self.contents_list:
+        if self.clean_contents_list is not None:
+            for line in self.clean_contents_list:
                 print(line)
 
     def print_html_contents(self):
@@ -195,19 +202,58 @@ class Contents:
 
 class Display:
     def __init__(self):
-        pass
+        self.display = []
+        self.add_display_menu()
 
     def display_the_lists(self, list_1, list_2):
+        list_display = []
+        short_list_strings = []
+
+        if len(list_1) >= len(list_2):
+            long_list = list_1
+            short_list = list_2
+        else:
+            long_list = list_2
+            short_list = list_1
+
         i = 0
-        while i <= len(list_1):
-            print(str(list_1[i]) + str(list_2[i]))
+        while i <= len(long_list):
+            if i < len(short_list):
+                short_string = self.clean_content_dict(short_list[i])
+            else:
+                short_string = " "
+            short_list_strings.append(short_string)
             i += 1
+
+        i = 0
+        while i < len(long_list):
+            self.display.append(self.clean_content_dict(long_list[i]).ljust(100) + short_list_strings[i].ljust(100))
+            i += 1
+
+    def add_display_menu(self):
+        self.display.append("Welcome to Contents Manager! What would you like to do?")
+        self.display.append("c - Change a line's ID (Not functioning)")
+
+    def print_display(self):
+        for line in self.display:
+            print(line)
+
+    def clean_content_dict(self, content_dict):
+        if content_dict['type'] == 'sec_link':
+            return content_dict['id'][4:-1] + "-" + content_dict['content']
+        elif content_dict['type'] == 'link_line' or 'dropdown_ul':
+            return content_dict['id'][7:-1] + "-" + content_dict['content']
+        else:
+            return "Wrong type for clean_content_dict()"
+
+
 
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
 display = Display()
-display.display_the_lists(contents.deep_list, contents.contents_list)
+display.display_the_lists(contents.deep_list, contents.clean_contents_list)
+display.print_display()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
 writer.write_html_file(html_file)
