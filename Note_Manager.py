@@ -17,10 +17,10 @@ class HTMLFile:
         self.html_top_contents = None
         self.contents_start_index = None
         self.contents_end_index = None
-        self.html_deep_list = None
+        self.html_body_contents = None
         self.set_html_file(self.html_filename)
         self.get_html_contents(self.html_file)
-        self.get_html_deep_list(self.html_file)
+        self.get_html_body_contents(self.html_file)
 
     def set_html_file(self, html_filename):
         print("set_html_file ran")
@@ -56,13 +56,13 @@ class HTMLFile:
     def insert_contents(self, contents):
         self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
 
-    def get_html_deep_list(self, html_file):
+    def get_html_body_contents(self, html_file):
         deep_list = []
         section_classes = ['class="linked_sub"', 'class="linked_sec"']
         for line in html_file:
             if any(x in line for x in section_classes):
                 deep_list.append(line.strip())
-        self.html_deep_list = deep_list
+        self.html_body_contents = deep_list
 
     def change_line(self, index, line_string):
         self.html_file[index] = line_string
@@ -88,20 +88,19 @@ class HTMLFile:
         modded_line = ''.join([left_string, new_id, right_string])
         self.html_file[index] = modded_line
 
-
 class Contents:
     def __init__(self, html):
         self.html_top_contents = html.html_top_contents
         self.top_contents = None
-        self.html_deep_list = html.html_deep_list
+        self.html_body_contents = html.html_body_contents
         self.body_contents = None
         self.full_list = None
-        self.clean_contents_list = []
+        self.top_contents_links_only = []
         self.ref_id = 0
 
         self.set_top_contents_list()
-        self.set_deep_list()
-        self.set_clean_contents_list()
+        self.set_body_contents()
+        self.set_top_contents_links_only()
 
     def get_html_from_top_contents(self):
         html_list = []
@@ -146,11 +145,11 @@ class Contents:
         self.top_contents = contents_list
         self.convert_contents_list_to_html()
 
-    def set_deep_list(self):
+    def set_body_contents(self):
         sudo_list = []
         id_regex_pattern = 'id="BM(?:[.][1-9]*)*"'
-        content_regex_pattern = '>([ a-zA-Z1-9.]*)</h'
-        for line in self.html_deep_list:
+        content_regex_pattern = '>([: a-zA-Z1-9.]*)</h'
+        for line in self.html_body_contents:
             try:
                 id = re.findall(id_regex_pattern, line)[0]
             except:
@@ -163,22 +162,22 @@ class Contents:
             self.ref_id += 1
         self.body_contents = sudo_list
 
-    def set_clean_contents_list(self):
+    def set_top_contents_links_only(self):
         for line in self.top_contents:
             if line['type'] == 'dropdown_ul' or line['type'] == 'link_line':
-                self.clean_contents_list.append(line)
+                self.top_contents_links_only.append(line)
 
     def print_contents_list(self):
-        if self.clean_contents_list is not None:
-            for line in self.clean_contents_list:
+        if self.top_contents_links_only is not None:
+            for line in self.top_contents_links_only:
                 print(line)
 
     def print_html_contents(self):
         for line in self.html_top_contents:
             print(line)
 
-    def print_html_deep_list(self):
-        for line in self.html_deep_list:
+    def print_html_body_contents(self):
+        for line in self.html_body_contents:
             print(line)
 
     def print_deep_list(self):
@@ -227,13 +226,11 @@ class Display:
         else:
             return "Wrong type for clean_content_dict()"
 
-
-
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
 display = Display()
-display.display_the_lists(contents.clean_contents_list, contents.body_contents)
+display.display_the_lists(contents.top_contents_links_only, contents.body_contents)
 display.print_display()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
