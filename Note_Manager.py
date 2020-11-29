@@ -92,7 +92,7 @@ class HTMLFile:
 class Contents:
     def __init__(self, html):
         self.html_contents = html.html_contents
-        self.contents_list = None
+        self.top_contents = None
         self.html_deep_list = html.html_deep_list
         self.deep_list = None
         self.full_list = None
@@ -105,7 +105,7 @@ class Contents:
     def convert_contents_list_to_html(self):
         html_list = []
         html_list.append('<ul class="contents">')
-        for item in self.contents_list:
+        for item in self.top_contents:
             if item[0] == 'link_line':
                 line = '<li><a href="#' + item[1] + '">' + item[2] + '</a></li>'
                 html_list.append(line)
@@ -138,10 +138,10 @@ class Contents:
             if '</ul></li>' in trimmed_line:
                 type = 'end_dropdown_ul'
             sudo_list.append({'type' : type , 'id' : id, 'content' : content })
-        self.contents_list = sudo_list
+        self.top_contents = sudo_list
 
     def set_contents_from_clist(self, contents_list):
-        self.contents_list = contents_list
+        self.top_contents = contents_list
         self.convert_contents_list_to_html()
 
     def set_deep_list(self):
@@ -161,7 +161,7 @@ class Contents:
         self.deep_list = sudo_list
 
     def set_clean_contents_list(self):
-        for line in self.contents_list:
+        for line in self.top_contents:
             if line['type'] == 'dropdown_ul' or line['type'] == 'link_line':
                 self.clean_contents_list.append(line)
 
