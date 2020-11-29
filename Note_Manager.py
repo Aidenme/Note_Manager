@@ -14,7 +14,7 @@ class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
         self.html_file = None
-        self.html_contents = None
+        self.html_top_contents = None
         self.contents_start_index = None
         self.contents_end_index = None
         self.html_deep_list = None
@@ -51,7 +51,7 @@ class HTMLFile:
                 end_index = index - 1
                 break
         html_contents = html_list[start_index:(end_index + 1)]
-        self.html_contents = html_contents
+        self.html_top_contents = html_contents
 
     def insert_contents(self, contents):
         self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
@@ -91,18 +91,18 @@ class HTMLFile:
 
 class Contents:
     def __init__(self, html):
-        self.html_contents = html.html_contents
+        self.html_top_contents = html.html_top_contents
         self.top_contents = None
         self.html_deep_list = html.html_deep_list
-        self.deep_list = None
+        self.body_contents = None
         self.full_list = None
         self.clean_contents_list = []
 
-        self.convert_html_to_contents_list()
+        self.set_top_contents_list()
         self.set_deep_list()
         self.set_clean_contents_list()
 
-    def convert_contents_list_to_html(self):
+    def get_html_from_top_contents(self):
         html_list = []
         html_list.append('<ul class="contents">')
         for item in self.top_contents:
@@ -116,13 +116,13 @@ class Contents:
                 line = '</ul></li>'
                 html_list.append(line)
         html_list.append('</ul><!--End contents-->')
-        self.html_contents = html_list
+        self.html_top_contents = html_list
 
-    def convert_html_to_contents_list(self):
+    def set_top_contents_list(self):
         sudo_list = []
         id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
         content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
-        for line in self.html_contents:
+        for line in self.html_top_contents:
             try:
                 id = re.findall(id_regex_pattern, line)[0]
             except:
@@ -158,7 +158,7 @@ class Contents:
             except:
                 content = 'No content'
             sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link'})
-        self.deep_list = sudo_list
+        self.body_contents = sudo_list
 
     def set_clean_contents_list(self):
         for line in self.top_contents:
@@ -171,7 +171,7 @@ class Contents:
                 print(line)
 
     def print_html_contents(self):
-        for line in self.html_contents:
+        for line in self.html_top_contents:
             print(line)
 
     def print_html_deep_list(self):
@@ -179,7 +179,7 @@ class Contents:
             print(line)
 
     def print_deep_list(self):
-        for line in self.deep_list:
+        for line in self.body_contents:
             print(line)
 
 class Display:
@@ -187,29 +187,25 @@ class Display:
         self.display = []
         self.add_display_menu()
 
-    def display_the_lists(self, list_1, list_2):
+    def display_the_lists(self, top_contents, body_contents):
         list_display = []
-        short_list_strings = []
+        clean_top_contents = []
+        clean_body_contents = []
+        list_difference = abs(len(top_contents) - len(body_contents))
 
-        if len(list_1) >= len(list_2):
-            long_list = list_1
-            short_list = list_2
+        for x, line in enumerate(top_contents):
+            top_contents[x] = self.clean_content_dict(line)
+        for x, line in enumerate(body_contents):
+            body_contents[x] = self.clean_content_dict(line)
+
+        #In theory these lists should be the same length at all times, but if they aren't blank spaces will be added to the end of the list
+        if len(top_contents) >= len(body_contents):
+            body_contents.extend([' '] * list_difference)
         else:
-            long_list = list_2
-            short_list = list_1
-
+            top_contents.extend([' '] * list_difference)
         i = 0
-        while i <= len(long_list):
-            if i < len(short_list):
-                short_string = self.clean_content_dict(short_list[i])
-            else:
-                short_string = " "
-            short_list_strings.append(short_string)
-            i += 1
-
-        i = 0
-        while i < len(long_list):
-            self.display.append(self.clean_content_dict(long_list[i]).ljust(100) + short_list_strings[i].ljust(100))
+        while i < len(top_contents):
+            self.display.append(top_contents[i].ljust(100) + body_contents[i].ljust(100))
             i += 1
 
     def add_display_menu(self):
@@ -234,7 +230,7 @@ html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
 display = Display()
-display.display_the_lists(contents.deep_list, contents.clean_contents_list)
+display.display_the_lists(contents.clean_contents_list, contents.body_contents)
 display.print_display()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
