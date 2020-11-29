@@ -138,7 +138,7 @@ class Contents:
                 type = 'dropdown_ul'
             if '</ul></li>' in trimmed_line:
                 type = 'end_dropdown_ul'
-            sudo_list.append({'type' : type , 'id' : id, 'content' : content , 'ref_id' : self.ref_id})
+            sudo_list.append({'type' : type , 'id' : id, 'content' : content , 'ref_id' : str(self.ref_id)})
             self.ref_id += 1
         self.top_contents = sudo_list
 
@@ -159,7 +159,7 @@ class Contents:
                 content = re.findall(content_regex_pattern, line)[0]
             except:
                 content = 'No content'
-            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link', 'ref_id' : self.ref_id})
+            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link', 'ref_id' : str(self.ref_id)})
             self.ref_id += 1
         self.body_contents = sudo_list
 
@@ -221,9 +221,9 @@ class Display:
 
     def clean_content_dict(self, content_dict):
         if content_dict['type'] == 'sec_link':
-            return content_dict['id'][4:-1] + " - " + content_dict['content']
+            return content_dict['ref_id'] + " - " + content_dict['id'][4:-1] + " - " + content_dict['content']
         elif content_dict['type'] == 'link_line' or 'dropdown_ul':
-            return content_dict['id'][7:-1] + " - " + content_dict['content']
+            return content_dict['ref_id'] + " - " + content_dict['id'][7:-1] + " - " + content_dict['content']
         else:
             return "Wrong type for clean_content_dict()"
 
