@@ -97,6 +97,7 @@ class Contents:
         self.body_contents = None
         self.full_list = None
         self.clean_contents_list = []
+        self.ref_id = 0
 
         self.set_top_contents_list()
         self.set_deep_list()
@@ -137,7 +138,8 @@ class Contents:
                 type = 'dropdown_ul'
             if '</ul></li>' in trimmed_line:
                 type = 'end_dropdown_ul'
-            sudo_list.append({'type' : type , 'id' : id, 'content' : content })
+            sudo_list.append({'type' : type , 'id' : id, 'content' : content , 'ref_id' : self.ref_id})
+            self.ref_id += 1
         self.top_contents = sudo_list
 
     def set_contents_from_clist(self, contents_list):
@@ -157,7 +159,8 @@ class Contents:
                 content = re.findall(content_regex_pattern, line)[0]
             except:
                 content = 'No content'
-            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link'})
+            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link', 'ref_id' : self.ref_id})
+            self.ref_id += 1
         self.body_contents = sudo_list
 
     def set_clean_contents_list(self):
