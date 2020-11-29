@@ -23,9 +23,7 @@ class HTMLFile:
         self.get_html_body_contents(self.html_file)
 
     def set_html_file(self, html_filename):
-        print("set_html_file ran")
         the_file = []
-        global html_file
         with open(html_filename) as f:
             for line in f:
                 the_file.append(line.rstrip())
@@ -43,7 +41,6 @@ class HTMLFile:
         end_index = None
         for index, item in enumerate(html_list):
             if content_start_string in item:
-                print("if statement ran")
                 self.contents_start_index = index
                 start_index = index + 1
             if content_end_string in item:
@@ -98,7 +95,7 @@ class Contents:
         self.top_contents_links_only = []
         self.ref_id = 0
 
-        self.set_top_contents_list()
+        self.set_top_contents()
         self.set_body_contents()
         self.set_top_contents_links_only()
 
@@ -118,7 +115,7 @@ class Contents:
         html_list.append('</ul><!--End contents-->')
         self.html_top_contents = html_list
 
-    def set_top_contents_list(self):
+    def set_top_contents(self):
         sudo_list = []
         id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
         content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
@@ -185,9 +182,22 @@ class Contents:
             print(line)
 
 class Display:
-    def __init__(self):
+    def __init__(self, html_file, contents_file):
+        self.html_file = html_file
+        self.contents_file = contents_file
         self.display = []
         self.add_display_menu()
+
+    def run(self):
+        input = self.get_user_input()
+        if input == 'c':
+            self.change_line_id()
+        elif input == 'x':
+            exit()
+        self.get_user_input()
+
+    def change_line_id(self):
+        ref_id = self.get_user_input("Select a ref id")
 
     def display_the_lists(self, top_contents, body_contents):
         list_display = []
@@ -212,7 +222,9 @@ class Display:
 
     def add_display_menu(self):
         self.display.append("Welcome to Contents Manager! What would you like to do?")
-        self.display.append("c - Change a line's ID (Not functioning)")
+        self.display.append("a - Add a new link")
+        self.display.append("c - Change an ID")
+        self.display.append("x - Exit")
 
     def print_display(self):
         for line in self.display:
@@ -226,12 +238,17 @@ class Display:
         else:
             return "Wrong type for clean_content_dict()"
 
+    def get_user_input(self, input_message="Make a selection"):
+        input = raw_input(input_message)
+        return input
+
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
 contents = Contents(html_file)
-display = Display()
+display = Display(html_file, contents)
 display.display_the_lists(contents.top_contents_links_only, contents.body_contents)
 display.print_display()
+display.run()
 #contents.set_contents_from_clist(sudo_list)
 #html_file.insert_contents(contents.html_contents)
 writer.write_html_file(html_file)
