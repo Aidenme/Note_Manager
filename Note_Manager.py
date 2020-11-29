@@ -14,7 +14,7 @@ class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
         self.html_file = None
-        self.contents = None
+        self.html_contents = None
         self.contents_start_index = None
         self.contents_end_index = None
         self.html_deep_list = None
@@ -51,7 +51,7 @@ class HTMLFile:
                 end_index = index - 1
                 break
         html_contents = html_list[start_index:(end_index + 1)]
-        self.contents = html_contents
+        self.html_contents = html_contents
 
     def insert_contents(self, contents):
         self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
@@ -91,7 +91,7 @@ class HTMLFile:
 
 class Contents:
     def __init__(self, html):
-        self.html_contents = html.contents
+        self.html_contents = html.html_contents
         self.contents_list = None
         self.html_deep_list = html.html_deep_list
         self.deep_list = None
