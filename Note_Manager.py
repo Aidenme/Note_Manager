@@ -118,7 +118,7 @@ class Contents:
     def __init__(self, html_file):
         self.contents_indexes = self.get_contents_indexes(html_file)
         self.top_links = self.get_top_links(html_file, self.contents_indexes)
-        self.body_links = None
+        self.body_links = self.get_body_links(html_file, self.contents_indexes[1] )
         self.all_links = None
         self.ref_id = 0
 
@@ -132,6 +132,14 @@ class Contents:
             if dict['type'] == 'linked_contents':
                 top_links.append(dict)
         return top_links
+
+    def get_body_links(self, html_file, search_start_index):
+        body_links = []
+        for dict in html_file.html_dict_list[search_start_index:]:
+            if dict['type'] == 'linked_contents':
+                body_links.append(dict)
+        return body_links
+
 
     def get_contents_indexes(self, html_file):
         content_start_string = '<ul class="contents">'
@@ -222,6 +230,10 @@ class Contents:
         for line in self.top_links:
             print(line)
 
+    def print_body_links(self):
+        for line in self.body_links:
+            print(line)
+
     def print_html_contents(self):
         for line in self.html_top_contents:
             print(line)
@@ -301,5 +313,5 @@ class Display:
 html_file = HTMLFile("Python2.html")
 contents = Contents(html_file)
 #html_file.print_html_dict_list()
-contents.print_top_links()
+contents.print_body_links()
 writer = HTMLWriter("New_Html.html")
