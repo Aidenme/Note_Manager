@@ -75,17 +75,6 @@ class HTMLFile:
             type = None
         return type
 
-    def insert_contents(self, contents):
-        self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
-
-    def get_html_body_contents(self, html_file):
-        deep_list = []
-        section_classes = ['class="linked_sub"', 'class="linked_sec"']
-        for line in html_file:
-            if any(x in line for x in section_classes):
-                deep_list.append(line.strip())
-        self.html_body_contents = deep_list
-
     def print_html_dict_list(self):
         for line in self.html_dict_list:
             print(line)
