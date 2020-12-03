@@ -13,23 +13,15 @@ class HTMLWriter:
 class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
-        self.html_file = None
-        self.html_top_contents = None
-        self.contents_start_index = None
-        self.contents_end_index = None
-        self.html_body_contents = None
-        self.html_dict_list = None
-        self.set_html_file(self.html_filename)
-        self.get_html_contents(self.html_file)
-        self.get_html_body_contents(self.html_file)
-        self.get_html_dict_list()
+        self.html_file = self.get_html_file(html_filename)
+        self.html_dict_list = self.get_html_dict_list(self.html_file)
 
-    def set_html_file(self, html_filename):
+    def get_html_file(self, html_filename):
         the_file = []
         with open(html_filename) as f:
             for line in f:
                 the_file.append(line)
-        self.html_file = the_file
+        return the_file
 
     def print_html_file(self):
         for item in self.html_file:
@@ -52,13 +44,13 @@ class HTMLFile:
         html_contents = html_list[start_index:(end_index + 1)]
         self.html_top_contents = html_contents
 
-    def get_html_dict_list(self):
+    def get_html_dict_list(self, html_file):
         html_dict_list = []
-        for index, line in enumerate(self.html_file):
+        for index, line in enumerate(html_file):
             html_dict_line = {'raw_string' : line.lstrip(), 'html_line' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
             html_dict_line['type'] = self.get_type(html_dict_line)
             html_dict_list.append(html_dict_line)
-        self.html_dict_list = html_dict_list
+        return html_dict_list
 
     def get_contents_id(self, line):
         contents_id = self.get_href_from_line(line)
