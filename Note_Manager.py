@@ -168,20 +168,26 @@ class Contents:
         for line in self.body_links:
             print(line)
 
-class Display:
+class ContentManager:
     def __init__(self, html_file, contents_file):
         self.html_file = html_file
         self.contents_file = contents_file
-        self.display = []
-        self.add_display_menu()
 
     def run(self):
+        self.print_menu()
+        self.display_the_lists(self.contents_file.top_links, self.contents_file.body_links)
         input = self.get_user_input()
         if input == 'c':
             self.change_line_id()
         elif input == 'x':
             exit()
         self.get_user_input()
+
+    def print_menu(self):
+        print("Welcome to Contents Manager! What would you like to do?")
+        print("a - Add a new link")
+        print("c - Change an ID")
+        print("x - Exit")
 
     def change_line_id(self):
         ref_id = self.get_user_input("Select a ref id")
@@ -196,9 +202,9 @@ class Display:
         list_difference = abs(len(top_contents) - len(body_contents))
 
         for x, line in enumerate(top_contents):
-            top_contents[x] = self.clean_content_dict(line)
+            top_contents[x] = str(line['line_index']) + " - " + line['contents_id'] + " - " + line['content']
         for x, line in enumerate(body_contents):
-            body_contents[x] = self.clean_content_dict(line)
+            body_contents[x] = str(line['line_index']) + " - " + line['contents_id'] + " - " + line['content']
 
         #In theory these lists should be the same length at all times, but if they aren't blank spaces will be added to the end of the list
         if len(top_contents) >= len(body_contents):
@@ -207,26 +213,8 @@ class Display:
             top_contents.extend([' '] * list_difference)
         i = 0
         while i < len(top_contents):
-            self.display.append(top_contents[i].ljust(100) + body_contents[i].ljust(100))
+            print(top_contents[i].ljust(100) + body_contents[i].ljust(100))
             i += 1
-
-    def add_display_menu(self):
-        self.display.append("Welcome to Contents Manager! What would you like to do?")
-        self.display.append("a - Add a new link")
-        self.display.append("c - Change an ID")
-        self.display.append("x - Exit")
-
-    def print_display(self):
-        for line in self.display:
-            print(line)
-
-    def clean_content_dict(self, content_dict):
-        if content_dict['type'] == 'sec_link':
-            return content_dict['ref_id'] + " - " + content_dict['id'][4:-1] + " - " + content_dict['content']
-        elif content_dict['type'] == 'link_line' or 'dropdown_ul':
-            return content_dict['ref_id'] + " - " + content_dict['id'][7:-1] + " - " + content_dict['content']
-        else:
-            return "Wrong type for clean_content_dict()"
 
     def get_user_input(self, input_message="Make a selection"):
         input = raw_input(input_message)
@@ -234,6 +222,7 @@ class Display:
 
 html_file = HTMLFile("Python2.html")
 contents = Contents(html_file)
+content_mod = ContentManager(html_file, contents)
+content_mod.run()
 #html_file.print_html_dict_list()
-contents.print_body_links()
 writer = HTMLWriter("New_Html.html")
