@@ -18,15 +18,17 @@ class HTMLFile:
         self.contents_start_index = None
         self.contents_end_index = None
         self.html_body_contents = None
+        self.html_dict_list = None
         self.set_html_file(self.html_filename)
         self.get_html_contents(self.html_file)
         self.get_html_body_contents(self.html_file)
+        self.get_html_dict_list()
 
     def set_html_file(self, html_filename):
         the_file = []
         with open(html_filename) as f:
             for line in f:
-                the_file.append(line.rstrip())
+                the_file.append(line)
         self.html_file = the_file
 
     def print_html_file(self):
@@ -49,6 +51,54 @@ class HTMLFile:
                 break
         html_contents = html_list[start_index:(end_index + 1)]
         self.html_top_contents = html_contents
+
+    def get_html_dict_list(self):
+        html_dict_list = []
+        for index, line in enumerate(self.html_file):
+            html_dict_line = {'raw_string' : line.lstrip(), 'html_line' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
+            html_dict_line['type'] = self.get_type(html_dict_line)
+            html_dict_list.append(html_dict_line)
+        self.html_dict_list = html_dict_list
+
+    def get_contents_id(self, line):
+        contents_id = self.get_href_from_line(line)
+        if contents_id == 'No href':
+            contents_id = self.get_id_from_line(line)
+        return contents_id
+
+    def get_id_from_line(self, line):
+        id_search_pattern = 'id="BM(?:[.][1-9]*)*"'
+        id_search = re.findall(id_search_pattern, line)
+        if id_search == []:
+            id = 'No ID'
+        else:
+            id = id_search[0]
+        return id
+
+    def get_href_from_line(self, line):
+        href_search_pattern = 'href="#BM(?:[.][1-9]*)*"'
+        regex_href = re.findall(href_search_pattern, line)
+        if regex_href == []:
+            href = 'No href'
+        else:
+            href = regex_href[0]
+        return href
+
+    def get_content_from_line(self, line):
+        content_regex_pattern = '>([ a-zA-Z1-9.]*)</'
+        regex_content = re.findall(content_regex_pattern, line)
+        if regex_content == []:
+            content = 'No Content'
+        else:
+            content = regex_content[0]
+        return content
+
+    def get_type(self, dict_line):
+        if dict_line['contents_id'] != 'No ID':
+            type = 'linked_contents'
+        else:
+            type = None
+        return type
 
     def insert_contents(self, contents):
         self.html_file[self.contents_start_index:self.contents_end_index + 1] = contents
@@ -85,19 +135,24 @@ class HTMLFile:
         modded_line = ''.join([left_string, new_id, right_string])
         self.html_file[index] = modded_line
 
+    def print_html_dict_list(self):
+        for line in self.html_dict_list:
+            print(line)
+
 class Contents:
     def __init__(self, html):
         self.html_top_contents = html.html_top_contents
         self.top_contents = None
         self.html_body_contents = html.html_body_contents
         self.body_contents = None
-        self.full_list = None
+        self.link_list = None
         self.top_contents_links_only = []
         self.ref_id = 0
 
         self.set_top_contents()
         self.set_body_contents()
         self.set_top_contents_links_only()
+        self.set_link_list()
 
     def get_html_from_top_contents(self):
         html_list = []
@@ -164,6 +219,13 @@ class Contents:
             if line['type'] == 'dropdown_ul' or line['type'] == 'link_line':
                 self.top_contents_links_only.append(line)
 
+    def set_link_list(self):
+        full_list = []
+        for item in self.top_contents_links_only:
+            full_list.append(item)
+        for item in self.body_contents:
+            full_list.append(item)
+
     def print_contents_list(self):
         if self.top_contents_links_only is not None:
             for line in self.top_contents_links_only:
@@ -198,6 +260,9 @@ class Display:
 
     def change_line_id(self):
         ref_id = self.get_user_input("Select a ref id")
+        for item in self.contents_file.link_list:
+            if item['ref_id'] == ref_id:
+                pass
 
     def display_the_lists(self, top_contents, body_contents):
         list_display = []
@@ -244,11 +309,4 @@ class Display:
 
 html_file = HTMLFile("Python2.html")
 writer = HTMLWriter("New_Html.html")
-contents = Contents(html_file)
-display = Display(html_file, contents)
-display.display_the_lists(contents.top_contents_links_only, contents.body_contents)
-display.print_display()
-display.run()
-#contents.set_contents_from_clist(sudo_list)
-#html_file.insert_contents(contents.html_contents)
-writer.write_html_file(html_file)
+html_file.print_html_dict_list()
