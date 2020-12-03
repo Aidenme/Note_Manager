@@ -31,7 +31,7 @@ class HTMLFile:
         html_dict_list = []
         for index, line in enumerate(html_file):
             html_dict_line = {'raw_string' : line.strip(), 'line_index' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
-            html_dict_line['type'] = self.get_type(html_dict_line)
+            html_dict_line['type'] = self.set_type(html_dict_line)
             html_dict_list.append(html_dict_line)
         return html_dict_list
 
@@ -68,7 +68,7 @@ class HTMLFile:
             content = regex_content[0]
         return content
 
-    def get_type(self, dict_line):
+    def set_type(self, dict_line):
         if dict_line['contents_id'] != 'No ID':
             type = 'linked_contents'
         else:
@@ -86,30 +86,6 @@ class HTMLFile:
                 deep_list.append(line.strip())
         self.html_body_contents = deep_list
 
-    def change_line(self, index, line_string):
-        self.html_file[index] = line_string
-
-    def change_line_id(self, index, new_id):
-        line_to_change = self.html_file[index]
-        #I've been treating id and href as the same thing, but different patterns need to be used to search for each of them:
-        href_search_pattern = 'href="#BM(?:[.][1-9]*)*"'
-        id_search_pattern = 'id="BM(?:[.][1-9]*)*"'
-        #These are added to whatever results are returned from the regex to get the index of where the id, starting with BM actually starts.
-        href_index_mod = 7
-        id_index_mod = 4
-        search_result = re.search(href_search_pattern, line_to_change)
-        if search_result == None:
-            search_result = re.search(id_search_pattern, line_to_change)
-            span_indexes = search_result.span()
-            search_indexes = [span_indexes[0] + id_index_mod, span_indexes[1] - 1]
-        else:
-            span_indexes = search_result.span()
-            search_indexes = [span_indexes[0] + href_index_mod, span_indexes[1] - 1]
-        left_string = line_to_change[:search_indexes[0]]
-        right_string = line_to_change[search_indexes[1]:]
-        modded_line = ''.join([left_string, new_id, right_string])
-        self.html_file[index] = modded_line
-
     def print_html_dict_list(self):
         for line in self.html_dict_list:
             print(line)
@@ -119,8 +95,6 @@ class Contents:
         self.contents_indexes = self.get_contents_indexes(html_file)
         self.top_links = self.get_top_links(html_file, self.contents_indexes)
         self.body_links = self.get_body_links(html_file, self.contents_indexes[1] )
-        self.all_links = None
-        self.ref_id = 0
 
     def get_top_links(self, html_file, content_indexes):
         top_links = []
@@ -153,13 +127,6 @@ class Contents:
                 break
         return (start_index, end_index)
 
-    def set_link_list(self):
-        full_list = []
-        for item in self.top_contents_links_only:
-            full_list.append(item)
-        for item in self.body_contents:
-            full_list.append(item)
-
     def print_top_links(self):
         for line in self.top_links:
             print(line)
@@ -188,12 +155,6 @@ class ContentManager:
         print("a - Add a new link")
         print("c - Change an ID")
         print("x - Exit")
-
-    def change_line_id(self):
-        ref_id = self.get_user_input("Select a ref id")
-        for item in self.contents_file.link_list:
-            if item['ref_id'] == ref_id:
-                pass
 
     def display_the_lists(self, top_contents, body_contents):
         list_display = []
