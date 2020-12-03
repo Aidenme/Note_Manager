@@ -27,27 +27,10 @@ class HTMLFile:
         for item in self.html_file:
             print(item)
 
-    def get_html_contents(self, html_list):
-        html_contents = []
-        content_start_string = '<ul class="contents">'
-        content_end_string = '</ul><!--End contents-->'
-        start_index = None
-        end_index = None
-        for index, item in enumerate(html_list):
-            if content_start_string in item:
-                self.contents_start_index = index
-                start_index = index + 1
-            if content_end_string in item:
-                self.contents_end_index = index
-                end_index = index - 1
-                break
-        html_contents = html_list[start_index:(end_index + 1)]
-        self.html_top_contents = html_contents
-
     def get_html_dict_list(self, html_file):
         html_dict_list = []
         for index, line in enumerate(html_file):
-            html_dict_line = {'raw_string' : line.lstrip(), 'html_line' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
+            html_dict_line = {'raw_string' : line.strip(), 'line_index' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
             html_dict_line['type'] = self.get_type(html_dict_line)
             html_dict_list.append(html_dict_line)
         return html_dict_list
@@ -132,19 +115,36 @@ class HTMLFile:
             print(line)
 
 class Contents:
-    def __init__(self, html):
-        self.html_top_contents = html.html_top_contents
-        self.top_contents = None
-        self.html_body_contents = html.html_body_contents
-        self.body_contents = None
-        self.link_list = None
-        self.top_contents_links_only = []
+    def __init__(self, html_file):
+        self.contents_indexes = self.get_contents_indexes(html_file)
+        self.top_links = self.get_top_links(html_file, self.contents_indexes)
+        self.body_links = None
+        self.all_links = None
         self.ref_id = 0
 
-        self.set_top_contents()
-        self.set_body_contents()
-        self.set_top_contents_links_only()
-        self.set_link_list()
+    def get_top_links(self, html_file, content_indexes):
+        top_links = []
+        content_start_string = '<ul class="contents">'
+        content_end_string = '</ul><!--End contents-->'
+        start_index = None
+        end_index = None
+        for dict in html_file.html_dict_list[content_indexes[0]:content_indexes[1]]:
+            if dict['type'] == 'linked_contents':
+                top_links.append(dict)
+        return top_links
+
+    def get_contents_indexes(self, html_file):
+        content_start_string = '<ul class="contents">'
+        content_end_string = '</ul><!--End contents-->'
+        start_index = None
+        end_index = None
+        for dict in html_file.html_dict_list:
+            if dict['raw_string'] == content_start_string:
+                start_index = dict['line_index']
+            if dict['raw_string'] == content_end_string:
+                end_index = dict['line_index']
+                break
+        return (start_index, end_index)
 
     def get_html_from_top_contents(self):
         html_list = []
@@ -218,10 +218,9 @@ class Contents:
         for item in self.body_contents:
             full_list.append(item)
 
-    def print_contents_list(self):
-        if self.top_contents_links_only is not None:
-            for line in self.top_contents_links_only:
-                print(line)
+    def print_top_links(self):
+        for line in self.top_links:
+            print(line)
 
     def print_html_contents(self):
         for line in self.html_top_contents:
@@ -300,5 +299,7 @@ class Display:
         return input
 
 html_file = HTMLFile("Python2.html")
+contents = Contents(html_file)
+#html_file.print_html_dict_list()
+contents.print_top_links()
 writer = HTMLWriter("New_Html.html")
-html_file.print_html_dict_list()
