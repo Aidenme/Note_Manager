@@ -140,7 +140,6 @@ class Contents:
                 body_links.append(dict)
         return body_links
 
-
     def get_contents_indexes(self, html_file):
         content_start_string = '<ul class="contents">'
         content_end_string = '</ul><!--End contents-->'
@@ -153,71 +152,6 @@ class Contents:
                 end_index = dict['line_index']
                 break
         return (start_index, end_index)
-
-    def get_html_from_top_contents(self):
-        html_list = []
-        html_list.append('<ul class="contents">')
-        for item in self.top_contents:
-            if item[0] == 'link_line':
-                line = '<li><a href="#' + item[1] + '">' + item[2] + '</a></li>'
-                html_list.append(line)
-            elif item[0] == 'dropdown_ul':
-                line = '<li><a href="#' + item[1] + '">' + item[2] + '</a><div id="'+ item[1] + 'but" class="twirl_button" onclick="reveal(\'' + item[1] + 'sub\', \'' + item[1] + 'but\')">&#8658;</div><ul id="' + item[1] + 'sub" class="subcontents" style="display:none;">'
-                html_list.append(line)
-            elif item[0] == 'end_dropdown_ul':
-                line = '</ul></li>'
-                html_list.append(line)
-        html_list.append('</ul><!--End contents-->')
-        self.html_top_contents = html_list
-
-    def set_top_contents(self):
-        sudo_list = []
-        id_regex_pattern = 'href="#BM(?:[.][1-9]*)*"'
-        content_regex_pattern = '>([ a-zA-Z1-9.]*)</a>'
-        for line in self.html_top_contents:
-            try:
-                id = re.findall(id_regex_pattern, line)[0]
-            except:
-                id = 'No id'
-            try:
-                content = re.findall(content_regex_pattern, line)[0]
-            except:
-                content = 'No content'
-            type = 'link_line'
-            trimmed_line = line.strip()
-            if 'class="subcontents"' in trimmed_line:
-                type = 'dropdown_ul'
-            if '</ul></li>' in trimmed_line:
-                type = 'end_dropdown_ul'
-            sudo_list.append({'type' : type , 'id' : id, 'content' : content , 'ref_id' : str(self.ref_id)})
-            self.ref_id += 1
-        self.top_contents = sudo_list
-
-    def set_contents_from_clist(self, contents_list):
-        self.top_contents = contents_list
-        self.convert_contents_list_to_html()
-
-    def set_body_contents(self):
-        sudo_list = []
-        id_regex_pattern = 'id="BM(?:[.][1-9]*)*"'
-        content_regex_pattern = '>([: a-zA-Z1-9.]*)</h'
-        for line in self.html_body_contents:
-            try:
-                id = re.findall(id_regex_pattern, line)[0]
-            except:
-                id = 'No id'
-            try:
-                content = re.findall(content_regex_pattern, line)[0]
-            except:
-                content = 'No content'
-            sudo_list.append({'id' : id, 'content' : content, 'type' : 'sec_link', 'ref_id' : str(self.ref_id)})
-            self.ref_id += 1
-        self.body_contents = sudo_list
-
-    def set_top_contents_links_only(self):
-        for line in self.top_contents:
-            if line['type'] == 'dropdown_ul' or line['type'] == 'link_line':
-                self.top_contents_links_only.append(line)
 
     def set_link_list(self):
         full_list = []
@@ -232,18 +166,6 @@ class Contents:
 
     def print_body_links(self):
         for line in self.body_links:
-            print(line)
-
-    def print_html_contents(self):
-        for line in self.html_top_contents:
-            print(line)
-
-    def print_html_body_contents(self):
-        for line in self.html_body_contents:
-            print(line)
-
-    def print_deep_list(self):
-        for line in self.body_contents:
             print(line)
 
 class Display:
