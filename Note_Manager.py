@@ -47,7 +47,7 @@ class HTMLFile:
         if id_search == []:
             id = 'No ID'
         else:
-            id = id_search[0]
+            id = id_search[0][4:-1]
         return id
 
     def get_href_from_line(self, line):
@@ -56,7 +56,7 @@ class HTMLFile:
         if regex_href == []:
             href = 'No href'
         else:
-            href = regex_href[0]
+            href = regex_href[0][7:-1]
         return href
 
     def get_content_from_line(self, line):
@@ -83,7 +83,8 @@ class Contents:
     def __init__(self, html_file):
         self.contents_indexes = self.get_contents_indexes(html_file)
         self.top_links = self.get_top_links(html_file, self.contents_indexes)
-        self.body_links = self.get_body_links(html_file, self.contents_indexes[1] )
+        self.body_links = self.get_body_links(html_file, self.contents_indexes[1])
+        self.top_body_pairs = self.pair_links(self.top_links, self.body_links)
 
     def get_top_links(self, html_file, content_indexes):
         top_links = []
@@ -115,6 +116,9 @@ class Contents:
                 end_index = dict['line_index']
                 break
         return (start_index, end_index)
+
+    def pair_links(self, top_links, body_links):
+        return None
 
     def print_top_links(self):
         for line in self.top_links:
@@ -169,6 +173,15 @@ class ContentManager:
     def get_user_input(self, input_message="Make a selection"):
         input = raw_input(input_message)
         return input
+
+    def simplify_id(self, contents_id):
+        regex_pattern = 'BM(?:[.][1-9]*)*'
+        re_result = re.findall(regex_pattern, contents_id)
+        if re_result != []:
+            return re_result[0]
+        else:
+            return "Could not simplify"
+
 
 html_file = HTMLFile("Python2.html")
 contents = Contents(html_file)
