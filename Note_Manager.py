@@ -70,7 +70,10 @@ class HTMLFile:
 
     def set_type(self, dict_line):
         if dict_line['contents_id'] != 'No ID':
-            type = 'linked_contents'
+            if 'href="#BM' in dict_line['raw_string']:
+                type = 'top_contents_link'
+            else:
+                type = 'body_contents_link'
         else:
             type = None
         return type
@@ -93,14 +96,14 @@ class Contents:
         start_index = None
         end_index = None
         for dict in html_file.html_dict_list[content_indexes[0]:content_indexes[1]]:
-            if dict['type'] == 'linked_contents':
+            if dict['type'] == 'top_contents_link':
                 top_links.append(dict)
         return top_links
 
     def get_body_links(self, html_file, search_start_index):
         body_links = []
         for dict in html_file.html_dict_list[search_start_index:]:
-            if dict['type'] == 'linked_contents':
+            if dict['type'] == 'body_contents_link':
                 body_links.append(dict)
         return body_links
 
