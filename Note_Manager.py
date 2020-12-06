@@ -10,6 +10,11 @@ class HTMLWriter:
             for line in html_file.html_file:
                 y.write(line + '\n')
 
+    def write_htmlfile_dict_list(self, html_file):
+        with open(self.filename, mode='a') as y:
+            for line in html_file.html_dict_list:
+                y.write((line['spaces'] * ' ') + line['raw_string'] + '\n')
+
 class HTMLFile:
     def __init__(self, html_filename):
         self.html_filename = html_filename
@@ -30,7 +35,7 @@ class HTMLFile:
     def get_html_dict_list(self, html_file):
         html_dict_list = []
         for index, line in enumerate(html_file):
-            html_dict_line = {'raw_string' : line.strip(), 'line_index' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None}
+            html_dict_line = {'raw_string' : line.strip(), 'line_index' : index + 1, 'contents_id' : self.get_contents_id(line), 'content' : self.get_content_from_line(line), 'spaces' : len(line) - len(line.lstrip()), 'type' : None, 'paired' : False}
             html_dict_line['type'] = self.set_type(html_dict_line)
             html_dict_list.append(html_dict_line)
         return html_dict_list
@@ -121,6 +126,8 @@ class Contents:
         return (start_index, end_index)
 
     def pair_links(self, top_links, body_links):
+        pair_links = []
+
         return None
 
     def print_top_links(self):
@@ -188,7 +195,7 @@ class ContentManager:
 
 html_file = HTMLFile("Python2.html")
 contents = Contents(html_file)
-content_mod = ContentManager(html_file, contents)
-content_mod.run()
-#html_file.print_html_dict_list()
+#content_mod = ContentManager(html_file, contents)
+#content_mod.run()
 writer = HTMLWriter("New_Html.html")
+writer.write_htmlfile_dict_list(html_file)
