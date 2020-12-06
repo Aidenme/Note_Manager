@@ -127,8 +127,12 @@ class Contents:
 
     def pair_links(self, top_links, body_links):
         pair_links = []
-
-        return None
+        for top_line in top_links:
+            search_id = top_line['contents_id']
+            for body_line in body_links:
+                if body_line['contents_id'] == search_id:
+                    pair_links.append({ 'top_link' : top_line, 'body_link' : body_line})
+        return pair_links
 
     def print_top_links(self):
         for line in self.top_links:
@@ -136,6 +140,10 @@ class Contents:
 
     def print_body_links(self):
         for line in self.body_links:
+            print(line)
+
+    def print_top_body_pairs(self):
+        for line in self.top_body_pairs:
             print(line)
 
 class ContentManager:
@@ -195,7 +203,7 @@ class ContentManager:
 
 html_file = HTMLFile("Python2.html")
 contents = Contents(html_file)
+contents.print_top_body_pairs()
 #content_mod = ContentManager(html_file, contents)
 #content_mod.run()
-writer = HTMLWriter("New_Html.html")
-writer.write_htmlfile_dict_list(html_file)
+#writer = HTMLWriter("New_Html.html")
