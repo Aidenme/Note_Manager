@@ -1,0 +1,2240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Python</title>
+    <!--Add "../" before Main_Styles.css for each folder deep this is-->
+    <link rel="stylesheet" type="text/css" href="../../Main_Styles.css">
+  </head>
+  <body onload="loadFunctions()">
+    <h1>Python</h1>
+    <ul class="contents">
+      <li>
+        <a href="#BM1" id="BM1Link">Variable assignment</a>
+      </li>
+      <li>
+        <a href="#BM2" id="BM2Link">Numbers</a><div id="BM2but" class="twirl_button" onclick="reveal('BM2sub', 'BM2but')">&#8658;</div>
+        <ul id="BM2sub" class="subcontents" style="display:none;">
+          <li><a href="#BM2.1">Number Data Types</a></li>
+          <li><a href="#BM2.2">Number Types</a></li>
+          <li><a href="#BM2.3">Numeric Operators</a></li>
+          <li><a href="#BM2.4">Functions for Numbers</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#BM3" id="BM3Link">Strings</a><div id="BM3but" class="twirl_button" onclick="reveal('BM3sub', 'BM3but')">&#8658;</div>
+        <ul id="BM3sub" class="subcontents" style="display:none;">
+          <li><a href="#BM3.1">Escape Characters</a></li>
+          <li><a href="#BM3.2">Special Characters</a></li>
+          <li><a href="#BM3.3">Operators</a></li>
+          <li><a href="#BM3.4">Regular Expressions</a></li>
+          <li><a href="#BM3.5">String Functions and Methods</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#BM4" id="BM4Link">Collections</a><div id="BM4but" class="twirl_button" onclick="reveal('BM4sub', 'BM4but')">&#8658;</div>
+        <ul id="BM4sub" class="subcontents" style="display:none;">
+          <li>
+            <a href=#BM4.1 id="BM4.1Link">Lists</a><div id="BM4.1but" class="twirl_button" onclick="reveal('BM4.1sub', 'BM4.1but')">&#8658;</div>
+            <ul id="BM4.1sub" class="subcontents" style="display:none;">
+              <li><a href="#BM4.1.1">Referencing list elements</a></li>
+              <li><a href="#BM4.1.2">Modifying lists</a></li>
+              <li><a href="#BM4.1.3">Modifying variables containing sublists</a></li>
+              <li><a href="#BM4.1.4">Copying lists</a></li>
+              <li><a href="#BM4.1.5">List operators</a></li>
+              <li><a href="#BM4.1.6">List functions and methods</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#BM4.2" id="BM4.2Link">Tuples</a><div id="BM4.2but" class="twirl_button" onclick="reveal('BM4.2sub', 'BM4.2but')">&#8658;</div>
+            <ul id="BM4.2sub" class="subcontents" style="display:none;">
+              <li><a href="#BM4.2.1">Tuple functions and methods</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href='#BM4.3' id="BM4.3Link">Dictionaries</a>
+          </li>
+          <li>
+            <a href='#BM4.4' id="BM4.4Link">Sets</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="#BM8" id="BM8Link">Object Oriented Features</a>
+      </li>
+    </ul><!--End contents-->
+    <div class="content">
+      <h2 id="BM1" class="linked_sec">Variable Assignment</h2>
+      <p>Variables are assigned with "=" also known as the assignment operator.</p>
+      <p>The variable on the left is assigned to the object or variable on the right.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>cake = "Tasty!"</li>
+          <li>print(cake)</li>
+        </ul>
+        <ul class="results">
+          <li>"Tasty!"</li>
+        </ul>
+      </div>
+      <p>Python has the unique ability to do multiple variable assignments on one line:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>kelly, andy, mike = 'Wealthy', 'Healthy', 'Stealthy'</li>
+          <li>print("Kelly is " + kelly)</li>
+          <li>print("Andy is " + andy)</li>
+          <li>print("Mike is " + mike)</li>
+        </ul>
+        <ul class="results">
+          <li>Kelly is Wealthy</li>
+          <li>Andy is Healthy</li>
+          <li>Mike is Stealthy</li>
+        </ul>
+      </div>
+      <p>This can save some lines of code in situations where you want to swap variable values. Normally if you want to swap values you need to use a temporary variable like this:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>book1 = "Maximum Ride"</li>
+          <li>book2 = "Harry Potter"</li>
+          <li>placeholder = book1</li>
+          <li>book1 = book2</li>
+          <li>book2 = placeholder</li>
+          <li>print(book1 + ", " + book2)</li>
+        </ul>
+        <ul class="results">
+          <li>Harry Potter, Maximum Ride</li>
+        </ul>
+      </div>
+      <p>If you tried this swap without the placeholder, assigning book2 to book1 would cause you to lose the original value in book1. Since with tuples you can do multiple assignments at once you can swap these values with one line and avoid a placeholder:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>book1 = "Maximum Ride"</li>
+          <li>book2 = "Harry Potter"</li>
+          <li>book1, book2 = book2, book1</li>
+          <li>print(book1 + ", " + book2)</li>
+        </ul>
+        <ul class="results">
+          <li>Harry Potter, Maximum Ride</li>
+        </ul>
+      </div>
+      <p>You don't even need to have the same number of values on both sides of the equal sign. * can be used to indicate a variable on the left you want to use to absorb the extra variables on the right:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>tenlb_weight, twentylb_weight, *dog = 10, 20, 8, 16</li>
+          <li>print("Ten pound weights are " + str(tenlb_weight) + " lbs")</li>
+          <li>print("Twenty pound weights are " + str(twentylb_weight) + " lbs")</li>
+          <li>print("Dogs are either " + str(dog) + " lbs")</li>
+        </ul>
+        <ul class="results">
+          <li>Ten pound weights are 10 lbs</li>
+          <li>Twenty pound weights are 20 lbs</li>
+          <li>Dogs are either [8, 16] lbs</li>
+        </ul>
+      </div>
+      <h2 id="BM2" class="linked_sec">Numbers</h2>
+      <h3 id="BM2.1" class="linked_sub">Number Data Types:</h3>
+      <ul>
+        <li>Integers</li>
+        <li>Floats</li>
+        <li>Complex Numbers</li>
+      </ul>
+      <p>Integer and float size is infinite (limited by system memory only)</p>
+      <h4>Integers</h4>
+      <p>Operations with them make integers unless dividing. Then they convert to floating point numbers:</p>
+      <div class="code">
+        <ul class="inputs"><li>1/8</li></ul>
+        <ul class="results"><li>0.125</li></ul>
+      </div>
+      <p>You can convert a float to a float with int(). No rounding. This removes everything after the decimal.</p>
+      <div class="code">
+        <ul class="inputs"><li>int(4.9)</li></ul>
+        <ul class="results"><li>4</li></ul>
+      </div>
+      <h4>Floats</h4>
+      <p>Operations with them always return floats. Any operation done on a int that needs it to be a float will automatically convert it to a float,
+      but the function float() will convert.</p>
+      <div class="code">
+        <ul class="inputs"><li>float(4)</li></ul>
+        <ul class="results"><li>4.0</li></ul>
+      </div>
+      <h4>Complex Numbers</h4>
+      <p>Numbers made of a real and imaginary part.</p>
+      <p>The imaginary part is made up of an integer and standard imaginary number notation "j", which represents the square root of 1:</p>
+      <div class="code">
+        <ul class="inputs"><li>4</li></ul>
+      </div>
+      <p>You can create a complex number with a real and imaginary part with this function:</p>
+      <div class="code">
+        <ul class="inputs"><li>complex(8, 4j)</li></ul>
+        <ul class="results"><li>(8+4j)</li></ul>
+      </div>
+      <p>The real and imaginary part of the number are floats. Results are returned in paren to show they represent one value, one complex number.</p>
+      <p>You can also do math with them like this:</p>
+      <div class="code">
+        <ul class="inputs"><li>3 + 2j - (4 + 4j)</li></ul>
+        <ul class="results"><li>(-1 - 2j)</li></ul>
+      </div>
+      <p>They never auto convert to another type, but can be converted with these functions:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>z=(3+5j)</li>
+          <li>z.real</li>
+        </ul>
+        <ul class="results"><li>3.0</li></ul>
+      </div>
+      <p>Or to get the imaginary part:</p>
+      <div class="code">
+        <ul class="inputs"><li>z.imag</li></ul>
+        <ul class="results"><li>5.0</li></ul>
+      </div>
+      <h2 id="BM2.2" class="linked_sub">Number Types</h2>
+      <p>Python can work with number types other than base 10. Like octal and hexidecimal numbers. Note python will always use base 10 to print numbers.</p>
+      <p>Start a number with "0o" and it will be treated as an octal.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>num = 0o12</li>
+          <li>print(num)</li>
+        </ul>
+          <ul class="results"><li>10</li></ul>
+      </div>
+      <p>Start a number with "0x" and it will be treated as a Hexidecimal</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>num = 0x8ab</li>
+          <li>print(num)</li>
+        </ul>
+        <ul class="results"><li>2219</li></ul>
+      </div>
+      <h2 id="BM2.3" class="linked_sub">Numeric Operators</h2>
+      <table>
+        <tr>
+          <th>Operator</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td>+</td>
+          <td>Addition</td>
+        </tr>
+        <tr>
+          <td>-</td>
+          <td>Subtraction</td>
+        </tr>
+        <tr>
+          <td>*</td>
+          <td>Multiplication</td>
+        </tr>
+        <tr>
+          <td>/</td>
+          <td>Division</td>
+        </tr>
+        <tr>
+          <td>**</td>
+          <td>Exponentation</td>
+        </tr>
+      </table>
+      <p>Remember PEMDAS cause that's how Python do. Use a lot of parentheses if it gets confusing.</p>
+      <h3 id="BM2.4" class="linked_sub">Functions for Numbers</h3>
+      <p>Number functions generally return the same type as the input.</p>
+      <div class="function">
+        <div class="func_sum">Convert a non int type to integer:</div>
+        <div class="func_name">int()</div>
+        <div class="func_fill">int(<span class="required">&lt;Something to convert&gt;</span>,
+          <span class="optional">&lt;number base to interpret from&gt;</span>)
+        </div>
+        <p>You can convert a value from binary into an integer:</p>
+         <div class="code">
+           <ul class="inputs"><li>int('101', 2)</li></ul>
+           <ul class="results"><li>5</li></ul>
+         </div>
+         <p>If the string passed above was '102' instead of '101' this would cause an error because 2 is not a number that can appear in binary.</p>
+       </div><!--End func int() div-->
+      <p>abs(x)</p>
+      <p>Absolute Value</p>
+      <p>round(x)</p>
+      <p>Rounds to the nearest integer</p>
+      <p>divmod(a,b)</p>
+      <p>Int division and modulus. a is divided by b and returns (division result, remainder).</p>
+      <div class="code">
+        <ul class="inputs"><li>divmod(5, 2)</li></ul>
+        <ul class="results"><li>(2, 1)</li></ul>
+      </div>
+      <p>pow(a,b)</p>
+      <p>Alternate to ** a is taken to the power of b.</p>
+      <div class="code">
+        <ul class="inputs"><li>pow(2, 3)</li></ul>
+        <ul class="results"><li>8</li></ul>
+      </div>
+  <!--Strings-->
+      <h2 id="BM3" class="linked_sec">Strings</h2>
+      <p>They are immutable. You must make a new string or assign string operation output to the input string to "change" it.</p>
+      <p>Strings can be delimited with ' and ". To define a string across multiple lines of code delimit with ''' or """. When you define a string
+        with single-quotes, double quotes will be treated as a character and won't delimit. Both double and single quotes won't delimit when using three
+      quotes to define the string across multiple lines. You can also define a string across multiple lines by ending each line with \.</p>
+      <p>Although strings are immutable you can easily turn a string into a list of characters with the list() function. You can convert it back with "".join(&lt;some list of characters&gt;).</p>
+      <h3 id="BM3.1" class="linked_sub">Escape Characters</h3>
+      <p>These are characters that start with a backslash and represent a different character. Are often used for special characters or Characters
+      that don't have a standard printable representation.</p>
+      <table>
+        <tr>
+          <th>Escape Character</th>
+          <th>What it does</th>
+        </tr>
+        <tr>
+          <td>\n</td>
+          <td>Newline</td>
+        </tr>
+        <tr>
+          <td>\t</td>
+          <td>tab</td>
+        </tr>
+        <tr>
+          <td>\\</td>
+          <td>Single backslash character</td>
+        </tr>
+        <tr>
+          <td>\"</td>
+          <td>Quote without ending the string</td>
+        </tr>
+        <tr>
+          <td>\'</td>
+          <td>Single quote without ending the string</td>
+        </tr>
+        <tr>
+          <td>\b</td>
+          <td>Backspace</td>
+        </tr>
+        <tr>
+          <td>\v</td>
+          <td>Vertical tab</td>
+        </tr>
+        <tr>
+          <td>\a</td>
+          <td>Bell</td>
+        </tr>
+        <tr>
+          <td>\f</td>
+          <td>Formfeed</td>
+        </tr>
+        <tr>
+          <td>\r</td>
+          <td>Carriage Return</td>
+        </tr>
+        <tr>
+          <td>\0</td>
+          <td>Null terminator</td>
+        </tr>
+        <tr>
+          <td>\0nn</td>
+          <td>Octal escape character for ASCII character</td>
+        </tr>
+        <tr>
+          <td>\xnn</td>
+          <td>hexidecimal escape character for ASCII character</td>
+        </tr>
+        <tr>
+          <td>\e</td>
+          <td>Escape character</td>
+        </tr>
+      </table>
+      <p>You can process these escape characters literally by adding "r" in front of the string outside the quotes:</p>
+      <div class="code">
+        <ul class="inputs"><li>print(r"\n is the newline character")</li></ul>
+        <ul class="results"><li>\n is the newline character</li></ul>
+      </div>
+      <p>When using escape characters in python's interactive mode they will often be interpreted literally unless they are used with the print() function.</p>
+      <p>The print function will automatically add a newline to the end of it's output unless it's passed an "end" parameter with nothing:</p>
+      <div class="code">
+        <ul class="inputs"><li>print("Hello, World!", end="")</li></ul>
+      </div>
+      <h3 id="BM3.2" class="linked_sub">Special Characters</h3>
+      <h4>ASCII Characters</h4>
+      <p>To write any ASCII character requires escaping and providing a hexidecimal or octal number that corresponds to that character</p>
+      <p>When using the octal option you can just enter the number after \, but this only allows for three digits:</p>
+      <div class="code">
+        <ul class="inputs"><li>'\155'</li></ul>
+        <ul class="results"><li>'m'</li></ul>
+      </div>
+      <p>To print in hex you need to add an x before the hexidecimal number you use so python knows it's a hexidecimal.</p>
+      <div class="code">
+        <ul class="inputs"><li>'\x6D'</li></ul>
+        <ul class="results"><li>'m'</li></ul>
+      </div>
+      <p>Most of the weird ASCII characters aren't available because Python strings are written in Unicode. See below.</p>
+      <h4>Unicode Characters</h4>
+      <p>To write a unicode character requires escaping and providing the unicode code. These codes all start with u.</p>
+      <div class="code">
+        <ul class="inputs"><li>'\u00a7'</li></ul>
+        <ul class="results"><li>&sect;</li></ul>
+      </div>
+      <p>You can also provide the unicode characters name if you escape with \N and write the name in brackets that follow:</p>
+      <div class="code">
+        <ul class="inputs"><li>'\N{COPYRIGHT SIGN}'</li></ul>
+        <ul class="results"><li>&copy;</li></ul>
+      </div>
+      <h3 id="BM3.3" class="linked_sub">Operators</h3>
+      <div class="function">
+        <div class="func_name">+</div>
+          <p>The concatenation operator. Adds one string on to the end of another. Since "+" is also the addition operator adding a integer to a string doesn't
+        automatically convert the integer to a string and causes an error. Also note this is less efficient than the join() method.</p>
+      </div>
+      <div class="function">
+        <div class="func_name">*</div>
+          <p>The repetition operator. Multiplies a string.</p>
+        <div class="code">
+          <ul class="inputs"><li>'A' * 10</li></ul>
+          <ul class="results"><li>'AAAAAAAAAA'</li></ul>
+        </div>
+      </div>
+      <div class="function">
+        <div class="func_name">in</div>
+        <p>Determines if a string is in a string and returns a boolean if it is (True) or isn't (False)</p>
+      </div>
+      <div class="function">
+        <div class="func_name">%</div>
+        <p>You can use the modulus operator to format strings, but this is the old way to use formatting. Now the .format() method is used (see functions).</p>
+        <div class="code">
+          <ul class="inputs"><li>"Good %s my good %s" % ("Morning", "Sir")</li></ul>
+          <ul class="results"><li>'Good Morning my good Sir'</li></ul>
+        </div>
+        <p>The formatting is a string on the left of % (where it doesn't have a character next to it) and a tuple of strings on the right</p>
+        <p>str() is automatically applied to all the strings in the tuple so you don't have to worry about converting any values there beforehand.</p>
+        <p>There are a number of different formatting sequences that can be used instead of simple %s (which just means string replacement). Formatting sequences start with % and are defined by the character attached to the right.</p>
+        <p>For example this specifies field width (number of characters to fit the tuple in) to be 6, specifies number of characters after the decimal to be 2, and left justifies the number in the field:</p>
+        <div class="code">
+          <ul class="inputs"><li>"Pi is <%-6.2f>" % 3.14159</li></ul>
+          <ul class="results"><li>Pi is &lt;3.14&nbsp;&nbsp;&gt;</li></ul>
+        </div>
+        <p>Instead of using a tuple you can also use a dictionary on the right side of the modulus operator. This is helpful because you can be more specific with what values you want returned:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>num_dict = {'e' : 2.718, 'pi' : 3.14159}</li>
+            <li>print("%(pi).2f - %(pi).4f - %(e).2f" % num_dict)</li>
+          </ul>
+          <ul class="results"><li>3.14 - 3.1416 - 2.72</li></ul>
+        </div>
+
+      </div>
+      <p>Any operators that work on tuples (i.e. most operators that work on lists) also work on strings.</p>
+      <h3 id="BM3.4" class="linked_sub">Regular Expressions</h3>
+      <p>To work with regular expressions the "re" module needs to be imported.</p>
+      <p>RegEx is a special mini language for searching strings of substrings of a particular format.</p>
+      <p>The re module has specific functions that apply RegExs to a string and return different results based on the RegEx pattern searched for.</p>
+      <p>The pattern to search for passed to the RegEx function is a string. A basic search pattern can simply be a string if you want:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "Hello, World!"</li>
+          <li>re.findall("Hello", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['Hello']</li>
+        </ul>
+      </div>
+      <p>There are lots of things you can put in the pattern beyond just characters in a particular order however:</p>
+      <h4>[]</h4>
+      <p>Searches for any characters in the brackets. This can include any letters [ahc] or a range of letters in alphabetical order [a-g]</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "tisk tisk the thistle hurt my tooth"</li>
+          <li>re.findall("t[hi]")</li>
+        </ul>
+        <ul class="results">
+          <li>['ti', 'ti', 'th', 'th', 'th']</li>
+        </ul>
+      </div>
+      <h4>.</h4>
+      <p>Searches for any character except for \n (newline)</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "Hooligan owls like to hoot and hurt"</li>
+          <li>re.findall("h..t", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['hoot', 'hurt']</li>
+        </ul>
+      </div>
+      <h4>^</h4>
+      <p>Checks if the string starts with the pattern. Returns the matching pattern if the string starts with the pattern. This can only return one match because there is only one beginning to a string. As a result this is mostly useful for True/False checks. This must be at the very beginning of the pattern.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "positivity makes positivity"</li>
+          <li>re.findall("^p.s", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['pos']</li>
+        </ul>
+      </div>
+      <h4>$</h4>
+      <p>Checks if the string ends with the pattern. This must be at the very end of the pattern.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "positivity makes positivity"</li>
+          <li>re.findall("i.y$", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['ity']</li>
+        </ul>
+      </div>
+      <h4>+</h4>
+      <p>Does a check with the character before it. It sees if there is one or more occurrences of that character after the rest of the pattern being seached for.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "lee is low and likes to loot"</li>
+          <li>re.findall("lo+", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['lo', 'loo']</li>
+        </ul>
+      </div>
+      <h4>*</h4>
+      <p>+ (see above) except optional. Even if there are 0 occurrences of the character this is applied to, the rest of the pattern will be returned. Like + above it will return all occurrences of the character in a row or by itself if it is present.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "lee is low and likes to loot"</li>
+          <li>re.findall("lo*", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['l', 'lo', 'l', 'loo']</li>
+        </ul>
+      </div>
+      <h4>{}</h4>
+      <p>Like + and * except you put a number in the bracket that specifies the number of times the character before it should appear in a row.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "goofy goober gophers gallop through gorges"</li>
+          <li>re.findall("go{2}", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['goo', 'goo']</li>
+        </ul>
+      </div>
+      <h4>|</h4>
+      <p>Works like the or conditional. Allows you to check for different patterns at the same time.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "aiden always alliterates"</li>
+          <li>re.findall("[Aa]iden|always", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['aiden', 'always']</li>
+        </ul>
+      </div>
+      <h4>()</h4>
+      <p>Only the part of a pattern in parenthesis will be returned in a search, but RegEx outside the parenthesis will still be used in the search.</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>x = "aay, bby, zzy, yyy, ccy, hhy"</li>
+          <li>re.findall("([a-d])[a-d]y", x)</li>
+        </ul>
+        <ul class="results">
+          <li>['a', 'b', 'c']</li>
+        </ul>
+      </div>
+
+
+      <h4>RegEx Functions</h4>
+      <div class="function">
+        <div class="func_sum">Return a list of all matches</div>
+        <div class="func_name">re.findall()</div>
+        <div class="func_fill">re.findall(<span class="required">&lt;RegEx pattern or string to find&gt;</span>,<span class="required">&lt;String to search through&gt;</span>)</div>
+      </div><!--End function re.findall()-->
+      <div class="function">
+        <div class="func_sum">Return a special object called a Match Object that contains information about the search</div>
+        <div class="func_name">re.search()</div>
+        <div class="func_fill">re.search(<span class="required">&lt;RegEx pattern or string to find&gt;</span>,<span class="required">&lt;String to search through&gt;</span>)</div>
+        <p>This is actually pretty useful because you can get more specific results once you process the Match Object a bit.</p>
+        <p>Note that "None" will be returned instead of the Match Object if there is no match</p>
+        <p>x.group returns the string match</p>
+        <p>x.span returns the start and end positions of the match</p>
+        <p>x.string returns the string that was searched through</p>
+      </div>
+      <div class="function">
+        <div class="func_sum">Return a list where the string has been split at each match</div>
+        <div class="func_name">re.split()</div>
+        <div class="func_fill">re.split(<span class="required">&lt;RegEx pattern or string to find&gt;</span>,<span class="required">&lt;String to replace matches with&gt;</span>,<span class="required">&lt;String to search through&gt;</span>)</div>
+      </div>
+      <div class="function">
+        <div class="func_sum">Replace any matches with a string of your choice</div>
+        <div class="func_name">re.sub()</div>
+        <div class="func_fill">re.sub(<span class="required">&lt;RegEx pattern or string to find&gt;</span>,<span class="required">&lt;String to search through&gt;</span>)</div>
+      </div>
+      <h3>Bytes</h3>
+      <p>This object represents binary data which is important for some specific functions. There are some situations where byte data can be used, but string data can't be even if you need to send text data.</p>
+      <p>Normally when working with strings it doesn't matter how many bytes each character takes up in memory so we don't pay attention to the fact each character has a byte representation</p>
+      <p>Sometimes you'll want to work with a string in it's byte form. For example some systems, like communications equipment, need data passed through them in binary. You can't do this with a string</p>
+      <p>There are a number of different encoding methods. Python strings are in unicode so by default encoding a string into a byte uses UTF-8 encoding</p>
+      <p>To encode a string into bytes:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>character_to_encode = '\N{LATIN SMALL LETTER A WITH ACUTE}'</li>
+          <li>byte_character = character_to_encode.encode()</li>
+          <li>byte_character</li>
+        </ul>
+        <ul class="results">
+        <li>b'\xc3\xa1'</li>
+        </ul>
+      </div>
+      <p>After being converted we now have two bytes which cannot be a part of any string operations like concatenation. They must be converted back into a string:</p>
+      <div class="code">
+        <ul class="inputs">
+          <li>byte_character.decode()</li>
+        </ul>
+        <ul class="results">
+          <li>&#225;</li>
+        </ul>
+      </div>
+
+      <h3 id="BM3.5" class="linked_sub">String Functions and Methods</h3>
+      <div class="play_var">x = "An example String for learning science"</div>
+      <div class="function">
+        <div class="func_sum">Print a string to the console</div>
+        <div class="func_name">print()</div>
+        <div class="func_fill">print(<span class="required">&lt;some string&gt;,...</span>, <span class="optional">sep="&lt;character&gt;"</span>, <span class="optional">end="&lt;character&gt;"</span>)</div>
+        <p>Print by default ends with a newline character. Running the command will print whatever is inside on a new line each time.</p>
+        <p>Alternatively print can be given multiple strings and it will print them all on one line. Each string will be seperated by a space and the last string will end with newline:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>print("Hello, World!")</li>
+            <li>print("Hello" "again," World!")</li>
+          </ul>
+          <ul class="results">
+            <li>'Hello, World!'</li>
+            <li>'Hello again, World!'</li>
+          </ul>
+        </div>
+        <div class="parameters">
+        <div class="header">Parameters</div>
+          <div class="required">
+            <div class="what">&lt;some string&gt;,...</div>
+            <p>Any string. When print runs it will automatically add a newline to the end of it. You can give it multiple strings and each one will be seperated by a space and appear on one line.</p>
+          </div>
+          <div class="optional">
+            <div class="what">sep="&lt;character&gt;"</div>
+            <p>Any character. When passing print() multiple string parameters they will each be seperated by whatever this is set to</p>
+          </div>
+          <div class="optional">
+            <div class="what">end="&lt;character&gt;"</div>
+            <p>Any character to put at the end of the string that is printed. By default is the newline character which is why a newline is created each time the function runs</p>
+          </div>
+        </div><!--End parameters-->
+      </div><!--End function definition-->
+      <div class="function">
+        <div class="func_sum">Split a string into a list:</div>
+        <div class="func_name">x.split()</div>
+        <div class="code">
+          <ul class="inputs"><li>x.split</li></ul>
+          <ul class="results"><li>['An', 'example', 'String', 'for', 'learning', 'science']</li></ul>
+        </div>
+        <p>By default splits happen at whitespace characters. Passing a string causes splits wherever that string appears. The passed string is not added to the returned list.</p>
+        <div class="code">
+          <ul class="inputs"><li>x.split("example")</li></ul>
+          <ul class="results"><li>["An", "String for learning science"]</li></ul>
+        </div>
+        <p>You can also limit the number of splits with a number after the string to split the string with.</p>
+        <div class="code">
+          <ul class="inputs"><li>x.split("e", 2)</li></ul>
+          <ul class="results"><li>['an ', 'xampl', ' String for learning science']</li></ul>
+        </div>
+        <p>You can only use this second argument if you fill the first argument. If you still want to split on whitespace characters you can pass
+          None as the first argument.</p>
+      </div><!--End function div-->
+      <div class="function">
+        <div class="func_sum">Return a string with part of the string replaced with a different string:</div>
+        <div class="func_name">x.replace()</div>
+        <div class="code">
+          <ul class="inputs"><li>x.replace("science", "python")</li></ul>
+          <ul class="results"><li>"An example String for learning python"</li></ul>
+        </div>
+      </div><!--End function div-->
+      <div class="function">
+        <div class="func_sum">Temporarily turns any object into a string:</div>
+        <div class="func_name">repr(), str()</div>
+        <p>Almost anything can be turned into a string representation with these functions, so they're really useful with the concatenation operator.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = [1, 2, 3, 4]</li>
+            <li>'the list x is ' + repr(x)</li>
+          </ul>
+          <ul class="results">
+            <li>'the list x is [1, 2, 3, 4]'
+          </ul>
+        </div>
+        <p>You can even do this with objects as complex as Python functions. For example with the len() function:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>repr(len)</li>
+          </ul>
+          <ul class="results">
+            <li>'&lt;built-in function len&gt;'</li>
+          </ul>
+        </div>
+        <p>This is really helpful for debugging because you can figure out exactly what is in a variable</p>
+        <p>The difference betwen repr() and str() is that str() produces a printable version of what repr() would output, but repr() produces a result that Python can understand. This mean str() should be used whenever you want to get a string for displaying information</p>
+      </div><!--End function div-->
+      <div class="function">
+        <div class="func_sum">Return the index of a substring:</div>
+        <div class="func_name">x.find(), x.index(), x.rfind(), x.rindex()</div>
+        <div class="func_fill">
+          <span class="required">
+          &lt;some string&gt;</span>.find(<span class="required">&lt;substring
+          to find&gt;</span>, <span class="optional">
+          &lt;index to start search&gt;</span>, <span class="optional">
+          &lt;index to end search&gt;</span>)
+        </div>
+          <p>Returns the position of the first character of the first instance of the substring. x.rfind() and x.rindex() start the seach
+          at the right side of the string. As a result they return the first character of the last instance
+          of the substring. x.index() raises a ValueError exception if the string isn't found and x.find() returns -1</p>
+        <p>x.find()</p>
+        <div class="code">
+          <ul class="inputs"><li>x.find("example")</li></ul>
+          <ul class="results"><li>3</li></ul>
+        </div>
+        <p>x.rfind()</p>
+        <div class="code">
+         <ul class="inputs"><li>x.rfind("example")</li></ul>
+         <ul class="results"><li>3</li></ul>
+        </div>
+        <p>The two optional arguments define where to start the search and where to stop searching:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = "Mississippi"</li>
+            <li>x.find("i", 2, 6)</li>
+          </ul>
+          <ul class="results"><li>4</li></div>
+        </ul>
+          <p>You can use x.index() and x.rindex() to pull a string out of a function with some parameters by treating the string as a tuple:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "An example (String) for learning science</li>
+              <li>x[x.index('(') + 1 : x.rindex(')')]</li>
+            </ul>
+            <ul class="results">
+              <li>"String"</li>
+            </ul>
+          </div>
+            <p>Generally it's easy enough to do this with regex, but this trick can be used with simple problems.</p>
+        </div><!--End function div-->
+        <div class="function">
+          <div class="func_sum">Count number of times a substring appears in a string without overlapping</div>
+          <div class="func_name">x.count()</div>
+          <div class="func_fill"><span class="required">&lt;some string&gt;</span>.count(<span class="required">&lt;some substring&lt;</span>)</div>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "Mississippi"</li>
+              <li>x.count("ss")</li>
+            </ul>
+            <ul class="results">
+              <li>2</li>
+            </ul>
+          </div>
+        </div><!--End function count div-->
+        <div class="function">
+          <div class="func_sum">Return True or False depending on if a string starts with or ends with the substring</div>
+          <div class="func_name">x.startswith(), x.endswith()</div>
+          <div class="func_fill"><span class="required">&lt;string or tuple of strings&gt;</span>.startswith(&lt;strings to search for&gt;)</div>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "Mississippi"</li>
+              <li>x.startswith("Miss")</li>
+            </ul>
+            <ul class="results">
+              <li>True</li>
+            </ul>
+          </div>
+          <p>You can search for multiple strings and return True if any of them are found</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "Mississippi"</li>
+              <li>x.endswith("i", "u")</li>
+            </ul>
+            <ul class="results">
+              <li>True</li>
+            </ul>
+          </div>
+        </div><!--End function startswith div-->
+        <div class="function">
+          <div class="func_sum">Join the words in a list, seperating them by the string the method is invoked on:</div>
+          <div class="func_name">''.join()</div>
+          <div class="code">
+            <ul class="inputs">
+              <li>y = ["words", "to", "join", "together!"]</li>
+              <li>'_'.join(y)</li>
+            </ul>
+            <ul class="results">
+              <li>"words_to_join_together!"</li>
+            </ul>
+          </div>
+          <p>This is more efficient than the "+" operator for string concatenation.</p>
+          <p>You can also use "".join() on a list of characters to turn them back into a string if you broke them into a list with the list() function.</p>
+        </div><!--End function div-->
+        <div class="function">
+          <div class="func_sum">Capitalization modification functions:</div>
+          <div class="func_name">x.capitalize()</div>
+          <p>capitalizes the first letter of the string</p>
+          <div class="func_name">x.lower()</div>
+          <div class="func_name">x.swapcase()</div>
+          <div class="func_name">x.title()</div>
+          <p>Makes the first letter of each word capitalized</p>
+          <div class="func_name">x.upper()</div>
+        </div><!--End function div-->
+        <div class="function">
+          <div class="func_sum">Padding, spacing, and justification methods</div>
+          <div class="func_name">x.ljust()</div>
+          <p>Pads string with spaces and justifies it to the left</p>
+          <div class="func_name">x.center()</div>
+          <p>Pads string with spaces and justifies it to the center</p>
+          <div class="func_name">x.rjust()</div>
+          <p>Pads a string with spaces and justifies it to the right</p>
+          <div class="func_name">x.expandtabs()</div>
+          <p>Gets rid of tabs in the string and replaces them with a specified number of spaces</p>
+          <div class="func_name">x.zfill()</div>
+          <p>Left pads a numeric strings with 0s</p>
+        </div>
+        <div class="function">
+          <div class="func_sum">Predicate Methods. Return 1 or 0 if all characters are of a particular type:</div>
+          <div class="func_name">x.isalnum()</div>
+          <p>Are they all alphabetic or a digit?</p>
+          <div class="func_name">x.isalpha()</div>
+          <p>Are they all alphabetic?</p>
+          <div class="func_name">x.isdigit()</div>
+          <p>Are they all digits?</p>
+          <div class="func_name">x.isspace()</div>
+          <p>Are they all whitespace characters?</p>
+          <div class="func_name">x.islower()</div>
+          <p>Are they all lower case?</p>
+          <div class="func_name">x.isupper()</div>
+          <p>Are they all upper case?</p>
+          <div class="func_name">x.istitle()</div>
+          <p>Is the first letter of each word capitalized (Titlecase)</p>
+        </div><!--End predicate methods div-->
+        <div class="function">
+          <div class="func_sum">Strips whitespace characters off the ends of the string</div>
+          <div class="func_name"> x.strip(), x.lstrip(), x.rstrip()</div>
+          <p>x.strip() takes whitespace characters off both ends, and x.lstrip() and x.rstrip() take them off the left and right sides respectively.</p>
+          <p>You can specify which characters x.strip will remove by passing it characters</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = www.python.org</li>
+              <li>x.strip(".gorw")</li>
+            </ul>
+            <ul class="results">
+              <li>'python'</li>
+            </ul>
+          </div>
+          <p>Remember whitespace characters aren't just spaces, they are things like newlines and tabs as well. x.rstrip() is often used to remove the newlines
+          python might leave on strings when importing multiple lines of text.</p>
+          <p>To see what Python considers whitespace characters, print the string.whitespace constant. Note to do this the "string" module must be imported</p>
+        </div><!--End strip functions div-->
+        <div class="function">
+          <div class="func_sum">Translate characters in strings into different characters</div>
+          <div class="func_name">x.maketrans(), x.translate()</div>
+          <p>If you have multiple characters you would like to turn into other characters these allow you to do that without using replace() multiple times</p>
+          <p>First you have to use makestrans() to create a translation table, then you have to apply that table using translate()</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "Make leet speak"</li>
+              <li>table = x.maketrans("aes", "435")</li>
+              <li>x.translate(table)</li>
+            </ul>
+            <ul class="results">
+              <li>'M4k3 l33t 5p34k'</li>
+            </ul>
+          </div>
+        </div><!--End translate functions-->
+        <div class="function">
+          <div class="func_sum">Usefull constants</div>
+          <p>These can all be obtained once the string module has been imported</p>
+          <div class="func_name">string.whitespace</div>
+          <p>Returns which characters Python considers whitespace characters</p>
+          <div class="func_name">string.digits</div>
+          <p>Returns the string '123456789'</p>
+          <div class="func_name">string.hexigits</div>
+          <p>Returns the string '123456789abcdefABCDEF'</p>
+          <div class="func_name">string.octdigits</div>
+          <p>Returns the string '1234567'</p>
+          <div class="func_name">ascii_string.letters</div>
+          <p>Returns all aphabetic characters</p>
+          <div class="func_name">ascii_string.uppercase</div>
+          <p>Contains all upper case alphabetic characters</p>
+          <div class="func_name">ascii_string.lowercase</div>
+          <p>Contains all lower case alphabetic characters</p>
+          <p>Remember you can use the 'in' operator to check and see if some character is a member of these strings</p>
+        </div><!--End list of useful string constants-->
+        <div class="function">
+          <div class="func_sum">Format strings in a flexible way</div>
+          <div class="func_name">x.format()</div>
+          <p>format is applied to a string with {}s defining values to replace in the string, then those values are passed parameters</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>"{0} love learning all about {1} and {2}!".format("I", "Python", "programming")</li>
+            </ul>
+            <ul class="results">
+              <li>'I love learning all about Python and programming!'</li>
+            </ul>
+          </div>
+          <p>To use { or } literally they can be escaped with {{ and }} respectively</p>
+          <p>{0}, {1}, {2} can be placed in the string to be formatted in any order, but they will always grab the parameters in order</p>
+          <p>You can also use named parameters instead</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>"{who} love learning all about {first_love} and {second_love}".format(who="They", first_love="Dinosaurs", second_love="Anthropology")</li>
+            </ul>
+            <ul class="results">
+              <li>'They love learning all about Dinosaurs and Anthropology'</li>
+            </ul>
+          </div>
+          <p>Named and positional parameters can be used in the same string and you can even access the attributes of those paramters<p>
+            <div class="code">
+              <ul class="inputs">
+                <li>"{people[1]} believes in {0}".format("America", people=["Channing", "Aiden", "Victor"])</li>
+              </ul>
+              <ul class="results">
+                <li>'Aiden believes in America'</li>
+              </ul>
+            </div>
+            <p>There is an entire mini-language you can use with format() called format specifiers</p>
+            <p>After using {} to select what you want to insert you can use : after the variable to enter some extra code</p>
+            <div class=func_fill>{<span class="required">&lt;variable name or param index&gt;</span>:<span class="optional">&lt;format specifier code&gt;</span>}</div>
+            <p>The format specifier code can be used to pad with spaces. Here the parameter is given 12 characters to be fit into. Extra character space is filled with spaces:</p>
+            <div class="code">
+              <ul class="inputs"><li>"{0:12} is the food of the gods".format("Ambrosia")</li></ul>
+              <ul class="results"><li>'Ambrosia&nbsp;&nbsp;&nbsp;&nbsp;is the food of the gods'</li></ul>
+            </div>
+            <p>You can use another positional parameter to define the format specifier if you want:</p>
+            <div class="code">
+              <ul class="inputs"><li>"{0:{1}} is the food of the gods".format("Ambrosia", 12)</li></ul>
+              <ul class="results"><li>'Ambrosia&nbsp;&nbsp;&nbsp;&nbsp;is the food of the gods'</li></ul>
+            </div>
+            <p>Or you can use named parameters:</p>
+            <div class="code">
+              <ul class="inputs"><li>"{food:{width}} is the food of the gods".format(food="Ambrosia", width=12)</li></ul>
+              <ul class="results"><li>'Ambrosia&nbsp;&nbsp;&nbsp;&nbsp;is the food of the gods'</li></ul>
+            </div>
+            <p>You can choose the justification of the spaces the parameter is being fit into:</p>
+            <div class="code">
+              <ul class="inputs"><li>"{0:>12} is the food of the gods".format("Ambrosia")</li></ul>
+              <ul class="results"><li>'&nbsp;&nbsp;&nbsp;&nbsp;Ambrosia is the food of the gods'</li></ul>
+            </div>
+            <p>And you can choose what character is used to fill in the extra spaces:</p>
+            <div class="code">
+              <ul class="inputs"><li>"{0:&amp;>12} is the food of the gods".format("Ambrosia")</li></ul>
+              <ul class="results"><li>'&amp;&amp;&amp;&amp;Ambrosia is the food of the gods'</li></ul>
+            </div>
+          </div><!--End format() function-->
+<!--Lists-->
+        <h2 id="BM4.1" class="linked_sec">Lists</h2>
+        <p>Lists are a way to store a collection of information. The information they contain can be of any type. Even lists.</p>
+        <p>Lists are basically what Python uses as arrays, but they are called lists because they have behavior that differs from arrays in most other languages.</p>
+        <p>To create a list you just have to create a list of types, seperate them by commas and put this between brackets:</p>
+        <div class="sl_code">number_list = [1, 2, 3, 4, 5]</div>
+        <p>You reference an element in a list like this:</p>
+        <div class="sl_code">number_list[0]</div>
+        <p>This will return the first element of a list, as the index starts counting at 0. Since this is a bit counterintuitive it can be helpful to think of indexes as selecting the spaces between list elements.</p>
+        <p>You can create an empty list:</p>
+        <div class="sl_code">empty_list = []</div>
+        <p>Elements of a list do not have to be the same type. This is one thing that makes lists differ from arrays in other languages:</p>
+        <div class="sl_code">mixlist = [1, "dog", [10,20,30], abs]</div>
+        <p>Elements of a list behave exactly like their individual objects behave. So for example to access a list in a list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>list = [1, 2, 3, [7, 10, 19, 12]]</li>
+            <li>list[3][2]</li>
+          </ul>
+          <ul class="results">
+            <li>10</li>
+          </ul>
+        </div>
+        <p>You can also use a function stored in a list like this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>num_func_list = [-12, abs]</li>
+            <li>num_func_list[1](num_func_list[0])</li>
+          </ul>
+          <ul class="results">
+            <li>12</li>
+          </ul>
+        </div>
+        <p>
+        <h3 id="BM4.1.1" class="linked_sub">Referencing list elements</h3>
+        <p>Elements of a list are referenced with [index] at the end of the list variable like this: some_variable[some_index]</p>
+        <p>More than just the index can be used in the reference and there are different types of notation that are used depending on how the reference is being made.</p>
+        <h4>Index notation</h4>
+        <p>To get data out of a list you can put stuff into [] after the list</p>
+        <p>To get one element in a list use x[element index]. Remember the count of items begins at 0. Keep in mind you're selecting elements by the spaces between them. So the 0th space selects the first element:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>nums = [1, 2, 3, 4, 5]</li>
+            <li>nums[0]</li>
+          </ul>
+          <ul class="results"><li>1</li></ul>
+        </div>
+        <p>And the 1st space selects the second element:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>nums = [1, 2, 3, 4, 5]</li>
+            <li>nums[1]</li>
+          </ul>
+          <ul class="results"><li>2</li></ul>
+        </div>
+        <p>You can also get elements from the end of the list by using negatives in []. -1 indicates the last element. This is easier to visualize if you keep in mind you're selecting the space right before the last element.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>nums = [1, 2, 3, 4, 5]</li>
+            <li>nums[-1]</li>
+          </ul>
+          <ul class="results"><li>5</li></ul>
+        </div>
+        <p>-0 is equal to 0 so will select the first element:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>nums = [1, 2, 3, 4, 5]</li>
+            <li>nums[-0]</li>
+          </ul>
+          <ul class="results"><li>1</li></ul>
+        </div>
+        <h4>Slice notation</h4>
+        <p>You can put more complex stuff in [] like : which indicates a slice in the list. These can be easier to understand if you keep in mind the idea indexes are selecting the spaces between elements.</p>
+        <p>Slice a string with<span class="func_fill">[<span class="any">&lt;left most character index inclusive&gt;</span>:<span class="any">&lt;right most index exclusive&gt;</span>]</span></p>
+        <div class="code">
+          <ul class="inputs">
+            <li>nums = [1, 2, 3, 4, 5]</li>
+            <li>nums[2:4]</li>
+          </ul>
+          <ul class="results">
+            <li>[3, 4]</li>
+          </ul>
+        </div>
+        <p>You can tell the slice to go to the beginning or end of the string by only putting in one number on a side of :</p>
+        <p>So to select from the 0th space to the 3rd you can do this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[:3]</li>
+          </ul>
+          <ul class="results">
+            <li>['A', 'B', 'C']</li>
+          </ul>
+        </div>
+        <p>And to select from the 3rd space to the end you can do this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[3:]</li>
+          </ul>
+          <ul class="results">
+            <li>['D', 'E']</li>
+          </ul>
+        </div>
+        <p>You can also use negative numbers in slice notation. To remove the last element of a list for example:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[:-1]</li>
+          </ul>
+          <ul class="results">
+            <li>['A', 'B', 'C', 'D']</li>
+          </ul>
+        </div>
+        <p>You can select an entire list with slice notation. Just don't put anything on either side of the colon:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[:]</li>
+          </ul>
+          <ul class="results">
+            <li>['A', 'B', 'C', 'D', 'E']</li>
+          </ul>
+        </div>
+        <p>This is how you create a real copy of a list instead of just a reference. See the "Copying a list" section below.</p>
+        <p>To append to the end of a list with slice notation whatever its length you can do this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[len(characters):] = ['F', 'G']</li>
+            <li>print(characters)</li>
+          </ul>
+          <ul class="results">
+            <li>['A', 'B', 'C', 'D', 'E', 'F', 'G']</li>
+          </ul>
+        </div>
+        <p>And to append to the front of a list you can do this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E', 'F', 'G']</li>
+            <li>characters[:0] = ['The', 'notes', 'are:']</li>
+            <li>print(characters)</li>
+          </ul>
+          <ul class="results">
+            <li>['The', 'notes', 'are:', 'A', 'B', 'C', 'D', 'E', 'F', 'G']</li>
+          </ul>
+        </div>
+        <p>You can just get the first and last elements of a list by doing this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>characters = ['A', 'B', 'C', 'D', 'E']</li>
+            <li>characters[1:-1] = []</li>
+            <li>print(characters)</li>
+          </ul>
+          <ul class="results">
+            <li>['A', 'E']</li>
+          </ul>
+        </div>
+        <p>There are about a million more things that can be done with slice notation, but those are some examples I thought were neato.</p>
+        <h3 id="BM4.1.2" class="linked_sub">Modifying lists</h3>
+        <p>Index and Slice notation can both be used to modify a list, but these examples cannot be with strings as they are immutable.</p>
+        <p>To add one element to the list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = [1, 2, 3, 4]</li>
+            <li>x[2] = 'tree'</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>[1, 2, 'tree', 4]</li>
+          </ul>
+        </div>
+        <p>To add multiple elements to a list requires slice notation used like this:</p>
+        <div class="func_fill">x[&lt;index to add an element&gt;:&lt;same index on the left&gt;]</div>
+        <p>This will force all the elements after this index to move up one index as this does not replace anything in the list. It just adds.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = ["a", "b", "c", "Baby you and me!"]</li>
+            <li>x[3:3] = [1, 2, 3]</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>['a', 'b', 'c', 1, 2, 3, 'Baby you and me!']</li>
+          </ul>
+        </div>
+        <p>Another way to think of this is that you are selecting the space between index 1 and 2 because if you want to select index 2 you have to use 3 on the right side of the slice. This is because you define the slice you're selecting exclusively on the right side.</p>
+        <p>Using slice notation tells python to add the elements of a list to the list and not the whole list. If you don't use slice notation this happens</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = ['apple', 'banana', 'pear']</li>
+            <li>x[0] = ['orange', 'kiwi', 'strawberry']</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>[['orange', 'kiwi', 'strawberry'], 'banana', 'pear']</li>
+          </ul>
+        </div>
+        <p>The individual elements have not been added. Instead the entire list has been added</p>
+        <p>You can use slice notation to replace elements in a list by using the form</p>
+        <div class="func_fill">x[&lt;index to replace&gt;:&lt;index to replace plus 1&gt;]</div>
+        <p>For example:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = ["mary","carrie","larry"]</li>
+            <li>x[1:2] = ["John","Henry","Perkins"]</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>['mary', 'John', 'Henry', 'Perkins', 'larry']</li>
+          </ul>
+        </div>
+        <p>The name at index 2 is not affected because the second index is exclusive in slice notation.</p>
+        <p>You can use the 'del' operator to remove something from a list (<a href="#BM4.5-a">see below</a>), but slice notation works as well. Just assign a slice an empty list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>words = ['keep', 'keepeth', 'delete', "don't delete"]</li>
+            <li>words[2:3] = []</li>
+            <li>print(words)</li>
+          </ul>
+          <ul class="results">
+            <li>['keep', 'keepeth', "don't delete"]</li>
+          </ul>
+        </div>
+        <p>Keep in mind you must have a difference of at least 1 between the left and right sides of the colon when deleting a value. Otherwise you're just selecting the space between an index and the index before it. For example this doesn't remove anything:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>words = ['keep', 'keepeth', 'delete', "don't delete"]</li>
+            <li>words[2:2] = []</li>
+            <li>print(words)</li>
+          </ul>
+          <ul class="results">
+            <li>['keep', 'keepeth', 'delete', "don't delete"]</li>
+          </ul>
+        </div>
+        <h3 class="linked_sub" id="BM4.1.3">Modifying variables containing sublists</h3>
+        <p>There is some special behavior when it comes to storing variables that hold lists in a list.</p>
+        <p>Here is an example of a variable in a list holding a sublist:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>village_coord = [10, 15]</li>
+            <li>poi = [village_coord, [4, 8], [7, 6]]</li>
+            <li>print(poi)</li>
+          </ul>
+          <ul class="results">
+            <li>[[10, 15], [4, 8], [7, 6]]</li>
+          </ul>
+        </div>
+        <p>There are two ways you can change the values in the sublist of poi. You can modify the village_coord list with slice or index notation:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>village_coord = [10, 15]</li>
+            <li>poi = [village_coord, [4, 8], [7, 6]]</li>
+            <li>village_coord[0] = 5</li>
+            <li>print(poi)
+          </ul>
+          <ul class="results">
+            <li>[[5, 15], [4, 8], [7, 6]]</li>
+          </ul>
+        </div>
+        <p>Or you can access the sublist via poi:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>village_coord = [10, 15]</li>
+            <li>poi = [village_coord, [4, 8], [7, 6]]</li>
+            <li>poi[0][0] = 20</li>
+            <li>print(village_coord)</li>
+            <li>print(poi)</li>
+          </ul>
+          <ul class="results">
+            <li>[20, 15]</li>
+            <li>[[20, 15], [4, 8], [7, 6]]</li>
+          </ul>
+        </div>
+        <p>Notice although you are not directly interacting with the village_coord variable it is changed when interacting with the list it represents in poi.</p>
+        <p>If, however, you change the village_coord variable by reassigning the list it represents without index or slice notation it will become disconnected from poi:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>village_coord = [10, 15]</li>
+            <li>poi = [village_coord, [4, 8], [7, 6]]</li>
+            <li>village_coord = [99, 99]</li>
+            <li>print(poi)</li>
+          </ul>
+          <ul class="results">
+            <li>[[10, 15], [4, 8], [7, 6]]</li>
+          </ul>
+        </div>
+        <p>You'll notice assigning village_coord to a new list did not change the sublist that is represented by village_coord in poi.</p>
+        <p>To prevent the village_coord variable from being cut off from the village_coord sublist stored in the poi list you MUST modify the village_coord list with index or slice notation like this:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>village_coord= [10, 15]</li>
+            <li>poi = [village_coord, [4, 8], [7, 6]]</li>
+            <li>village_coord[:] = [11, 16]</li>
+          </ul>
+          <ul class="results">
+            <li>[[11, 16], [4, 8], [7, 6]]</li>
+          </ul>
+        </div>
+        <h3 id="BM4.1.4" class="linked_sub">Copying lists</h3>
+        <p>When you assign a variable to a variable that holds a list, this creates a reference to the original list. Not a new instance of the list.</p>
+        <p>This means any modifications you make to the new variable will also modify the original variable and its contained list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>one = [1, 2, 3, 4]</li>
+            <li>two = one</li>
+            <li>two.append(5)</li>
+            <li>print(one)</li>
+          </ul>
+          <ul class="results">
+            <li>[1, 2, 3, 4, 5]</li>
+          </ul>
+        </div>
+        <p>To create a copy instead of a reference you use slice notation to select the entire list and assign it to a variable:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>one = [1, 2, 3, 4]</li>
+            <li>two = one[:]</li>
+            <li>two.append(5)</li>
+            <li>print(one)</li>
+            <li>print(two)</li>
+          </ul>
+          <ul class="results">
+            <li>[1, 2, 3, 4]</li>
+            <li>[1, 2, 3, 4, 5]</li>
+          </ul>
+        </div>
+        <p>This can get even more confusing when you put variables that represent lists into lists and then try to copy them. If you create a copy of a list with slice notation you will get a new list, but variables that contain lists will stay connected to both lists:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>car_car = ['Volvo', 'Toyota', 'Saturn']</li>
+            <li>train = [car_car, 'boxcar', 'coalhopper']</li>
+            <li>train_copy = train[:]</li>
+            <li>train_copy[1] = 'grainhopper'</li>
+            <li>print(train)</li>
+            <li>print(train_copy)</li>
+          </ul>
+          <ul class="results">
+            <li>[['Volvo', 'Toyota', 'Saturn'], 'boxcar', 'coalhopper']</li>
+            <li>[['Volvo', 'Toyota', 'Saturn'], 'grainhopper', 'coalhopper']</li>
+          </ul>
+        </div>
+        <p>As you can see these lists are now seperated. This, however, is known only as a shallow copy because the car_car variable is still shared between the two lists:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>car_car[0] = 'Honda'</li>
+            <li>print(train)</li>
+            <li>print(train_copy)</li>
+          </ul>
+          <ul class="results">
+            <li>[['Honda', 'Toyota', 'Saturn'], 'boxcar', 'coalhopper']</li>
+            <li>[['Honda', 'Toyota', 'Saturn'], 'grainhopper', 'coalhopper']</li>
+          </ul>
+        </div>
+        <p>Notice car_car[0] has changed in both lists.</p>
+        <p>This is probably the behavior you want. It makes sense when one variable is in more than one place making a change to it anywhere should affect all instances of it. If you don't want this to happen, however, you can create what is known as a deep copy rather than a shallow copy. This requires the copy module:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>import copy</li>
+            <li>car_car = ['Volvo', 'Toyota', 'Saturn']</li>
+            <li>train = [car_car, 'boxcar', 'coalhopper']</li>
+            <li>deep_train_copy = copy.deepcopy(train)</li>
+            <li>car_car[0] = 'BMW'</li>
+            <li>print(train)</li>
+            <li>print(deep_train_copy)</li>
+          </ul>
+          <ul class="results">
+            <li>[['BMW', 'Toyota', 'Saturn'], 'boxcar', 'coalhopper']</li>
+            <li>[['Volvo', 'Toyota', 'Saturn'], 'boxcar', 'coalhopper']</li>
+          </ul>
+        </div>
+        <p>train and its sublist car_car are now completely seperated from the copy deep_train_copy.</p>
+        <h3 id="BM4.1.5" class="linked_sub">List operators</h3>
+        <h4 id="BM4.1.5-a">del</h4>
+        <p>This is an operator even though you'd think it would be a function. It is used like this:</p>
+        <div class="func_fill">del &lt;a list reference&gt;</div>
+        <p>For example with a normal index:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = ['one', 'fish', 'two']</li>
+            <li>del x[1]</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>['one', 'two']</li>
+          </ul>
+        </div>
+        <p>Or with slice notation:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = ['one', 'fish', 'two', 'fish', 'red', 'fish', 'blue', 'fish']</li>
+            <li>del x[2:]</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>['one', 'fish']</li>
+          </ul>
+        </div>
+        <p>When removing items from a list it is often best to use del rather than an empty list assignment because it is easier to read.</p>
+        <h4>+</h4>
+        <p>The list concatenation operator. This can only add lists to each other. Even if you want to add a single value it must be in list form.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>words = ['hello', 'darkness', 'my', 'old'] + ['friend']</li>
+            <li>print(words)</li>
+          </ul>
+          <ul class="results">
+            <li>['hello', 'darkness', 'my', 'old', 'friend']</li>
+          </ul>
+        </div>
+        <p>Keep in mind doing this doesn't actually change a list. It just returns a new list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>words = ['hello', 'darkness', 'my', 'old', 'friend']</li>
+            <li>words + ['you', 'dingus']</li>
+            <li>print(words)</li>
+          </ul>
+          <ul class="results">
+            <li>['hello', 'darkness', 'my', 'old', 'friend']</li>
+          </ul>
+        </div>
+        <h4>*</h4>
+        <p>Multiplication operator. Multiplies a list by an integer. Remember this will only do normal multiplication if you do not have brackets around one of the numbers.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>x = 5 * [5]</li>
+            <li>print(x)</li>
+          </ul>
+          <ul class="results">
+            <li>[5, 5, 5, 5, 5]</li>
+          </ul>
+        </div>
+        <p>You can use this initialize a list of a given size:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>to_fill = [None] * 5</li>
+            <li>print(to_fill)</li>
+          </ul>
+          <ul class="results">
+            <li>[None, None, None, None, None]</li>
+          </ul>
+        </div>
+        <p>If you know how big your list needs to be this is more efficient than appending to it constantly and having to reallocate memory.</p>
+        <p>You can also multiply lists of multiple elements:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>party_schedule = ['drink', 'party'] * 4</li>
+            <li>print(party_schedule)</li>
+          </ul>
+          <ul class="results">
+            <li>['drink', 'party', 'drink', 'party', 'drink', 'party', 'drink', 'party']</li>
+          </ul>
+        </div>
+        <h4>in</h4>
+        <p>Determines if a value is an element of a list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>fruits = ['apple', 'orange', 'tomato', 'banana']</li>
+            <li>print('tomato' in fruits)</li>
+          </ul>
+          <ul class="results">
+            <li>True</li>
+          </ul>
+        </div>
+        <p>This only determines if an element is in a list. NOT if that element is in a list in a list.</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>vegetarian_options = [["onion", "carrot"], ["apple", "lemon"]]</li>
+            <li>print('lemon' in vegetarian_options)</li>
+          </ul>
+          <ul class="results">
+            <li>False</li>
+          </ul>
+        </div>
+        <p>This can be paired with "not" to check if an element is not in a list:</p>
+        <div class="code">
+          <ul class="inputs">
+            <li>fav_foods = ['Apples', 'Pie', 'Salmon', 'Pizza']</li>
+            <li>print('Nuts' not in fav_foods)</li>
+          </ul>
+          <ul class="results">
+            <li>True</li>
+          </ul>
+        </div>
+        <h3 class="linked_sub" id="BM4.1.6">List functions and methods</h3>
+        <div class="function">
+          <div class="func_sum">Return the length of a list:</div>
+          <div class="func_name">len()</div>
+          <div class="func_fill">len(<span class="required">&lt;some list&gt;</span>)</div>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = "Hello"</li>
+              <li>len(x)</li>
+            </ul>
+            <ul class="results"><li>5</li></ul>
+          </div>
+          <p>Note that the len() function returns the number of elements in a list. It will not include elements in sublists:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>families = [['Dave', 'Susan', 'Thomas', 'Little Davey Jr.'], ['Carl', 'Kirk', 'Sweet Suzanne', 'Big Brother Barry']]</li>
+              <li>len(families)</li>
+            </ul>
+            <ul class="results">
+              <li>2</li>
+            </ul>
+          </div>
+        </div><!--end function len()-->
+        <div class="function">
+          <div class="func_sum">Add a single element to the end of a list</div>
+          <div class="func_name">x.append()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.append(<span class="required">&lt;data to add&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['cat', 'bird', 'dog']</li>
+              <li>x.append('llama')</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['cat', 'bird', 'dog', 'llama']</li>
+            </ul>
+          </div>
+          <p>Note that when appending a list to a list, the list being appended is added as one element, not as its individual elements:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['dig', 'pick', 'iron']</li>
+              <li>x.append(['dwarf', 'gold', 'minecart'])</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['dig', 'pick', 'iron', ['dwarf', 'gold', 'minecart']]</li>
+            </ul>
+          </div>
+          <p>If you want to add elements of a different list individually use the extend() function:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['dig', 'pick', 'iron']</li>
+              <li>x.extend(['dwarf', 'gold', 'minecart'])</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['dig', 'pick', 'iron', 'dwarf', 'gold', 'minecart']</li>
+            </ul>
+          </div>
+        </div><!-- end function-->
+        <div class="function">
+          <div class="func_sum">Add a list of elements to the end of a list</div>
+          <div class="func_name">x.extend()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.extend(<span class="required">&lt;some list&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['ding', 'dong']</li>
+              <li>x.extend(['bing', 'bong'])</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['ding', 'dong', 'bing', 'bong']</li>
+            </ul>
+          </div>
+          <p>You can only add one element to a list with extend if you put that element in a list first:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['ding', 'dong']</li>
+              <li>x.extend(['bing'])</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['ding', 'dong', 'bing']</li>
+            </ul>
+          </div>
+          <p>Without putting the element being added in brackets it either can't be added if it's an int or this happens with a string:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['ding', 'dong']</li>
+              <li>x.extend('bing')</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['ding', 'dong', 'b', 'i', 'n', 'g']</li>
+            </ul>
+          </div>
+        </div><!-- end function-->
+        <div class="function">
+          <div class="func_sum">Insert a single element anywhere in a list</div>
+          <div class="func_name">x.insert()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.insert(<span class="required">&lt;index to insert value&gt;</span>, <span class="required">&lt;value to add&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['earth', 'water', 'fire']</li>
+              <li>x.insert(1, 'air')</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['earth', 'air', 'water', 'fire']</li>
+            </ul>
+          </div>
+          <p>insert recognizes negative indices:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['earth', 'water', 'fire']</li>
+              <li>x.insert(-1, 'air')</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['earth', 'water', 'air', 'fire']</li>
+            </ul>
+          </div>
+          <p>There is an equivalent way to do this with slice notation:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['earth', 'water', 'fire']</li>
+              <li>x[1:1] = ['air']</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['earth', 'air', 'water', 'fire']</li>
+            </ul>
+          </div>
+          <p>And with this method you can add multiple elements at once if you pass a list of items:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = ['earth', 'water', 'fire']</li>
+              <li>x[1:1] = ['flying', 'fighting', 'electric']</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>['earth', 'flying', 'fighting', 'electric', 'water', 'fire']</li>
+            </ul>
+          </div>
+        </div><!-- end function-->
+        <div class="function">
+          <div class="func_sum">Remove a single element from a list via that element's value</div>
+          <div class="func_name">x.remove()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.remove(<span class="required">&lt;value to remove&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>birds = ['parrot', 'cockatiel', 'parakeet', 'dalmation']</li>
+              <li>birds.remove('dalmation')</li>
+              <li>print(birds)</li>
+            </ul>
+            <ul class="results">
+              <li>['parrot', 'cockatiel', 'parakeet']</li>
+            </ul>
+          </div>
+          <p>This will only remove the first matching element found in the list. It does not remove more than one of the same value at once:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>birds = ['parrot', 'wolf', 'cockatiel', 'parakeet', 'wolf']</li>
+              <li>birds.remove('wolf')</li>
+              <li>print(birds)</li>
+            </ul>
+            <ul class="results">
+              <li>['parrot', 'cockatiel', 'parakeet', 'wolf']</li>
+            </ul>
+          </div>
+          <p>If you try and remove something from a list and it isn't there an error will occur. Therefore it's a good idea to check if what you want to remove is actually in the list first:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>dinos = ['t-rex', 'stegosaurus', 'diplo', 'triceratops']</li>
+              <li>artist = 'diplo'</li>
+              <li>if artist in dinos:</li>
+              <li><span class="tab"></span>dinos.remove(artist)</li>
+              <li><span class="tab"></span>print(dinos)</li>
+            </ul>
+            <ul class="results">
+              <li>['t-rex', 'stegosaurus', 'triceratops']</li>
+            </ul>
+          </div>
+          <p>If you want to remove an element by index use the 'del' operator. <a href="#BM4.5-a">See above</a>.</p>
+          <p>You can also remove items with slice notation. Just assign a slice to an empty list:</p>
+        </div><!--end function-->
+        <div class="function">
+          <div class="func_sum">Reverse the order of the list</div>
+          <div class="func_name">x.reverse()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.reverse()</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo']</li>
+              <li>colors.reverse()</li>
+              <li>print(colors)</li>
+            </ul>
+            <ul class="results">
+              <li>['indigo', 'blue', 'green', 'yellow', 'orange', 'red']</li>
+            </ul>
+          </div>
+          <p>This does not return the reverse list. It modifies the list itself so be careful.</p>
+        </div><!--end function-->
+        <div class="function" id="BM4.1.6-a">
+          <div class="func_sum">Sorts the elements of a list</div>
+          <div class="func_name">x.sort()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.sort(<span class="optional">key=&lt;key creating function&gt;</span>, <span class="optional">reverse=&lt;True or False&gt;</span>)</div>
+          <p>When used without parameters this will sort basic lists in an expected way.</p>
+          <p>Alphabetically with a list of strings:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>names = ["Derrickson", "Clomberstank", "Albatrosm", "BoJinugs"]</li>
+              <li>names.sort()</li>
+              <li>print(names)</li>
+            </ul>
+            <ul class="results">
+              <li>['Albatrosm', 'BoJinugs', 'Clomberstank', 'Derrickson']</li>
+            </ul>
+          </div>
+          <p>Numerically with a list of numbers:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>nums = [12, 13, 84, 19, 47, 30, 54]</li>
+              <li>nums.sort()</li>
+              <li>print(nums)</li>
+            </ul>
+            <ul class="results">
+              <li>[12, 13, 19, 30, 47, 54, 84]</li>
+            </ul>
+          </div>
+          <p>You can set the reverse parameter, which defaults to False, if you would like to reverse the result of the sort method like so:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>nums = [12, 13, 84, 19, 47, 30, 54]</li>
+              <li>nums.sort(reverse=True)</li>
+              <li>print(nums)</li>
+            </ul>
+            <ul class="results">
+              <li>[84, 54, 47, 30, 19, 13, 12]</li>
+            </ul>
+          </div>
+          <p>The default sorting behavior requires all elements of a list to be of comparable types or else an error will occur. Strings and numbers are not comparable for example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>alphanumerics = [1, 'a', 2, 'b', 3, 'c']</li>
+              <li>alphanumerics.sort()</li>
+            </ul>
+            <ul class="results">
+              <li>TypeError: '<' not supported between instances of 'str' and 'int'</li>
+            </ul>
+          </div>
+          <p>You can write a function to modify the default sorting behavior. For example in a list with both lower case and upper case names, the upper case names will appear first:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>names = ["ronnie", "Huebie", "angus", "Zazzmus"]</li>
+              <li>names.sort()</li>
+              <li>print(names)</li>
+            </ul>
+            <ul class="results">
+              <li>['Huebie', 'Zazzmus', 'angus', 'ronnie']</li>
+            </ul>
+          </div>
+          <p>To solve this problem you can pass everything through a function first using the "key" parameter like this:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>def nocase(a):</li>
+              <li><span class="tab"></span>return a.lower()</li>
+              <li>names = ["ronnie", "Huebie", "angus", "Zazzmus"]</li>
+              <li>names.sort(key=nocase)</li>
+              <li>print(names)</li>
+            </ul>
+            <ul class="results">
+              <li>['angus', 'Huebie', 'ronnie', 'Zazzmus']</li>
+            </ul>
+          </div>
+          <p>To sort like this you must return a value that you would like to sort by.</p>
+          <p>Each element of the list is passed to the key function, modified, then passed to a temporary list. Everything in that temp list is then sorted, paired with the original value stored in the original list and then the original list is sorted to match the order in the temp list.</p>
+          <p>This is why the parameter is a "key". This is making a temporary dictionary. By using key=&lt;some function&gt; you're saying this value in the list has a key equal to the result of the function. The sort method then sorts by the key side of the dictionary and saves the value side over the list the sort method is run on.</p>
+          <p>If the key function doesn't return anything you will cause an error because the sort method will try to sort based on nothing, so it MUST return something.</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>def sort_key(a):</li>
+              <li><span class="tab"></span>print("Hello")</li>
+              <li>names = ['zander', 'alex']</li>
+              <li>names.sort(key=sort_key)</li>
+              <li>print(names)</li>
+            </ul>
+            <ul class="results">
+              <li>Hello</li>
+              <li>Hello</li>
+              <li>TypeError: '<' not supported between instances of 'NoneType' and 'NoneType'</li>
+            </ul>
+          </div>
+          <p>It's also important to consider what you are returning. If you are returning values that will all equal each other the order of the list will remain the same
+          <div class="code">
+            <ul class="inputs">
+              <li>def sort_key(a):</li>
+              <li><span class="tab"></span>return 'hi'</li>
+              <li>names = ['zander', 'alex']</li>
+              <li>names.sort(key=sort_key)</li>
+              <li>print(names)</li>
+            </ul>
+            <ul class="results">
+              <li>['zander', 'alex']</li>
+            </ul>
+          </div>
+          <p>Since the sort method is comparing keys that all equal 'hi' it doesn't change the order of the list.</p>
+          <p>Here is another example that also uses the reverse parameter:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>def length_sort(a):</li>
+              <li><span class="tab"></span>return len(a)</li>
+              <li>words = ['Calculator', 'Albatross', 'Tap', 'Consumer', 'Date']</li>
+              <li>words.sort(key=length_sort, reverse=True)</li>
+              <li>print(words)</li>
+            </ul>
+            <ul class="results">
+              <li>['Calculator', 'Albatross', 'Consumer', 'Date', 'Tap']</li>
+            </ul>
+          </div>
+        </div><!--end function sort()-->
+        <div class="function">
+          <div class="func_sum">Finds the largest element in a list</div>
+          <div class="func_name">max(x)</div>
+          <div class="func_fill">max(<span class="required">&lt;some list&gt;</span>)</div>
+          <p>This uses the same comparison rules as the sort() function so be careful if you have a list of items that cannot have a "largest".</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>leaves_on_trees = [168, 258, 98, 459, 380, 697]</li>
+              <li>print(max(leaves_on_trees))</li>
+            </ul>
+            <ul class="results">
+              <li>697</li>
+            </ul>
+          </div>
+        </div><!--End function max()-->
+        <div class="function">
+          <div class="func_sum">Finds the smallest element in a list</div>
+          <div class="func_name">min(x)</div>
+          <div class="func_fill">min(<span class="required">&lt;some list&gt;</span>)</div>
+          <p>This uses the same comparison rules as the sort() function so be careful if you have a list of items that cannot have a "smallest".</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>leaves_on_trees = [168, 258, 98, 459, 380, 697]</li>
+              <li>print(min(leaves_on_trees))</li>
+            </ul>
+            <ul class="results">
+              <li>98</li>
+            </ul>
+          </div>
+        </div><!--End function min()-->
+        <div class="function">
+          <div class="func_sum">Count number of times a value occurs in a list</div>
+          <div class="func_name">x.count()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.count(<span class="required">&lt;value to count&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>plants_in_yard = ['grass', 'tulip', 'grass', 'grass', 'grass', 'rose', 'grass']</li>
+              <li>plants_in_yard.count('grass')</li>
+            </ul>
+            <ul class="results">
+              <li>5</li>
+            </ul>
+          </div>
+          <p>This will just return 0 if it doesn't find any of the value being searched for. No errors or nothin'.</p>
+        </div><!--end function count()-->
+        <div class="function">
+          <div class="func_sum">Return the index of the first occurance of a value in the list</div>
+          <div class="func_name">x.index()</div>
+          <div class="func_fill"><span class="required">&lt;some list&gt;</span>.index(<span class="required">&lt;value to find&gt;</span>)</div>
+          <p>For example:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>haystack = ['hay', 'hay', 'hay', 'needle', 'hay', 'hay', 'hay']</li>
+              <li>haystack.index('needle')</li>
+            </ul>
+            <ul class="results">
+              <li>3</li>
+            </ul>
+          </div>
+          <p>If the value being searched for is not in the list an error will result.</p>
+        </div><!--end function index()-->
+        <h2 id="BM4.2" class="linked_sec">Tuples</h2>
+          <p>Basically lists that cannot be changed. They are slightly more efficient than standard lists because of this. They are required for certain functions and operations which is why they're important to understand.</p>
+          <p>They are needed for formatting processes that use the % operator.</p>
+          <p>Tuples can be used as keys in dictionaries</p>
+          <p>Tuples are created like lists except they use parentheses () instead of brackets [] to be defined:</p>
+          <div class="sl_code">tup = (1, 2, 3, 4, 5)</div>
+          <p>Similarly to lists you can create an empty tuple:</p>
+          <div class="sl_code">tup = ()</div>
+          <p>Parentheses are also used for grouping in math operations so when creating a tuple with a single element a comma needs to be added:</p>
+          <div class="sl_code">tup = (6,)</div>
+          <p>If this isn't done you'll create a variable that is of the type in the parentheses and not a tuple.</p>
+          <p>If you do this with an int you'll throw an error when attempting to reference it because you'll have created an integer that has no index reference:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>tup = (5)</li>
+              <li>print(tup[0])</li>
+            </ul>
+            <ul class="results">
+              <li>TypeError: 'int' object is not subscriptable</li>
+            </ul>
+          </div>
+          <p>If you do this with a string you'll be able to reference it with an index because strings can be referenced as a list of characters, but you won't have a tuple, you'll have a string. If you wanted to make a tuple, however, you'll get behavior you probably didn't expect:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>tup = ('Andy')</li>
+              <li>print(tup[0])</li>
+            </ul>
+            <ul class="results">
+              <li>A</li>
+            </div>
+            <p>To make the string function as a single element in the tuple you must include the comma:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>tup = ("Andy",)</li>
+                <li>print(tup[0])</li>
+              </ul>
+              <ul class="results">
+                <li>'Andy'</li>
+              </ul>
+            </div>
+          <p>Tuples value's cannot be modified without recreation because they are immutable. As a result there is no .append() method like there is with lists. Instead you have to reassign a new value to itself like this:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>tup = (1, 2, 3)</li>
+              <li>tup = tup + (4,)</li>
+              <li>print(tup)</li>
+            </ul>
+            <ul class="results">
+              <li>(1, 2, 3, 4)</li>
+            </ul>
+          </div>
+          <p>You can do operations that only work on lists by converting a tuple to a list and back:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>tupl = (3,7,12,13,19)</li>
+              <li>ltupl = list(tupl)</li>
+              <li>ltupl.append(21)</li>
+              <li>tupl = tuple(ltupl)</li>
+              <li>print(tupl)</li>
+            </ul>
+            <ul class="results">
+              <li>(3, 7, 12, 13, 19, 21)</li>
+            </ul>
+          </div>
+          <p>Even though tuples are immutable you can change mutable objects within them if that object has a variable reference outside the tuple:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>molten_rocks = ['obsidian', 'granite']</li>
+              <li>rocks = (molten_rocks, 'shale', 'shist', 'othoclase')</li>
+              <li>molten_rocks[0] = 'marble'</li>
+              <li>rocks[1] = 'slate'</li>
+            </ul>
+            <ul class="results">
+              <li>TypeError: 'tuple' object does not support item assignment</li>
+            </ul>
+          </div>
+          <p>Any immutable object can be used as a dictionary key. That includes tuples:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>cave_location = (10, 15)</li>
+              <li>house_location = (17, 18)</li>
+              <li>pois = { cave_location : "A Cave", house_location : "A House" }</li>
+              <li>print(pois[10, 15])</li>
+            </ul>
+            <ul class="results">
+              <li>'A Cave'</li>
+            </ul>
+          </div>
+          <p>but a tuple of immutable objects cannot be used as a key:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>sixth_floor = (['Mike', 'Mary'], ['Aiden', 'Katelyn'])</li>
+              <li>first_floor = ('Steve', 'Shelly')</li>
+              <li>residents = {sixth_floor : 'Nicest Neighbors', first_floor : 'Basement Folk'}</li>
+            </ul>
+            <ul class="results">
+              <li>TypeError: unhashable type: 'list'</li>
+            </ul>
+          </div>
+
+          <h3 id="BM4.2.1" class="linked_sub">Tuple functions and methods</h3>
+          <div class="function">
+            <div class="func_sum">Allows sorting of iterables: Tuples and dictionaries.</div>
+            <div class="func_name">x.sorted()</div>
+            <div class="func_fill"><span class="required">&lt;some list&gt;</span>.sorted(<span class="optional">key=&lt;key creating function&gt;</span>, <span class="optional">reverse=&lt;True or False&gt;</span>)</div>
+            <p>This is the same as the <a href="#BM4.6-a">sort() function for lists</a>, but can be used on iterables. Check that out for details on how to use this.</p>
+            <p>Also since iterables cannot be modified this returns a list.</p>
+          </div><!--end function sorted()-->
+        <h2 id="BM4.3" class="linked_sec">Dictionaries</h2>
+          <p>Dictionaries are collections of elements, but they can be indexed by immutable objects like integers AND strings or tuples instead of only by consecutive numbers</p>
+          <p>List elements are always referenced by their position in the list via index number, but people aren't great at memorizing numbers so it often makes sense to reference elements in a list via a string instead. Dictionaries allow you to do that.</p>
+          <p>A dictionary is essentially a list of pairs. The two parts of a dictionary entry are the key (the string or other object used as an index reference) and the value stored at that index that can be refered to via the key.</p>
+          <p>Consider how this is useful for something like a phone book. Instead of having a list of pairs of names and phone numbers and searching the list for a name then doing some work to get the number, you can simply use a name as the index for a phone number.</p>
+          <p>Note that these are called associative arrays in other languages.</p>
+          <p>A dictionary is created like this:</p>
+          <div class="sl_code">dictionary = { &lt;some key&gt; : &lt;some value&gt;, &lt;some key&gt; : &lt;some value&gt; }</div>
+          <p>To access a value use the key as an index just like how you would use a number index as an index for a list:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>phonebook = {'Harvey' : '123-456-7890', 'Gary' : '420-420-6969'}</li>
+              <li>print(phonebook['Gary'])</li>
+            </ul>
+            <ul class="results">
+              <li>420-420-6969</li>
+            </ul>
+          </div>
+          <p>Adding values is even simpler than adding values to lists. Just create a new key that doesn't already exist in the dictionary and give it an assignment:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>phonebook = {'Harvey' : '123-456-7890', 'Gary' : '420-420-6969'}</li>
+              <li>phonebook['Susie'] = '849-777-6969'</li>
+              <li>print(phonebook)</li>
+            </ul>
+            <ul class="results">
+              <li>{'Harvey': '123-456-7890', 'Gary': '420-420-6969', 'Susie': '849-777-6969'}</li>
+            </ul>
+          </div>
+          <p>Remember that you can use any immutable object as a key. Here a dictionary is created with tuples as keys:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>mine_positions = { (5, 4) : 'small mine', (2, 7) : 'poison mine', (8, 3) : 'big mine' }</li>
+              <li>print(mine_positions[(5,4)])</li>
+            </ul>
+            <ul class="results">
+              <li>'small mine'</li>
+            </ul>
+          </div>
+          <p>Doing this with a list instead of a tuple will result in an error:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>pit_positions = { [5, 4] : 'deep pit' }</li>
+            </ul>
+            <ul class="results">
+              <li>TypeError: unhashable type: 'list'</li>
+            </ul>
+          </div>
+          <p>You can reference a tuple with math problems as long as the problems solve to equal the values in the tuple:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>mine_positions = { (5, 4) : 'small mine', (2, 7) : 'poison mine', (8, 3) : 'big mine' }</li>
+              <li>mine_positions[(2 * 4, 9/3)]</li>
+            </ul>
+            <ul class="results">
+              <li>'big mine'</li>
+            </ul>
+          </div>
+          <h3>Operators for dictionaries</h3>
+          <h3>in</h3>
+          <p>Used in conditionals to check if a key is in a dictionary:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>color_wavelengths = {650 : 'red', 600 :'orange', 580 : 'yellow', 550 : 'green', 450 : 'blue', 400 : 'violet' }</li>
+              <li>580 in color_wavelengths</li>
+            </ul>
+            <ul class="results">
+              <li>True</li>
+            </ul>
+          </div>
+          <p>Remember this only checks keys, not values. This is the opposite of how "in" works for lists. In that case "in" checks to see if a value is in the list because it wouldn't make sense to see if a numerical index is in a list.</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>color_wavelengths = {650 : 'red', 600 :'orange', 580 : 'yellow', 550 : 'green', 450 : 'blue', 400 : 'violet' }</li>
+              <li>'red' in color_wavelengths</li>
+            </ul>
+            <ul class="results">
+              <li>False</li>
+            </ul>
+          </div>
+          <p>Using a nonexisting key will return an error so it's a good idea to check for a key before attempting to access it in the dictionary:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>color_wavelengths = {650 : 'red', 600 :'orange', 580 : 'yellow', 550 : 'green', 450 : 'blue', 400 : 'violet' }</li>
+              <li>wavelength = 600</li>
+              <li>if wavelength in color_wavelength:</li>
+              <li><span class="tab"></span>print(color_wavelengths[wavelength])</li>
+            </ul>
+            <ul class="results">
+              <li>orange</li>
+            </ul>
+          </div>
+          <h4>del</h4>
+          <p>Removes an item from a dictionary:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>english_japanese = { 'hello' : 'ohaiyo', 'understand' : 'wakarimasu', 'beer' : 'biru' }</li>
+              <li>del english_japanese['hello']</li>
+              <li>print(english_japanese)</li>
+            </ul>
+            <ul class="results">
+              <li>{'understand': 'wakarimasu', 'beer': 'biru'}</li>
+            </ul>
+          </div>
+          <h3 class="linked_sub">Functions and methods for dictionaries</h3>
+          <div class="function">
+            <div class="func_sum">Returns total number of values (key/value pairs) stored in the dictionary</div>
+            <div class="func_name">len(x)</div>
+            <div class="func_fill">len(<span class="required">&lt;some dictionary&gt;</span>)</div>
+            <p>For example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>menu = {'CH01' : 'Chicken Curry', 'CH02' : 'Chicken Noodle Soup'}</li>
+                <li>len(menu)</li>
+              </ul>
+              <ul class="results">
+                <li>5</li>
+              </ul>
+            </div>
+          </div><!--End function len()-->
+          <div class="function">
+            <div class="func_sum">Get a value from a dictionaries key or return a value you set if that key doesn't exist</div>
+            <div class="func_name">x.get()</div>
+            <div class="func_fill"><span class="required">&lt;some dictionary&gt;</span>.get(<span class="required">&lt;key value&gt;</span>, <span class="optional">default=&lt;value returned if key not found&gt;</span>)</div>
+            <p>For example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>bus_headcount = {'purple_bus' : 20, 'blue_bus' : 15, 'orange_bus' : 34 }</li>
+                <li>bus_headcount.get('blue_bus')</li>
+              </ul>
+              <ul class="results">
+                <li>15</li>
+              </ul>
+            </div>
+            <p>key value is any key in the dictionary. The optional argument here is the value to return if a key isn't found. By default it returns None:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>bus_headcount = {'purple_bus' : 20, 'blue_bus' : 15, 'orange_bus' : 34 }</li>
+                <li>current_bus = 'green_bus'</li>
+                <li>bus_headcount.get(current_bus, "No such bus")</li>
+              </ul>
+              <ul class="results">
+                <li>'No such bus'</li>
+              </ul>
+            </div>
+          </div><!--End get() function-->
+          <div class="function">
+            <div class="func_sum">Get a value from a dictionary key, but also add a key value pair if there isn't one found in the dictionary</div>
+            <div class="func_name">x.setdefault()</div>
+            <div class="func_fill"></div>
+            <p>For example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>english_japanese = { 'hello' : 'ohaiyo', 'understand' : 'wakarimasu', 'beer' : 'biru' }</li>
+                <li>print(english_japanese.setdefault('hello', 'needs translation'))</li>
+              </ul>
+              <ul class="results">
+                <li>ohaiyo</li>
+              </ul>
+            </div>
+            <p>If an item is in the dictionary it gets returned, but if an item isn't in the dictionary:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>print(english_japanese.setdefault('now', 'needs translation'))</li>
+              </ul>
+              <ul class="results">
+                <li>needs translation</li>
+              </ul>
+            </div>
+            <p>The cool part is that this has now been added to the dictionary:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>print(english_japanese)</li>
+              </ul>
+              <ul class="results">
+                <li>{'hello': 'ohaiyo', 'understand': 'wakarimasu', 'beer': 'biru', 'now': 'needs translation'}</li>
+              </ul>
+            </div>
+          </div><!-- End function setdefault()-->
+          <div class="function">
+            <div class="func_sum">Returns a view object of keys in a dictionary</div>
+            <div class="func_name">x.keys()</div>
+            <div class="func_fill"><span class="required">&lt;some dictionary&gt;</span>.keys()</div>
+            <p>To get elements out of a views object it must be converted to a list or iterated through. To get a list of keys for example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>wft_players  = {'QB' : 'Alex Smith', 'RB' : 'J.D. McKisic', 'WR' : 'Terry McLaurin' }</li>
+                <li>print(list(wft_players.keys()))</li>
+              </ul>
+              <ul class="results">
+                <li>['QB', 'RB', 'WR']</li>
+              </ul>
+            </div>
+            <p>This function is useful for creating a for loop that iterates through the entire dictionary.</p>
+          </div><!--end keys() function-->
+          <div class="function">
+            <div class="func_sum">Returns a view object of values in a dictionary</div>
+            <div class="func_name">x.values()</div>
+            <div class="func_fill"><span class="required">&lt;some dictionary&gt;</span>.values()</div>
+            <p>To get elements out of a views object it must be converted to a list or iterated through. To get a list of values for example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>wft_players  = {'QB' : 'Alex Smith', 'RB' : 'J.D. McKisic', 'WR' : 'Terry McLaurin' }</li>
+                <li>print(list(wft_players.values()))</li>
+              </ul>
+              <ul class="results">
+                <li>['Alex Smith', 'J.D. McKisic', 'Terry McLaurin']</li>
+              </ul>
+            </div>
+            <p>Also of note, views objects act like sets so set operators can be used with them.</p>
+          </div><!--end values() function-->
+          <div class="function">
+            <div class="func_sum">Returns a view object of key/value pairs stored in tuples</div>
+            <div class="func_name">x.items()</div>
+            <div class="func_fill"><span class="required">&lt;some dictionary&gt;</span>.items()</div>
+            <p>To get elements out of a views object it must be converted to a list or iterated through. To get a list of key/value pairs for example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>wft_players  = {'QB' : 'Alex Smith', 'RB' : 'J.D. McKisic', 'WR' : 'Terry McLaurin' }</li>
+                <li>print(list(wft_players.items()))</li>
+              </ul>
+              <ul class="results">
+                <li>[('QB', 'Alex Smith'), ('RB', 'J.D. McKisic'), ('WR', 'Terry McLaurin')]</li>
+              </div>
+          </div>
+        <h2 id="BM4.4" class="linked_sec">Sets</h2>
+          <p>Sets are collections of objects where membership and uniqueness is important, but actual position is not. They're lists that can only hold immutable and hashable objects (ints, strings, floats, tuples), but don't hold them in any particular order.</p>
+          <p>Sets can use general collection operators like in, len, and be iterated over in for loops.</p>
+          <p>To create a set use the function set() on any sequence:</p>
+          <div class="sl_code">x = set(['A', 'B', 'C'])</div>
+          <p>When you do this any duplicates will be removed. Remember sets care about uniqueness so anything that isn't unique will have copies deleted until there is only one:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>x = set([1, 2, 3, 4, 1, 4, 1])</li>
+              <li>print(x)</li>
+            </ul>
+            <ul class="results">
+              <li>{1, 2, 3, 4}</li>
+            </ul>
+          </div>
+          <p>Sets are mutable and are not hashable which means they cannot be a part of other sets. If you want a set to be part of a set, however, you can create a frozen set:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>house_cats = frozenset(['Sable', 'Paprika', 'Juniper'])</li>
+              <li>all_house_cats = set(['Zipper', 'Ella', 'Frank', house_cats])</li>
+              <li>print(all_house_cats)</li>
+            </ul>
+            <ul class="results">
+              <li>{frozenset({'Juniper', 'Sable', 'Paprika'}), 'Frank', 'Zipper', 'Ella'}</li>
+            </ul>
+          </div>
+          <h3>Set operators</h3>
+          <h4>|</h4>
+          <p>The union operator. Returns a set of two sets combined:</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>even = set([0, 2, 4, 6, 8, 10])</li>
+              <li>odd = set([0, 1, 3, 5, 7, 9])</li>
+              <li>print(even | odd)</li>
+            </ul>
+            <ul class="results">
+              <li>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</li>
+            </ul>
+          </div>
+          <h4>&</h4>
+          <p>The intersection operator. Returns a set of values shared between sets.</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>class1 = set(['Jim', 'Carl', 'Kate', 'Luisa'])</li>
+              <li>class2 = set(['Jim', 'Luisa', 'Susan', 'Carrie'])</li>
+              <li>print(class1 & class2)</li>
+            </ul>
+            <ul class="results">
+              <li>{'Luisa', 'Jim'}</li>
+            </ul>
+          </div>
+          <h4>^</h4>
+          <p>The symmtric difference operator. Returns a set of values that are not shared between sets.</p>
+          <div class="code">
+            <ul class="inputs">
+              <li>class1 = set(['Jim', 'Carl', 'Kate', 'Luisa'])</li>
+              <li>class2 = set(['Jim', 'Luisa', 'Susan', 'Carrie'])</li>
+              <li>print(class1 ^ class2)</li>
+            </ul>
+            <ul class="results">
+              <li>{'Kate', 'Susan', 'Carl', 'Carrie'}</li>
+            </ul>
+          </div>
+          <h3>Set functions and methods</h3>
+          <div class="function">
+            <div class="func_sum">Add an element to a set</div>
+            <div class="func_name">x.add()</div>
+            <div class="func_fill"><span class="required">&lt;some set&gt;</span>.add(<span class="required">&lt;value to add&gt;</span>)</div>
+            <p>For example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>x = set([1, 2, 3])</li>
+                <li>x.add(4)</li>
+                <li>print(x)</li>
+              </ul>
+              <ul class="results">
+                <li>{1, 2, 3, 4}</li>
+              </ul>
+            </div>
+          </div><!--End function add()-->
+          <div class="function">
+            <div class="func_sum">Remove an element from a set</div>
+            <div class="func_name">x.remove()</div>
+            <div class="func_fill"><span class="required">&lt;some set&gt;</span>.remove(<span class="required">&lt;value to remove&gt;</span>)</div>
+            <p>For example:</p>
+            <div class="code">
+              <ul class="inputs">
+                <li>x = set([1, 2, 3])</li>
+                <li>x.remove(2)</li>
+                <li>print(x)</li>
+              </ul>
+              <ul class="results">
+                <li>{1, 3}</li>
+              </ul>
+            </div>
+          </div><!--End function remove()-->
+        <h2 id="BM8" class="linked_sec">Object Oriented Features</h2>
+        <p>OOP (object oriented programming) says that you want to focus on your data. An object holds all of a certain kind of data in one place.</p>
+        <p>You should also have the functions you would like to use to modify that data with the data. These functions, when they are part of an object (i.e with the data), are called methods.</p>
+        <p>Methods are run differently from functions. The method must be preceded by an object and the . operator:</p>
+        <div class="func_fill">&lt;some_object&gt;.&lt;some_method&gt;</div>
+        <p>For example:</p>
+        <div class="sl_code">cd_names.print()</div>
+        <p>Any additional arguments are passed the same way they are passed to functions:</p>
+        <div class="sl_code">icon_for_hire.print_album_songs("Scripted")</div>
+
+
+
+
+
+
+
+
+    </div>
+    <script src="../../Main_Script.js"></script>
+  </body>
+</html>
