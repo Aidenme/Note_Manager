@@ -5,6 +5,7 @@ class ContentUnit:
         self.name = name
         self.id = id
         self.head_html = head_html
+        self.is_dropdown = False
         self.spaces = self.get_spaces_from_id()
 
     def print_content(self):
