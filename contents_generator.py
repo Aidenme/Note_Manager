@@ -11,6 +11,9 @@ class ContentUnit:
     def print_content(self):
         print(" " * self.spaces + self.name + " - " + self.id)
 
+    def print_html(self):
+        print(self.head_html)
+
     def get_spaces_from_id(self, base_spaces=6, space_multiplier=2):
         return base_spaces + (self.id.count(".") * space_multiplier)
 
@@ -56,4 +59,4 @@ for line in html_contents_lines:
         contents_list.append(content)
 
 for content in contents_list:
-    content.print_content()
+    content.print_html()
