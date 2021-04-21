@@ -5,7 +5,7 @@ class ContentUnit:
         self.name = name
         self.id = id
         self.head_html = head_html
-        self.is_dropdown = False
+        self.is_dropdown = self.get_dropdown()
         self.spaces = self.get_spaces_from_id()
 
     def print_content(self):
@@ -24,6 +24,13 @@ class ContentUnit:
             return len(space_results.group(1))
         else:
             return 0
+
+    def get_dropdown(self):
+        dropdown_patt = re.compile('<li class="dropdown">')
+        if dropdown_patt.search(self.head_html):
+            return True
+        else:
+            return False
 
 def get_contents_html(filename, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
     note_file = open(filename, 'r')
@@ -59,4 +66,5 @@ for line in html_contents_lines:
         contents_list.append(content)
 
 for content in contents_list:
-    content.print_html()
+    print(content.head_html)
+    print(content.is_dropdown)
