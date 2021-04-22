@@ -47,7 +47,6 @@ class ContentUnit:
         else:
             self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
 
-
 def get_contents_html(filename, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
     note_file = open(filename, 'r')
     content_end = False
@@ -77,13 +76,6 @@ def create_new_contentunit():
     id = input("Please enter an ID")
     name = input("Please enter a name")
     return ContentUnit(id=id, name=name)
-
-def create_head_html(id, name, dropdown=False):
-    if dropdown == False:
-        head_html = '<li><a href="#' + id + '">' + name + '</a></li>'
-    else:
-        head_html = '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
-    return head_html
 
 print("Welcome to Contents Generator!")
 html_contents_lines = get_contents_html('Python.html')
