@@ -15,6 +15,7 @@ class ContentUnit:
         print(self.head_html)
 
     def get_spaces_from_id(self, base_spaces=6, space_multiplier=2):
+        print("get_spaces_from_id ran")
         return base_spaces + (self.id.count(".") * space_multiplier)
 
     def get_space_count_from_html(self):
@@ -57,14 +58,28 @@ def convert_to_contentunit(html_line):
     if search_results:
         return ContentUnit(id=search_results.group(1), name=search_results.group(2), head_html=html_line)
 
+def create_new_contentunit():
+    id = input("Please enter an ID")
+    name = input("Please enter a name")
+    return ContentUnit(id=id, name=name, head_html=create_head_html(id, name))
+
+def create_head_html(id, name, dropdown=False):
+    if dropdown == False:
+        head_html = '<li><a href="#' + id + '">' + name + '</a></li>'
+    else:
+        head_html = '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
+    return head_html
+
 print("Welcome to Contents Generator!")
 html_contents_lines = get_contents_html('Python.html')
-contents_list = []
+contentsunits_list = []
 for line in html_contents_lines:
     content = convert_to_contentunit(line)
     if content:
-        contents_list.append(content)
+        contentsunits_list.append(content)
 
-for content in contents_list:
+contentsunits_list.append(create_new_contentunit())
+
+for content in contentsunits_list:
     print(content.head_html)
     print(content.is_dropdown)
