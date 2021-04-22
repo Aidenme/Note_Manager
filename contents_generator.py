@@ -1,22 +1,30 @@
 import re
 
 class ContentUnit:
-    def __init__(self, name=None, id=None, head_html=None):
+    def __init__(self, name=None, id=None, head_html=None, is_dropdown=False):
         self.name = name
         self.id = id
+        self.spaces = "0"
         self.head_html = head_html
-        self.is_dropdown = self.get_dropdown()
-        self.spaces = self.get_spaces_from_id()
+        self.is_dropdown = is_dropdown
+
+        self.set_spaces_from_id(self.id)
+        if head_html == None:
+            #Create the html line
+            self.set_head_html(self.name, self.id)
+        else:
+            #Translate variables from the html line
+            self.set_dropdown()
 
     def print_content(self):
-        print(" " * self.spaces + self.name + " - " + self.id)
+        print(self.spaces + self.name + " - " + self.id)
 
     def print_html(self):
         print(self.head_html)
 
-    def get_spaces_from_id(self, base_spaces=6, space_multiplier=2):
-        print("get_spaces_from_id ran")
-        return base_spaces + (self.id.count(".") * space_multiplier)
+    def set_spaces_from_id(self, id, base_spaces=6, space_multiplier=2, space_char=" "):
+        space_count = base_spaces + (self.id.count(".") * space_multiplier)
+        self.spaces = space_count * space_char
 
     def get_space_count_from_html(self):
         space_patt = re.compile('(\s+)<li><a href')
@@ -26,12 +34,19 @@ class ContentUnit:
         else:
             return 0
 
-    def get_dropdown(self):
+    def set_dropdown(self):
         dropdown_patt = re.compile('<li class="dropdown">')
         if dropdown_patt.search(self.head_html):
-            return True
+            self.is_dropdown = True
         else:
-            return False
+            self.is_dropdown = False
+
+    def set_head_html(self, name, id):
+        if self.is_dropdown == False:
+            self.head_html = self.spaces + '<li><a href="#' + id + '">' + name + '</a></li>'
+        else:
+            self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
+
 
 def get_contents_html(filename, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
     note_file = open(filename, 'r')
@@ -61,7 +76,7 @@ def convert_to_contentunit(html_line):
 def create_new_contentunit():
     id = input("Please enter an ID")
     name = input("Please enter a name")
-    return ContentUnit(id=id, name=name, head_html=create_head_html(id, name))
+    return ContentUnit(id=id, name=name)
 
 def create_head_html(id, name, dropdown=False):
     if dropdown == False:
@@ -82,4 +97,3 @@ contentsunits_list.append(create_new_contentunit())
 
 for content in contentsunits_list:
     print(content.head_html)
-    print(content.is_dropdown)
