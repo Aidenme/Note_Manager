@@ -35,7 +35,7 @@ class ContentUnit:
             return 0
 
     def set_dropdown(self):
-        '''Uses the head HTML of a contentunit with HTML to determine what value is_dropdown should be'''
+        '''Uses the head HTML of a contentunit with HTML to determine what value is_dropdown should be.'''
         dropdown_patt = re.compile('<li class="dropdown">')
         if dropdown_patt.search(self.head_html):
             self.is_dropdown = True
@@ -43,7 +43,9 @@ class ContentUnit:
             self.is_dropdown = False
 
     def set_head_html(self, name, id):
-        '''Generates the html for the head part of a contentunit. This only runs if there is not yet any HTML defined. The head type is determined by the value of is_dropdown'''
+        '''Generates the html for the head part of a contentunit. This only runs if there is not yet any HTML
+        defined (a.k.a. when a new contentunit is created). The head type is determined by the value of is_dropdown,
+         which is a parameter set when the contentunit is created.'''
         if self.is_dropdown == False:
             self.head_html = self.spaces + '<li><a href="#' + id + '">' + name + '</a></li>'
         else:
@@ -80,6 +82,9 @@ def create_new_contentunit():
     return ContentUnit(id=id, name=name)
 
 def contentunits_from_html(html_contents_lines):
+    '''Takes the html that makes up the contents and converts it to a list of contentsunits. This MUST take only the html
+    in the contents div on a notes website page. html in this correct format should get spit out from an html file by
+    get_contents_html()'''
     contentsunits_list = []
     for line in html_contents_lines:
         content = convert_to_contentunit(line)
@@ -106,7 +111,6 @@ def start_menu():
         print("Thanks for using the generator! <3")
         exit()
 
+
 contentsunits_list = contentunits_from_html(get_contents_html('Python.html'))
-
-
 start_menu()
