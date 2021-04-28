@@ -10,10 +10,10 @@ class ContentUnit:
 
         self.set_spaces_from_id(self.id)
         if head_html == None:
-            #Create the html line
+            #Create the html line. The type depends on the is_dropdown value
             self.set_head_html(self.name, self.id)
         else:
-            #Translate variables from the html line
+            #Translate variables from the existing html line to create a complete contentunit
             self.set_dropdown()
 
     def print_content(self):
@@ -35,6 +35,7 @@ class ContentUnit:
             return 0
 
     def set_dropdown(self):
+        '''Uses the head HTML of a contentunit with HTML to determine what value is_dropdown should be'''
         dropdown_patt = re.compile('<li class="dropdown">')
         if dropdown_patt.search(self.head_html):
             self.is_dropdown = True
@@ -42,6 +43,7 @@ class ContentUnit:
             self.is_dropdown = False
 
     def set_head_html(self, name, id):
+        '''Generates the html for the head part of a contentunit. This only runs if there is not yet any HTML defined. The head type is determined by the value of is_dropdown'''
         if self.is_dropdown == False:
             self.head_html = self.spaces + '<li><a href="#' + id + '">' + name + '</a></li>'
         else:
@@ -77,13 +79,21 @@ def create_new_contentunit():
     name = input("Please enter a name")
     return ContentUnit(id=id, name=name)
 
+def contentunits_from_html(html_contents_lines):
+    contentsunits_list = []
+    for line in html_contents_lines:
+        content = convert_to_contentunit(line)
+        if content:
+            contentsunits_list.append(content)
+    return contentsunits_list
+
 def start_menu():
     print("--------------------Welcome to Contents Generator!--------------------\n")
     print("Please choose an option below")
     print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
     print("CURRENT CONTENTS:")
-    for content in contentsunits_list:
-        print((len(content.spaces) * " ") + content.id + " - " + content.name)
+    for contentunit in contentsunits_list:
+        print((len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
 
     choice = input()
     if choice == 'a':
@@ -93,14 +103,10 @@ def start_menu():
         print("You chose B")
         start_menu()
     elif choice == 'c':
-        print("You chose C")
+        print("Thanks for using the generator! <3")
         exit()
 
-html_contents_lines = get_contents_html('Python.html')
-contentsunits_list = []
-for line in html_contents_lines:
-    content = convert_to_contentunit(line)
-    if content:
-        contentsunits_list.append(content)
+contentsunits_list = contentunits_from_html(get_contents_html('Python.html'))
+
 
 start_menu()
