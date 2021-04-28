@@ -22,7 +22,7 @@ class ContentUnit:
     def print_html(self):
         print(self.head_html)
 
-    def set_spaces_from_id(self, id, base_spaces=6, space_multiplier=2, space_char=" "):
+    def set_spaces_from_id(self, id, base_spaces=0, space_multiplier=2, space_char=" "):
         space_count = base_spaces + (self.id.count(".") * space_multiplier)
         self.spaces = space_count * space_char
 
@@ -77,7 +77,11 @@ def create_new_contentunit():
     name = input("Please enter a name")
     return ContentUnit(id=id, name=name)
 
-print("Welcome to Contents Generator!")
+
+print("--------------------Welcome to Contents Generator!--------------------\n")
+print("Please choose an option below")
+print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
+print("CURRENT CONTENTS:")
 html_contents_lines = get_contents_html('Python.html')
 contentsunits_list = []
 for line in html_contents_lines:
@@ -85,7 +89,5 @@ for line in html_contents_lines:
     if content:
         contentsunits_list.append(content)
 
-contentsunits_list.append(create_new_contentunit())
-
 for content in contentsunits_list:
-    print(content.head_html)
+    print((len(content.spaces) * " ") + content.id + " - " + content.name)
