@@ -77,11 +77,25 @@ def create_new_contentunit():
     name = input("Please enter a name")
     return ContentUnit(id=id, name=name)
 
+def start_menu():
+    print("--------------------Welcome to Contents Generator!--------------------\n")
+    print("Please choose an option below")
+    print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
+    print("CURRENT CONTENTS:")
+    for content in contentsunits_list:
+        print((len(content.spaces) * " ") + content.id + " - " + content.name)
 
-print("--------------------Welcome to Contents Generator!--------------------\n")
-print("Please choose an option below")
-print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
-print("CURRENT CONTENTS:")
+    choice = input()
+    if choice == 'a':
+        print("You chose A")
+        start_menu()
+    elif choice == 'b':
+        print("You chose B")
+        start_menu()
+    elif choice == 'c':
+        print("You chose C")
+        exit()
+
 html_contents_lines = get_contents_html('Python.html')
 contentsunits_list = []
 for line in html_contents_lines:
@@ -89,5 +103,4 @@ for line in html_contents_lines:
     if content:
         contentsunits_list.append(content)
 
-for content in contentsunits_list:
-    print((len(content.spaces) * " ") + content.id + " - " + content.name)
+start_menu()
