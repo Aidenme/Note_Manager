@@ -108,32 +108,19 @@ def place_contentunit(contentsunits_list, contentunit):
     for line in contentsunits_list:
         if line.id == contentunit.id:
             print("Error, ID already in use! Please use a different ID.")
+            break
         else:
-            print("Actual Starts " + str(i))
-            clean_line = line.id.replace("BM", "")
-            clean_unit = contentunit.id.replace("BM", "")
-            line_split = clean_line.split('.')
-            contentunit_split = clean_unit.split('.')
-            try:
-                #Checking if the first section numbers of the line and contentunit match.
-                if int(line_split[split_val]) == int(contentunit_split[split_val]):
-                    print("First if started " + str(i))
-                    #If the first section number matches, check how many sections are in an id, if there are more sections in contentunit then
-                    #There are sections in line 
-                    if len(contentunit_split) > len(line_split):
-                        print("Second if started " + str(i))
-                        split_val = split_val + 1
-                        i = i + 1
-                        continue
-                    else:
-                        print("Second if's else started " + str(i))
+            simple_line_id = line.id.replace("BM", "").split('.')
+            simple_contentunit_id = contentunit.id.replace("BM", "").split('.')
+            if simple_line_id[:-1] == simple_contentunit_id[:-1]:
+                print("All but last match at line " + str(i))
+                if int(simple_line_id[-1]) == (int(simple_contentunit_id[-1]) - 1):
+                    print("Line position should be " + str(i + 1))
                 else:
-                    print("First if's else started " + str(i))
                     i = i + 1
-                    continue
-            except:
-                print("Index is " + str(i))
-                break
+            else:
+                i = i + 1
+
 
 
 def add_contentunit(contentsunits_list, contentunit):
