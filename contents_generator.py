@@ -92,6 +92,57 @@ def contentunits_from_html(html_contents_lines):
             contentsunits_list.append(content)
     return contentsunits_list
 
+def get_dot_number(id, dot):
+    split_id = id.split('.')
+    if dot == 0:
+        bm_cleaned = split_id[0].replace("BM", "")
+        return int(bm_cleaned)
+    else:
+        return int(split_id[dot])
+
+
+def place_contentunit(contentsunits_list, contentunit):
+    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
+    i = 0
+    split_val = 0
+    for line in contentsunits_list:
+        if line.id == contentunit.id:
+            print("Error, ID already in use! Please use a different ID.")
+        else:
+            print("Actual Starts " + str(i))
+            clean_line = line.id.replace("BM", "")
+            clean_unit = contentunit.id.replace("BM", "")
+            line_split = clean_line.split('.')
+            contentunit_split = clean_unit.split('.')
+            try:
+                #Checking if the first section numbers of the line and contentunit match.
+                if int(line_split[split_val]) == int(contentunit_split[split_val]):
+                    print("First if started " + str(i))
+                    #If the first section number matches, check how many sections are in an id, if there are more sections in contentunit then
+                    #There are sections in line 
+                    if len(contentunit_split) > len(line_split):
+                        print("Second if started " + str(i))
+                        split_val = split_val + 1
+                        i = i + 1
+                        continue
+                    else:
+                        print("Second if's else started " + str(i))
+                else:
+                    print("First if's else started " + str(i))
+                    i = i + 1
+                    continue
+            except:
+                print("Index is " + str(i))
+                break
+
+
+def add_contentunit(contentsunits_list, contentunit):
+    '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
+    correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
+    is placed in the correct place in the list.'''
+    contentsunits_list = place_contentunit(contentsunits_list, contentunit)
+
+
 def start_menu():
     print("--------------------Welcome to Contents Generator!--------------------\n")
     print("Please choose an option below")
@@ -103,6 +154,7 @@ def start_menu():
     choice = input()
     if choice == 'a':
         print("You chose A")
+        add_contentunit(contentsunits_list, create_new_contentunit())
         start_menu()
     elif choice == 'b':
         print("You chose B")
