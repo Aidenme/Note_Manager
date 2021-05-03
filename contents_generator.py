@@ -130,26 +130,6 @@ def place_contentunit(contentsunits_list, contentunit):
     '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
     print(find_id_placement(contentsunits_list, contentunit.id))
 
-def unused_place_contentunit(contentsunits_list, contentunit):
-    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
-    i = 0
-    split_val = 0
-    for line in contentsunits_list:
-        if line.id == contentunit.id:
-            print("Error, ID already in use! Please use a different ID.")
-            break
-        else:
-            simple_line_id = line.id.replace("BM", "").split('.')
-            simple_contentunit_id = contentunit.id.replace("BM", "").split('.')
-            if simple_line_id[:-1] == simple_contentunit_id[:-1]:
-                print("All but last match at line " + str(i))
-                if int(simple_line_id[-1]) == (int(simple_contentunit_id[-1]) - 1):
-                    print("Line position should be " + str(i + 1))
-                else:
-                    i = i + 1
-            else:
-                i = i + 1
-
 def add_contentunit(contentsunits_list, contentunit):
     '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
     correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
