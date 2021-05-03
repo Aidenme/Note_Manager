@@ -92,14 +92,6 @@ def contentunits_from_html(html_contents_lines):
             contentsunits_list.append(content)
     return contentsunits_list
 
-def get_dot_number(id, dot):
-    split_id = id.split('.')
-    if dot == 0:
-        bm_cleaned = split_id[0].replace("BM", "")
-        return int(bm_cleaned)
-    else:
-        return int(split_id[dot])
-
 def calc_search_id(some_id):
     calc_id = some_id.replace("BM", "").split('.')
     new_end_num = int(calc_id[-1]) - 1
