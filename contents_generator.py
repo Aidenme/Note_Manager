@@ -100,8 +100,37 @@ def get_dot_number(id, dot):
     else:
         return int(split_id[dot])
 
+def calc_search_id(some_id):
+    calc_id = some_id.replace("BM", "").split('.')
+    new_end_num = int(calc_id[-1]) - 1
+    if new_end_num == 0:
+        calc_id = calc_id[:-1]
+    else:
+        calc_id[-1] = str(new_end_num)
+    return "BM" + '.'.join(calc_id)
 
 def place_contentunit(contentsunits_list, contentunit):
+    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
+    i = 0
+    split_val = 0
+    search_results = []
+    units_list_ids = []
+    for line in contentsunits_list:
+        units_list_ids.append(line.id)
+        if line.id == contentunit.id:
+            print("Error, ID already in use! Please use a different ID.")
+            break
+        else:
+            search_id = calc_search_id(contentunit.id)
+            if search_id in line.id:
+                search_results.append(line.id)
+            else:
+                continue
+    print(search_results)
+    print(units_list_ids)
+    print(units_list_ids.index(search_results[-1]))
+
+def unused_place_contentunit(contentsunits_list, contentunit):
     '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
     i = 0
     split_val = 0
@@ -121,8 +150,6 @@ def place_contentunit(contentsunits_list, contentunit):
             else:
                 i = i + 1
 
-
-
 def add_contentunit(contentsunits_list, contentunit):
     '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
     correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
@@ -135,8 +162,8 @@ def start_menu():
     print("Please choose an option below")
     print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
     print("CURRENT CONTENTS:")
-    for contentunit in contentsunits_list:
-        print((len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
+    for index, contentunit in enumerate(contentsunits_list):
+        print(str(index) + (len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
 
     choice = input()
     if choice == 'a':
