@@ -109,26 +109,26 @@ def calc_search_id(some_id):
         calc_id[-1] = str(new_end_num)
     return "BM" + '.'.join(calc_id)
 
-def place_contentunit(contentsunits_list, contentunit):
-    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
-    i = 0
-    split_val = 0
+def find_id_placement(contentsunits_list, new_id):
     search_results = []
     units_list_ids = []
     for line in contentsunits_list:
         units_list_ids.append(line.id)
-        if line.id == contentunit.id:
+        if line.id == new_id:
             print("Error, ID already in use! Please use a different ID.")
             break
         else:
-            search_id = calc_search_id(contentunit.id)
+            search_id = calc_search_id(new_id)
             if search_id in line.id:
                 search_results.append(line.id)
             else:
                 continue
-    print(search_results)
-    print(units_list_ids)
-    print(units_list_ids.index(search_results[-1]))
+
+    return units_list_ids.index(search_results[-1])
+
+def place_contentunit(contentsunits_list, contentunit):
+    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
+    print(find_id_placement(contentsunits_list, contentunit.id))
 
 def unused_place_contentunit(contentsunits_list, contentunit):
     '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
