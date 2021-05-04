@@ -99,6 +99,7 @@ def calc_search_id(some_id):
         calc_id = calc_id[:-1]
     else:
         calc_id[-1] = str(new_end_num)
+
     return "BM" + '.'.join(calc_id)
 
 def find_id_placement(contentsunits_list, new_id):
@@ -111,7 +112,7 @@ def find_id_placement(contentsunits_list, new_id):
             break
         else:
             search_id = calc_search_id(new_id)
-            if search_id in line.id:
+            if search_id in line.id and len(search_id) == len(line.id):
                 search_results.append(line.id)
             else:
                 continue
@@ -127,7 +128,6 @@ def add_contentunit(contentsunits_list, contentunit):
     correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
     is placed in the correct place in the list.'''
     contentsunits_list = place_contentunit(contentsunits_list, contentunit)
-
 
 def start_menu():
     print("--------------------Welcome to Contents Generator!--------------------\n")
@@ -148,7 +148,6 @@ def start_menu():
     elif choice == 'c':
         print("Thanks for using the generator! <3")
         exit()
-
 
 contentsunits_list = contentunits_from_html(get_contents_html('Python.html'))
 start_menu()
