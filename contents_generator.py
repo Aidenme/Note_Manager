@@ -133,21 +133,24 @@ def start_menu():
     #global contentsunits_list
     print("--------------------Welcome to Contents Generator!--------------------\n")
     print("Please choose an option below")
-    print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
+    print("A - Add a content entry     B - Delete a content entry     C - Save      D - Quit\n")
     print("CURRENT CONTENTS:")
     for index, contentunit in enumerate(contentsunits_list):
         print(str(index) + (len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
 
     choice = input()
     if choice == 'a':
-        print("You chose A")
         add_contentunit(create_new_contentunit())
+        print("New content entry added!")
         start_menu()
     elif choice == 'b':
-        print("You chose B")
+        print("You Chose B")
         start_menu()
     elif choice == 'c':
-        print("Thanks for using the generator! <3")
+        print("You Chose C")
+        start_menu()
+    elif choice == 'd':
+        print("Thank you for using content generator! <3 <3")
         exit()
 
 contentsunits_list = contentunits_from_html(get_contents_html('Python.html'))
