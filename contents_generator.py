@@ -93,6 +93,7 @@ def contentunits_from_html(html_contents_lines):
     return contentsunits_list
 
 def calc_search_id(some_id):
+    '''Takes an id and changes it into the id that is expected to come before it in the contents'''
     calc_id = some_id.replace("BM", "").split('.')
     new_end_num = int(calc_id[-1]) - 1
     if new_end_num == 0:
@@ -103,6 +104,7 @@ def calc_search_id(some_id):
     return "BM" + '.'.join(calc_id)
 
 def find_id_placement(contentsunits_list, new_id):
+    '''Takes a list of contentunits and looks at their ids compared to a new id to determine where that new id should be placed in the contents'''
     search_results = []
     units_list_ids = []
     for line in contentsunits_list:
@@ -112,6 +114,8 @@ def find_id_placement(contentsunits_list, new_id):
             break
         else:
             search_id = calc_search_id(new_id)
+            #This if statements includes length because if it didn't a search id like "BM1" would find
+            #everything that starts with BM1 like BM10 or BM11
             if search_id in line.id and len(search_id) == len(line.id):
                 search_results.append(line.id)
             else:
@@ -121,13 +125,14 @@ def find_id_placement(contentsunits_list, new_id):
 
 def place_contentunit(contentsunits_list, contentunit):
     '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
-    print(find_id_placement(contentsunits_list, contentunit.id))
+    #print(find_id_placement(contentsunits_list, contentunit.id))
+    print(contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit))
 
 def add_contentunit(contentsunits_list, contentunit):
     '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
     correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
     is placed in the correct place in the list.'''
-    contentsunits_list = place_contentunit(contentsunits_list, contentunit)
+    return place_contentunit(contentsunits_list, contentunit)
 
 def start_menu():
     print("--------------------Welcome to Contents Generator!--------------------\n")
@@ -140,7 +145,7 @@ def start_menu():
     choice = input()
     if choice == 'a':
         print("You chose A")
-        add_contentunit(contentsunits_list, create_new_contentunit())
+        contentsunit_list = add_contentunit(contentsunits_list, create_new_contentunit())
         start_menu()
     elif choice == 'b':
         print("You chose B")
