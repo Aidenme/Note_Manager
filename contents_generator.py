@@ -123,16 +123,11 @@ def find_id_placement(contentsunits_list, new_id):
 
     return units_list_ids.index(search_results[-1])
 
-def place_contentunit(contentsunits_list, contentunit):
-    '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
-    #print(find_id_placement(contentsunits_list, contentunit.id))
-    contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
-
-def add_contentunit(contentsunits_list, contentunit):
+def add_contentunit(contentunit):
     '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
     correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
     is placed in the correct place in the list.'''
-    return place_contentunit(contentsunits_list, contentunit)
+    contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
 
 def start_menu():
     #global contentsunits_list
@@ -146,7 +141,7 @@ def start_menu():
     choice = input()
     if choice == 'a':
         print("You chose A")
-        add_contentunit(contentsunits_list, create_new_contentunit())
+        add_contentunit(create_new_contentunit())
         start_menu()
     elif choice == 'b':
         print("You chose B")
