@@ -126,7 +126,7 @@ def find_id_placement(contentsunits_list, new_id):
 def place_contentunit(contentsunits_list, contentunit):
     '''Takes a contentunit and properly places it in a contentsunits_list before returning the list.'''
     #print(find_id_placement(contentsunits_list, contentunit.id))
-    print(contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit))
+    contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
 
 def add_contentunit(contentsunits_list, contentunit):
     '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
@@ -135,6 +135,7 @@ def add_contentunit(contentsunits_list, contentunit):
     return place_contentunit(contentsunits_list, contentunit)
 
 def start_menu():
+    #global contentsunits_list
     print("--------------------Welcome to Contents Generator!--------------------\n")
     print("Please choose an option below")
     print("A - Add a content entry     B - Delete a content entry     C - Quit\n")
@@ -145,7 +146,7 @@ def start_menu():
     choice = input()
     if choice == 'a':
         print("You chose A")
-        contentsunit_list = add_contentunit(contentsunits_list, create_new_contentunit())
+        add_contentunit(contentsunits_list, create_new_contentunit())
         start_menu()
     elif choice == 'b':
         print("You chose B")
