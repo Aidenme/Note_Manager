@@ -51,25 +51,6 @@ class ContentUnit:
         else:
             self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
 
-def get_contents_html(filename, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
-    note_file = open(filename, 'r')
-    content_end = False
-    html_contents_lines = []
-    x = 0
-    in_contents = False
-    while 1:
-        line = note_file.readline()
-        line = line[:-1]
-        if start_line in line:
-            in_contents = True
-        if in_contents == True:
-            html_contents_lines.append(line)
-        if end_line in line:
-            break
-        if not line:
-            break
-    return html_contents_lines
-
 def convert_to_contentunit(html_line):
     search_patt = re.compile('<a href="#(BM(?:\d+\.|\d)+)">([\w\s\&\(\)]+)</a>')
     search_results = search_patt.search(html_line)
@@ -91,6 +72,19 @@ def contentunits_from_html(html_contents_lines):
         if content:
             contentsunits_list.append(content)
     return contentsunits_list
+
+def get_contents_html(start_line='<!--Start contents-->', end_line='<!--End contents-->'):
+    html_contents_lines = []
+    in_contents = False
+    for line in html_content:
+        line = line[:-1]
+        if start_line in line:
+            in_contents = True
+        if in_contents == True:
+            html_contents_lines.append(line)
+        if end_line in line:
+            break
+    return html_contents_lines
 
 def calc_search_id(some_id):
     '''Takes an id and changes it into the id that is expected to come before it in the contents'''
@@ -129,6 +123,15 @@ def add_contentunit(contentunit):
     is placed in the correct place in the list.'''
     contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
 
+def insert_new_contents():
+    
+
+
+def save_to_html():
+    note_file = open(html_filename, 'w')
+    for content in contentsunits_list:
+        note_file.write(content.head_html + '\n')
+
 def start_menu():
     #global contentsunits_list
     print("--------------------Welcome to Contents Generator!--------------------\n")
@@ -148,10 +151,14 @@ def start_menu():
         start_menu()
     elif choice == 'c':
         print("You Chose C")
+        save_to_html()
         start_menu()
     elif choice == 'd':
         print("Thank you for using content generator! <3 <3")
         exit()
 
-contentsunits_list = contentunits_from_html(get_contents_html('Python.html'))
+html_filename = 'Python.html'
+note_file = open(html_filename, 'r')
+html_content = note_file.readlines()
+contentsunits_list = contentunits_from_html(get_contents_html())
 start_menu()
