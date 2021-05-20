@@ -74,15 +74,17 @@ def contentunits_from_html(html_contents_lines):
     return contentsunits_list
 
 def get_contents_html(start_line='<!--Start contents-->', end_line='<!--End contents-->'):
-    html_contents_lines = []
+    html_contents_lines = {'contents' : [], 'start_index' : None, 'end_index' : None}
     in_contents = False
-    for line in html_content:
+    for index, line in enumerate(html_content):
         line = line[:-1]
         if start_line in line:
             in_contents = True
+            html_contents_lines['start_index'] = index
         if in_contents == True:
-            html_contents_lines.append(line)
+            html_contents_lines['contents'].append(line)
         if end_line in line:
+            html_contents_lines['end_index'] = index
             break
     return html_contents_lines
 
@@ -124,13 +126,17 @@ def add_contentunit(contentunit):
     contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
 
 def insert_new_contents():
-    
+    contents_strings = []
+    for content in contentsunits_list:
+        contents_strings.append(content.head_html + '\n')
 
+    html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
 
 def save_to_html():
     note_file = open(html_filename, 'w')
-    for content in contentsunits_list:
-        note_file.write(content.head_html + '\n')
+    for line in html_content:
+        print(line)
+        note_file.write(line)
 
 def start_menu():
     #global contentsunits_list
@@ -151,6 +157,7 @@ def start_menu():
         start_menu()
     elif choice == 'c':
         print("You Chose C")
+        insert_new_contents()
         save_to_html()
         start_menu()
     elif choice == 'd':
@@ -160,5 +167,6 @@ def start_menu():
 html_filename = 'Python.html'
 note_file = open(html_filename, 'r')
 html_content = note_file.readlines()
-contentsunits_list = contentunits_from_html(get_contents_html())
+html_contents = get_contents_html()
+contentsunits_list = contentunits_from_html(html_contents['contents'])
 start_menu()
