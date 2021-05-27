@@ -127,6 +127,7 @@ def add_contentunit(contentunit):
 
 def insert_new_contents():
     contents_strings = []
+    generate_dropdowns()
     for content in contentsunits_list:
         contents_strings.append(content.head_html + '\n')
 
@@ -135,8 +136,26 @@ def insert_new_contents():
 def save_to_html():
     note_file = open(html_filename, 'w')
     for line in html_content:
-        print(line)
         note_file.write(line)
+
+def generate_dropdowns():
+    '''After creating Content Units with an id that allows them to be properly placed, Content Units that need a dropdown (which
+    is based on their id) need to have their is_dropdown variable set and the proper html generated'''
+    print("generate_dropdowns ran")
+    for i, contentunit in enumerate(contentsunits_list):
+        if i + 1 == len(contentsunits_list):
+            break
+        else:
+            if len(contentunit.id) < len(contentsunits_list[i + 1].id) and contentunit.is_dropdown == False:
+                print("If ran for: " + contentunit.id)
+                contentunit.is_dropdown = True
+                contentunit.set_head_html(contentunit.name, contentunit.id)
+
+    make_closing_statements()
+
+def make_closing_statements():
+    pass
+    #for index, contentunit in enumerate(contentsunits_list):
 
 def start_menu():
     #global contentsunits_list
