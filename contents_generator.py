@@ -10,23 +10,32 @@ class ContentUnit:
 
         self.set_spaces_from_id(self.id)
         if head_html == None:
-            #Create the html line. The type depends on the is_dropdown value
+            #Create the html line if there isn't one yet. The type depends on the is_dropdown value
             self.set_head_html(self.name, self.id)
         else:
-            #Translate variables from the existing html line to create a complete contentunit
+            #If html is passed to the contentunit the type of dropdown needs to be set to either a dropdown or not
+            #based on the html.
             self.set_dropdown()
 
     def print_content(self):
+        '''Prints a contentunit's id and name in a nice and organized way. This is used to make the current contents easy to read and understand
+        without having to read through html lines.'''
         print(self.spaces + self.name + " - " + self.id)
 
     def print_html(self):
+        '''Prints the html code that makes up the head html of a contentunit'''
         print(self.head_html)
 
     def set_spaces_from_id(self, id, base_spaces=0, space_multiplier=2, space_char=" "):
+        '''Based on an id the tab level of an html line is determined and set. This is only to make the created html lines easier to read
+         in the actual html file.'''
         space_count = base_spaces + (self.id.count(".") * space_multiplier)
         self.spaces = space_count * space_char
 
     def get_space_count_from_html(self):
+        '''This determines the tab level of an html line based on the tab level stored in the actual html code. When importing the contents
+        this information is stored in order to maintain the tab level of the original contents so when regenerating the contents
+        set_spaces_from_id doesn't need to run again.'''
         space_patt = re.compile('(\s+)<li><a href')
         space_results = space_patt.search(self.head_html)
         if space_results:
@@ -35,7 +44,8 @@ class ContentUnit:
             return 0
 
     def set_dropdown(self):
-        '''Uses the head HTML of a contentunit with HTML to determine what value is_dropdown should be.'''
+        '''Uses the head HTML of a contentunit with HTML to determine what value is_dropdown should be. This runs if a newly created ContentUnit
+         is passed html in the creation stage. If that HTML draws a dropdown is_dropdown needs to be "True" if not it needs to be "False"'''
         dropdown_patt = re.compile('<li class="dropdown">')
         if dropdown_patt.search(self.head_html):
             self.is_dropdown = True
@@ -43,29 +53,32 @@ class ContentUnit:
             self.is_dropdown = False
 
     def set_head_html(self, name, id):
-        '''Generates the html for the head part of a contentunit. This only runs if there is not yet any HTML
-        defined (a.k.a. when a new contentunit is created). The head type is determined by the value of is_dropdown,
-         which is a parameter set when the contentunit is created.'''
+        '''Generates the html for the head part of a contentunit. This will run by default when a new contentunit is created.
+        The head type is determined by the class variable "is_dropdown". It can either be html that generates a dropdown or html that
+        allows the contentunit head to fit neatly in a list of contents.'''
         if self.is_dropdown == False:
             self.head_html = self.spaces + '<li><a href="#' + id + '">' + name + '</a></li>'
         else:
             self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
 
 def convert_to_contentunit(html_line):
+    '''When importing an html file with contents the html generating each contents entry needs to be converted to a contentunit object for
+    easy processing and storage in the contentunits_list global variable.'''
     search_patt = re.compile('<a href="#(BM(?:\d+\.|\d)+)">([\w\s\&\(\)]+)</a>')
     search_results = search_patt.search(html_line)
     if search_results:
         return ContentUnit(id=search_results.group(1), name=search_results.group(2), head_html=html_line)
 
 def create_new_contentunit():
+    '''Prompts the user to enter the information needed to create a new contentunit and returns a complete contentunit'''
     id = input("Please enter an ID")
     name = input("Please enter a name")
     return ContentUnit(id=id, name=name)
 
 def contentunits_from_html(html_contents_lines):
-    '''Takes the html that makes up the contents and converts it to a list of contentsunits. This MUST take only the html
-    in the contents div on a notes website page. html in this correct format should get spit out from an html file by
-    get_contents_html()'''
+    '''Takes the lines of html that make up the contents and converts it to a list of contentsunits. This MUST take only the html lines
+    in the "contents" div in a note html file. get_contents_html searches and returns those lines from a full html file so run that
+    first on an html file to get lines that can actually be converted.'''
     contentsunits_list = []
     for line in html_contents_lines:
         content = convert_to_contentunit(line)
@@ -74,6 +87,9 @@ def contentunits_from_html(html_contents_lines):
     return contentsunits_list
 
 def get_contents_html(start_line='<!--Start contents-->', end_line='<!--End contents-->'):
+    '''Searches an html file for the div that makes up the contents on the top of the page. Once found this will return all the html lines in the
+    div. This makes all the processing easier since it returns a list of html lines formatted in the specific formats that make up html lines and
+    dropdowns.'''
     html_contents_lines = {'contents' : [], 'start_index' : None, 'end_index' : None}
     in_contents = False
     for index, line in enumerate(html_content):
@@ -89,7 +105,8 @@ def get_contents_html(start_line='<!--Start contents-->', end_line='<!--End cont
     return html_contents_lines
 
 def calc_search_id(some_id):
-    '''Takes an id and changes it into the id that is expected to come before it in the contents'''
+    '''Takes a contentunit id and returns the id that is expected to come before it in the contents. Once that is determined it is easy to search for
+    that id (see function find_id_placement) and then insert the new contentunit beneath it (see function add_contentunit).'''
     calc_id = some_id.replace("BM", "").split('.')
     new_end_num = int(calc_id[-1]) - 1
     if new_end_num == 0:
@@ -127,7 +144,9 @@ def add_contentunit(contentunit):
 
 def insert_new_contents():
     contents_strings = []
+    #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
     generate_dropdowns()
+    make_closing_statements()
     for content in contentsunits_list:
         contents_strings.append(content.head_html + '\n')
 
@@ -150,8 +169,6 @@ def generate_dropdowns():
                 print("If ran for: " + contentunit.id)
                 contentunit.is_dropdown = True
                 contentunit.set_head_html(contentunit.name, contentunit.id)
-
-    make_closing_statements()
 
 def make_closing_statements():
     pass
