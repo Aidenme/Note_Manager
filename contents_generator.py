@@ -144,12 +144,20 @@ def add_contentunit(contentunit):
 
 def insert_new_contents():
     contents_strings = []
+    closing_statement_id = None
     #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
     generate_dropdowns()
-    make_closing_statements()
+    #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
     for content in contentsunits_list:
-        contents_strings.append(content.head_html + '\n')
+        if content.is_dropdown == True:
+            closing_statement_id = get_last_subcontent_id(content.id)
+        if content.id = closing_statement_id:
+            contents_strings.append(content.head_html + '\n')
+            contents_strings.append('</ul></li>\n')
+        else:
+            contents_strings.append(content.head_html + '\n')
 
+    #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
     html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
 
 def save_to_html():
@@ -170,9 +178,18 @@ def generate_dropdowns():
                 contentunit.is_dropdown = True
                 contentunit.set_head_html(contentunit.name, contentunit.id)
 
-def make_closing_statements():
-    pass
-    #for index, contentunit in enumerate(contentsunits_list):
+def get_last_subcontent_id(content_id):
+    subcontent_ids = []
+    #define regex pattern as "string that starts with content_id"
+    patt = re.compile("^(?:" + str(content_id) + ")")
+    for content in contentsunits_list:
+        match = patt.seach(content.id)
+        if match:
+            subcontent_ids.append(content.id)
+        else:
+            break
+
+    return subcontent_ids[-1]
 
 def start_menu():
     #global contentsunits_list
