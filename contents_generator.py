@@ -149,6 +149,8 @@ def insert_new_contents():
     generate_dropdowns()
     #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
     for content in contentsunits_list:
+        #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
+        #that you can append closing tags under it and close the html creating the dropdown
         if content.is_dropdown == True:
             closing_statement_id = get_last_subcontent_id(content.id)
         if content.id == closing_statement_id:
@@ -179,15 +181,19 @@ def generate_dropdowns():
                 contentunit.set_head_html(contentunit.name, contentunit.id)
 
 def get_last_subcontent_id(content_id):
+    '''Finds the last id in a dropdown's sublist of contentunit ids. This is used to determine the index in which to insert closing tags
+    </ul></li> by putting it under the found id.'''
     subcontent_ids = []
     #define regex pattern as "string that starts with content_id"
     patt = re.compile("^(?:" + str(content_id) + ")")
+    #Add everything that passes the pattern to the subcontent_ids list
     for content in contentsunits_list:
         match = patt.search(content.id)
         if match:
             subcontent_ids.append(content.id)
         else:
             continue
+
     return subcontent_ids[-1]
 
 def start_menu():
