@@ -151,7 +151,7 @@ def insert_new_contents():
     for content in contentsunits_list:
         if content.is_dropdown == True:
             closing_statement_id = get_last_subcontent_id(content.id)
-        if content.id = closing_statement_id:
+        if content.id == closing_statement_id:
             contents_strings.append(content.head_html + '\n')
             contents_strings.append('</ul></li>\n')
         else:
@@ -183,12 +183,11 @@ def get_last_subcontent_id(content_id):
     #define regex pattern as "string that starts with content_id"
     patt = re.compile("^(?:" + str(content_id) + ")")
     for content in contentsunits_list:
-        match = patt.seach(content.id)
+        match = patt.search(content.id)
         if match:
             subcontent_ids.append(content.id)
         else:
-            break
-
+            continue
     return subcontent_ids[-1]
 
 def start_menu():
