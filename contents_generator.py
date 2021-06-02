@@ -26,7 +26,7 @@ class ContentUnit:
         '''Prints the html code that makes up the head html of a contentunit'''
         print(self.head_html)
 
-    def set_spaces_from_id(self, id, base_spaces=0, space_multiplier=2, space_char=" "):
+    def set_spaces_from_id(self, id, base_spaces=4, space_multiplier=4, space_char=" "):
         '''Based on an id the tab level of an html line is determined and set. This is only to make the created html lines easier to read
          in the actual html file.'''
         space_count = base_spaces + (self.id.count(".") * space_multiplier)
