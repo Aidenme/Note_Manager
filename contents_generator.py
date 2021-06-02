@@ -144,20 +144,31 @@ def add_contentunit(contentunit):
 
 def insert_new_contents():
     contents_strings = []
-    closing_statement_id = None
+    closing_dicts = []
+    closing_statement = '</ul></li>\n'
     #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
     generate_dropdowns()
     #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
     for content in contentsunits_list:
+        print(content.name)
+        print(closing_dicts)
         #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
         #that you can append closing tags under it and close the html creating the dropdown
+        contents_strings.append(content.head_html + '\n')
+        if closing_dicts and content.id == closing_dicts[-1]['pre_close_id']:
+            closing_dicts[-1]['id_hit'] = True
+            if content.is_dropdown == False:
+                false_closing_dicts = []
+                for dict in closing_dicts:
+                    if dict['id_hit'] == True:
+                        contents_strings.append(closing_statement)
+                    else:
+                        false_closing_dicts.append(dict)
+                closing_dicts = false_closing_dicts
+
         if content.is_dropdown == True:
-            closing_statement_id = get_last_subcontent_id(content.id)
-        if content.id == closing_statement_id:
-            contents_strings.append(content.head_html + '\n')
-            contents_strings.append('</ul></li>\n')
-        else:
-            contents_strings.append(content.head_html + '\n')
+            closing_dict = {'name' : content.name, 'pre_close_id' : get_last_subcontent_id(content.id), 'id_hit' : False}
+            closing_dicts.append(closing_dict)
 
     #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
     html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
@@ -185,7 +196,7 @@ def get_last_subcontent_id(content_id):
     </ul></li> by putting it under the found id.'''
     subcontent_ids = []
     #define regex pattern as "string that starts with content_id"
-    patt = re.compile("^(?:" + str(content_id) + ")")
+    patt = re.compile("(?:" + str(content_id) + "\.\d+)$")
     #Add everything that passes the pattern to the subcontent_ids list
     for content in contentsunits_list:
         match = patt.search(content.id)
