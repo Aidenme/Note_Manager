@@ -143,25 +143,26 @@ def add_contentunit(contentunit):
     contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
 
 def insert_new_contents():
+    '''After the contentsunits_list is done being modified this creates the final html code and inserts it into html_content in
+    preparation for overwriting the old file with the html making up html_content.'''
     contents_strings = []
     closing_dicts = []
-    closing_statement = '</ul></li>\n'
     #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
     generate_dropdowns()
     #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
     for content in contentsunits_list:
-        print(content.name)
-        print(closing_dicts)
         #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
         #that you can append closing tags under it and close the html creating the dropdown
         contents_strings.append(content.head_html + '\n')
         if closing_dicts and content.id == closing_dicts[-1]['pre_close_id']:
             closing_dicts[-1]['id_hit'] = True
+            #An HTML line that generates a dropdown cannot have any closing tags directly under it. This writes the closing tags
+            #only after a good spot to write them is found.
             if content.is_dropdown == False:
                 false_closing_dicts = []
                 for dict in closing_dicts:
                     if dict['id_hit'] == True:
-                        contents_strings.append(closing_statement)
+                        contents_strings.append('</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
                     else:
                         false_closing_dicts.append(dict)
                 closing_dicts = false_closing_dicts
