@@ -9,13 +9,7 @@ class ContentUnit:
         self.is_dropdown = is_dropdown
 
         self.set_spaces_from_id(self.id)
-        if head_html == None:
-            #Create the html line if there isn't one yet. The type depends on the is_dropdown value
-            self.set_head_html(self.name, self.id)
-        else:
-            #If html is passed to the contentunit the type of dropdown needs to be set to either a dropdown or not
-            #based on the html.
-            self.set_dropdown()
+        self.set_head_html(self.name, self.id)
 
     def print_content(self):
         '''Prints a contentunit's id and name in a nice and organized way. This is used to make the current contents easy to read and understand
@@ -59,7 +53,7 @@ class ContentUnit:
         if self.is_dropdown == False:
             self.head_html = self.spaces + '<li><a href="#' + id + '">' + name + '</a></li>'
         else:
-            self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="BM2but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
+            self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="' + id + 'but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
 
 def convert_to_contentunit(html_line):
     '''When importing an html file with contents the html generating each contents entry needs to be converted to a contentunit object for
@@ -67,7 +61,7 @@ def convert_to_contentunit(html_line):
     search_patt = re.compile('<a href="#(BM(?:\d+\.|\d)+)">([\w\s\&\(\)]+)</a>')
     search_results = search_patt.search(html_line)
     if search_results:
-        return ContentUnit(id=search_results.group(1), name=search_results.group(2), head_html=html_line)
+        return ContentUnit(id=search_results.group(1), name=search_results.group(2))
 
 def create_new_contentunit():
     '''Prompts the user to enter the information needed to create a new contentunit and returns a complete contentunit'''
@@ -159,16 +153,17 @@ def insert_new_contents():
             #An HTML line that generates a dropdown cannot have any closing tags directly under it. This writes the closing tags
             #only after a good spot to write them is found.
             if content.is_dropdown == False:
+                closing_dicts.reverse()
                 false_closing_dicts = []
                 for dict in closing_dicts:
                     if dict['id_hit'] == True:
-                        contents_strings.append('</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
+                        contents_strings.append(dict['spaces'] + '</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
                     else:
                         false_closing_dicts.append(dict)
                 closing_dicts = false_closing_dicts
 
         if content.is_dropdown == True:
-            closing_dict = {'name' : content.name, 'pre_close_id' : get_last_subcontent_id(content.id), 'id_hit' : False}
+            closing_dict = {'name' : content.name, 'pre_close_id' : get_last_subcontent_id(content.id), 'id_hit' : False, 'spaces' : content.spaces}
             closing_dicts.append(closing_dict)
 
     #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
