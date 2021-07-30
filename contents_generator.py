@@ -11,6 +11,9 @@ class ContentUnit:
         self.set_spaces_from_id(self.id)
         self.set_head_html(self.name, self.id)
 
+    def __str__(self):
+        return self.spaces + self.name + " - " + self.id
+
     def print_content(self):
         '''Prints a contentunit's id and name in a nice and organized way. This is used to make the current contents easy to read and understand
         without having to read through html lines.'''
@@ -55,153 +58,203 @@ class ContentUnit:
         else:
             self.head_html = self.spaces + '<li class="dropdown"><a href="#' + id + '">' + name + '</a><div id="' + id + 'but" class="twirl_button" onclick="reveal(\'' + id + 'sub\', \'' + id + 'but\')">&#8658;</div><ul id="' + id + 'sub" class="subcontents" style="display:none;">'
 
-def convert_to_contentunit(html_line):
-    '''When importing an html file with contents the html generating each contents entry needs to be converted to a contentunit object for
-    easy processing and storage in the contentunits_list global variable.'''
-    search_patt = re.compile('<a href="#(BM(?:\d+\.|\d)+)">([\w\s\&\(\)]+)</a>')
-    search_results = search_patt.search(html_line)
-    if search_results:
-        return ContentUnit(id=search_results.group(1), name=search_results.group(2))
+class Contents:
+    def __init__(self, contents_dict):
+        self.html_contents = contents_dict['contents']
+        self.notefile_start = contents_dict['start_index']
+        self.notefile_end = contents_dict['end_index']
+        self.contents = None
 
-def create_new_contentunit():
-    '''Prompts the user to enter the information needed to create a new contentunit and returns a complete contentunit'''
-    id = input("Please enter an ID")
-    name = input("Please enter a name")
-    return ContentUnit(id=id, name=name)
+        self.convert_from_html(self.html_contents)
+        print("Contents Initialized")
 
-def contentunits_from_html(html_contents_lines):
-    '''Takes the lines of html that make up the contents and converts it to a list of contentsunits. This MUST take only the html lines
-    in the "contents" div in a note html file. get_contents_html searches and returns those lines from a full html file so run that
-    first on an html file to get lines that can actually be converted.'''
-    contentsunits_list = []
-    for line in html_contents_lines:
-        content = convert_to_contentunit(line)
-        if content:
-            contentsunits_list.append(content)
-    return contentsunits_list
-
-def get_contents_html(start_line='<!--Start contents-->', end_line='<!--End contents-->'):
-    '''Searches an html file for the div that makes up the contents on the top of the page. Once found this will return all the html lines in the
-    div. This makes all the processing easier since it returns a list of html lines formatted in the specific formats that make up html lines and
-    dropdowns.'''
-    html_contents_lines = {'contents' : [], 'start_index' : None, 'end_index' : None}
-    in_contents = False
-    for index, line in enumerate(html_content):
-        line = line[:-1]
-        if start_line in line:
-            in_contents = True
-            html_contents_lines['start_index'] = index
-        if in_contents == True:
-            html_contents_lines['contents'].append(line)
-        if end_line in line:
-            html_contents_lines['end_index'] = index
-            break
-    return html_contents_lines
-
-def calc_search_id(some_id):
-    '''Takes a contentunit id and returns the id that is expected to come before it in the contents. Once that is determined it is easy to search for
-    that id (see function find_id_placement) and then insert the new contentunit beneath it (see function add_contentunit).'''
-    calc_id = some_id.replace("BM", "").split('.')
-    new_end_num = int(calc_id[-1]) - 1
-    if new_end_num == 0:
-        calc_id = calc_id[:-1]
-    else:
-        calc_id[-1] = str(new_end_num)
-
-    return "BM" + '.'.join(calc_id)
-
-def find_id_placement(contentsunits_list, new_id):
-    '''Takes a list of contentunits and looks at their ids compared to a new id to determine where that new id should be placed in the contents'''
-    search_results = []
-    units_list_ids = []
-    for line in contentsunits_list:
-        units_list_ids.append(line.id)
-        if line.id == new_id:
-            print("Error, ID already in use! Please use a different ID.")
-            break
+    def __getitem__(self, index):
+        if index == len(self.contents):
+            raise IndexError
         else:
-            search_id = calc_search_id(new_id)
-            #This if statements includes length because if it didn't a search id like "BM1" would find
-            #everything that starts with BM1 like BM10 or BM11
-            if search_id in line.id and len(search_id) == len(line.id):
-                search_results.append(line.id)
+            return self.contents[index]
+
+    def convert_from_html(self, html_contents):
+        '''Takes the lines of html that make up the contents and converts it to a list of contentsunits. This MUST take only the html lines
+        in the "contents" div in a note html file. get_contents_html searches and returns those lines from a full html file so run that
+        first on an html file to get lines that can actually be converted.'''
+        contentsunits_list = []
+        for line in html_contents:
+            content = self.convert_to_contentunit(line)
+            if content:
+                contentsunits_list.append(content)
+        self.contents = contentsunits_list
+
+    def convert_to_contentunit(self, html_line):
+        '''When importing an html file with contents the html generating each contents entry needs to be converted to a contentunit object for
+        easy processing and storage in the contentunits_list global variable.'''
+        search_patt = re.compile('<a href="#(BM(?:\d+\.|\d)+)">([\w\s\&\(\)]+)</a>')
+        search_results = search_patt.search(html_line)
+        if search_results:
+            return ContentUnit(id=search_results.group(1), name=search_results.group(2))
+
+    def calc_search_id(self, some_id):
+        '''Takes a contentunit id and returns the id that is expected to come before it in the contents. Once that is determined it is easy to search for
+        that id (see function find_id_placement) and then insert the new contentunit beneath it (see function add_contentunit).'''
+        calc_id = some_id.replace("BM", "").split('.')
+        new_end_num = int(calc_id[-1]) - 1
+        if new_end_num == 0:
+            calc_id = calc_id[:-1]
+        else:
+            calc_id[-1] = str(new_end_num)
+
+        return "BM" + '.'.join(calc_id)
+
+    def find_id_placement(self, contentsunits_list, new_id):
+        '''Takes a list of contentunits and looks at their ids compared to a new id to determine where that new id should be placed in the contents'''
+        search_results = []
+        units_list_ids = []
+        for line in contentsunits_list:
+            units_list_ids.append(line.id)
+            if line.id == new_id:
+                print("Error, ID already in use! Please use a different ID.")
+                break
+            else:
+                search_id = self.calc_search_id(new_id)
+                #This if statements includes length because if it didn't a search id like "BM1" would find
+                #everything that starts with BM1 like BM10 or BM11
+                if search_id in line.id and len(search_id) == len(line.id):
+                    search_results.append(line.id)
+                else:
+                    continue
+
+        return units_list_ids.index(search_results[-1])
+
+    def add_contentunit(self, id, name):
+        '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
+        correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
+        is placed in the correct place in the list.'''
+        new_contentunit = ContentUnit(id=id, name=name)
+        self.contents.insert((self.find_id_placement(self.contents, new_contentunit.id) + 1), new_contentunit)
+        self.convert_to_html(self.contents)
+
+    def generate_dropdowns(self, contents_list):
+        '''After creating Content Units with an id that allows them to be properly placed, Content Units that need a dropdown (which
+        is based on their id) need to have their is_dropdown variable set and the proper html generated'''
+        print("generate_dropdowns ran")
+        for i, contentunit in enumerate(contents_list):
+            if i + 1 == len(contents_list):
+                break
+            else:
+                #A contentunit must have subcontents if the contentunit id in the line below it is longer than the id in the current contentunit.
+                if len(contentunit.id) < len(contents_list[i + 1].id) and contentunit.is_dropdown == False:
+                    print("If ran for: " + contentunit.id)
+                    contentunit.is_dropdown = True
+                    contentunit.set_head_html(contentunit.name, contentunit.id)
+        self.contents = contents_list
+
+    def get_last_subcontent_id(self, content_id):
+        '''Finds the last id in a dropdown's sublist of contentunit ids. This is used to determine the index in which to insert closing tags
+        </ul></li> by putting it under the found id.'''
+        subcontent_ids = []
+        #define regex pattern as "string that starts with content_id"
+        patt = re.compile("(?:" + str(content_id) + "\.\d+)$")
+        #Add everything that passes the pattern to the subcontent_ids list
+        for content in self.contents:
+            match = patt.search(content.id)
+            if match:
+                subcontent_ids.append(content.id)
             else:
                 continue
 
-    return units_list_ids.index(search_results[-1])
+        return subcontent_ids[-1]
 
-def add_contentunit(contentunit):
-    '''Takes the entire contentsunits list and adds a contentunit to it. This works to ensure the new contentunit has the
-    correct is_dropdown value, which is determined by the ids of neighboring contentunits. It also makes sure the contentunit
-    is placed in the correct place in the list.'''
-    contentsunits_list.insert((find_id_placement(contentsunits_list, contentunit.id) + 1), contentunit)
+    def convert_to_html(self, contents):
+        '''After the contentsunits_list is done being modified this creates the final html code and inserts it into html_content in
+        preparation for overwriting the old file with the html making up html_content.'''
+        contents_strings = []
+        closing_dicts = []
+        #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
+        self.generate_dropdowns(self.contents)
+        #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
+        for content in self.contents:
+            #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
+            #that you can append closing tags under it and close the html creating the dropdown
+            contents_strings.append(content.head_html + '\n')
+            if closing_dicts and content.id == closing_dicts[-1]['pre_close_id']:
+                closing_dicts[-1]['id_hit'] = True
+                #An HTML line that generates a dropdown cannot have any closing tags directly under it. This writes the closing tags
+                #only after a good spot to write them is found.
+                if content.is_dropdown == False:
+                    closing_dicts.reverse()
+                    false_closing_dicts = []
+                    for dict in closing_dicts:
+                        if dict['id_hit'] == True:
+                            contents_strings.append(dict['spaces'] + '</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
+                        else:
+                            false_closing_dicts.append(dict)
+                    closing_dicts = false_closing_dicts
 
-def insert_new_contents():
-    '''After the contentsunits_list is done being modified this creates the final html code and inserts it into html_content in
-    preparation for overwriting the old file with the html making up html_content.'''
-    contents_strings = []
-    closing_dicts = []
-    #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
-    generate_dropdowns()
-    #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
-    for content in contentsunits_list:
-        #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
-        #that you can append closing tags under it and close the html creating the dropdown
-        contents_strings.append(content.head_html + '\n')
-        if closing_dicts and content.id == closing_dicts[-1]['pre_close_id']:
-            closing_dicts[-1]['id_hit'] = True
-            #An HTML line that generates a dropdown cannot have any closing tags directly under it. This writes the closing tags
-            #only after a good spot to write them is found.
-            if content.is_dropdown == False:
-                closing_dicts.reverse()
-                false_closing_dicts = []
-                for dict in closing_dicts:
-                    if dict['id_hit'] == True:
-                        contents_strings.append(dict['spaces'] + '</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
-                    else:
-                        false_closing_dicts.append(dict)
-                closing_dicts = false_closing_dicts
+            if content.is_dropdown == True:
+                closing_dict = {'name' : content.name, 'pre_close_id' : self.get_last_subcontent_id(content.id), 'id_hit' : False, 'spaces' : content.spaces}
+                closing_dicts.append(closing_dict)
 
-        if content.is_dropdown == True:
-            closing_dict = {'name' : content.name, 'pre_close_id' : get_last_subcontent_id(content.id), 'id_hit' : False, 'spaces' : content.spaces}
-            closing_dicts.append(closing_dict)
+        self.html_contents = contents_strings
 
-    #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
-    html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
+        #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
+        #html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
 
-def save_to_html():
-    note_file = open(html_filename, 'w')
-    for line in html_content:
-        note_file.write(line)
+class NoteFile:
+    def __init__(self, filename):
+        self.note_interface = NoteFileInterface(filename)
+        self.contents = Contents(self.note_interface.get_contents())
+        print("NoteFile Initialized")
 
-def generate_dropdowns():
-    '''After creating Content Units with an id that allows them to be properly placed, Content Units that need a dropdown (which
-    is based on their id) need to have their is_dropdown variable set and the proper html generated'''
-    print("generate_dropdowns ran")
-    for i, contentunit in enumerate(contentsunits_list):
-        if i + 1 == len(contentsunits_list):
-            break
-        else:
-            if len(contentunit.id) < len(contentsunits_list[i + 1].id) and contentunit.is_dropdown == False:
-                print("If ran for: " + contentunit.id)
-                contentunit.is_dropdown = True
-                contentunit.set_head_html(contentunit.name, contentunit.id)
+    def add_contents(self):
+        '''Prompts the user to enter the information needed to create a new contentunit and returns a complete contentunit'''
+        id = input("Please enter an ID")
+        name = input("Please enter a name")
+        self.contents.add_contentunit(id, name)
+        self.note_interface.set_contents(self.contents)
+        self.note_interface.save_to_html()
 
-def get_last_subcontent_id(content_id):
-    '''Finds the last id in a dropdown's sublist of contentunit ids. This is used to determine the index in which to insert closing tags
-    </ul></li> by putting it under the found id.'''
-    subcontent_ids = []
-    #define regex pattern as "string that starts with content_id"
-    patt = re.compile("(?:" + str(content_id) + "\.\d+)$")
-    #Add everything that passes the pattern to the subcontent_ids list
-    for content in contentsunits_list:
-        match = patt.search(content.id)
-        if match:
-            subcontent_ids.append(content.id)
-        else:
-            continue
+class NoteFileInterface:
+    def __init__(self, filename):
+        self.filename = filename
+        self.html = None
 
-    return subcontent_ids[-1]
+        self.import_file(self.filename)
+        print("NoteFileInterface Initialized")
+
+    def import_file(self, filename):
+        note_file = open(filename, 'r')
+        self.html = note_file.readlines()
+        note_file.close()
+
+    def get_contents(self, html=None, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
+        '''Searches an html file for the div that makes up the contents on the top of the page. Once found this will return all the html lines in the
+        div. This makes all the processing easier since it returns a list of html lines formatted in the specific formats that make up html lines and
+        dropdowns.'''
+        if html == None:
+            html = self.html
+        html_contents_dict = {'contents' : [], 'start_index' : None, 'end_index' : None}
+        in_contents = False
+        for index, line in enumerate(html):
+            line = line[:-1]
+            if start_line in line:
+                in_contents = True
+                html_contents_dict['start_index'] = index
+            if in_contents == True:
+                html_contents_dict['contents'].append(line)
+            if end_line in line:
+                html_contents_dict['end_index'] = index
+                break
+        return html_contents_dict
+
+    def save_to_html(self):
+        note_file = open(self.filename, 'w')
+        for line in self.html:
+            note_file.write(line)
+        note_file.close()
+
+    def set_contents(self, contents):
+        self.html[contents.notefile_start + 1:contents.notefile_end] = contents.html_contents
+
 
 def start_menu():
     #global contentsunits_list
@@ -209,12 +262,12 @@ def start_menu():
     print("Please choose an option below")
     print("A - Add a content entry     B - Delete a content entry     C - Save      D - Quit\n")
     print("CURRENT CONTENTS:")
-    for index, contentunit in enumerate(contentsunits_list):
+    for index, contentunit in enumerate(note_file.contents):
         print(str(index) + (len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
 
     choice = input()
     if choice == 'a':
-        add_contentunit(create_new_contentunit())
+        note_file.add_contents()
         print("New content entry added!")
         start_menu()
     elif choice == 'b':
@@ -222,16 +275,12 @@ def start_menu():
         start_menu()
     elif choice == 'c':
         print("You Chose C")
-        insert_new_contents()
+        note_file.contents.insert_new_contents()
         save_to_html()
         start_menu()
     elif choice == 'd':
         print("Thank you for using content generator! <3 <3")
         exit()
 
-html_filename = 'Python.html'
-note_file = open(html_filename, 'r')
-html_content = note_file.readlines()
-html_contents = get_contents_html()
-contentsunits_list = contentunits_from_html(html_contents['contents'])
+note_file = NoteFile('Python.html')
 start_menu()
