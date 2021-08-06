@@ -161,43 +161,24 @@ class Contents:
                 subcontent_ids.append(content.id)
             else:
                 continue
-
+        #print("Tags go under: " + subcontent_ids[-1])
         return subcontent_ids[-1]
 
     def convert_to_html(self, contents):
-        '''After the contentsunits_list is done being modified this creates the final html code and inserts it into html_content in
-        preparation for overwriting the old file with the html making up html_content.'''
         contents_strings = []
-        closing_dicts = []
-        #Scans contentunits_list for contentunits that should have dropdowns and sets them to have those dropdowns
         self.generate_dropdowns(self.contents)
-        #All the lines of html that make up each contentunit's head html get put in a list after their html line is properly set
-        for content in self.contents:
-            #When something has a dropdown determine the last id in that dropdown list so when the current content id equals
-            #that you can append closing tags under it and close the html creating the dropdown
-            contents_strings.append(content.head_html + '\n')
-            if closing_dicts and content.id == closing_dicts[-1]['pre_close_id']:
-                closing_dicts[-1]['id_hit'] = True
-                #An HTML line that generates a dropdown cannot have any closing tags directly under it. This writes the closing tags
-                #only after a good spot to write them is found.
-                if content.is_dropdown == False:
-                    closing_dicts.reverse()
-                    false_closing_dicts = []
-                    for dict in closing_dicts:
-                        if dict['id_hit'] == True:
-                            contents_strings.append(dict['spaces'] + '</ul></li><!--End "' + dict['name'] + '" dropdown list-->\n')
-                        else:
-                            false_closing_dicts.append(dict)
-                    closing_dicts = false_closing_dicts
 
-            if content.is_dropdown == True:
-                closing_dict = {'name' : content.name, 'pre_close_id' : self.get_last_subcontent_id(content.id), 'id_hit' : False, 'spaces' : content.spaces}
-                closing_dicts.append(closing_dict)
-
-        self.html_contents = contents_strings
-
-        #Replaces the contents of the html file imported with the new contents. The final step before overwriting the old html file!
-        #html_content[html_contents['start_index'] + 1:html_contents['end_index']] = contents_strings
+        for i in range(len(self.contents)):
+            contents_strings.append(self.contents[i].head_html + '\n')
+            current_periods = self.contents[i].id.count(".")
+            try:
+                next_periods = self.contents[i + 1].id.count(".")
+            except:
+                self.html_contents = contents_strings
+                return
+            if current_periods > next_periods:
+                closing_count = current_periods - next_periods
+                contents_strings.append('</ul></li>' * closing_count)
 
 class NoteFile:
     def __init__(self, filename):
@@ -260,7 +241,7 @@ def start_menu():
     #global contentsunits_list
     print("--------------------Welcome to Contents Generator!--------------------\n")
     print("Please choose an option below")
-    print("A - Add a content entry     B - Delete a content entry     C - Save      D - Quit\n")
+    print("A - Add a content entry     B - Delete a content entry      C - Quit\n")
     print("CURRENT CONTENTS:")
     for index, contentunit in enumerate(note_file.contents):
         print(str(index) + (len(contentunit.spaces) * " ") + contentunit.id + " - " + contentunit.name)
@@ -274,11 +255,6 @@ def start_menu():
         print("You Chose B")
         start_menu()
     elif choice == 'c':
-        print("You Chose C")
-        note_file.contents.insert_new_contents()
-        save_to_html()
-        start_menu()
-    elif choice == 'd':
         print("Thank you for using content generator! <3 <3")
         exit()
 
