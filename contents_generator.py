@@ -178,7 +178,7 @@ class Contents:
                 return
             if current_periods > next_periods:
                 closing_count = current_periods - next_periods
-                contents_strings.append('</ul></li>' * closing_count)
+                contents_strings.append('</ul></li>\n' * closing_count)
 
 class NoteFile:
     def __init__(self, filename):
@@ -208,23 +208,20 @@ class NoteFileInterface:
         note_file.close()
 
     def get_contents(self, html=None, start_line='<!--Start contents-->', end_line='<!--End contents-->'):
-        '''Searches an html file for the div that makes up the contents on the top of the page. Once found this will return all the html lines in the
-        div. This makes all the processing easier since it returns a list of html lines formatted in the specific formats that make up html lines and
-        dropdowns.'''
+        '''Searches an html file for the ul that makes up the contents on the top of the page. Once found this will return all the html lines in the
+        ul as a dictionary containing "contents": the lines of html, "start_index": the line on which the contents start and "end_index": the line on
+        which the contents end.'''
         if html == None:
             html = self.html
         html_contents_dict = {'contents' : [], 'start_index' : None, 'end_index' : None}
-        in_contents = False
         for index, line in enumerate(html):
-            line = line[:-1]
             if start_line in line:
-                in_contents = True
                 html_contents_dict['start_index'] = index
-            if in_contents == True:
-                html_contents_dict['contents'].append(line)
             if end_line in line:
                 html_contents_dict['end_index'] = index
                 break
+        html_contents_dict['contents'] = html[html_contents_dict['start_index']:html_contents_dict['end_index']]
+
         return html_contents_dict
 
     def save_to_html(self):
